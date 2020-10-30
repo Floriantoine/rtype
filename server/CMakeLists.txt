@@ -22,4 +22,3 @@ set(SRCS
 add_executable(r-type_server ${SRCS})
 
 target_link_libraries(r-type_server PRIVATE ${CONAN_LIBS})
-
