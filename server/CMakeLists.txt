@@ -19,7 +19,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SRCS
         src/main.cpp)
 
-add_executable(server ${SRCS})
+add_executable(r-type_server ${SRCS})
 
-target_link_libraries(server PRIVATE ${CONAN_LIBS})
+target_link_libraries(r-type_server PRIVATE ${CONAN_LIBS})
 

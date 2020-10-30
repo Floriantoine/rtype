@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SRCS
         src/main.cpp)
 
-add_executable(client ${SRCS})
+add_executable(r-type_client ${SRCS})
 
-target_link_libraries(client PRIVATE ${CONAN_LIBS})
+target_link_libraries(r-type_client PRIVATE ${CONAN_LIBS})
 
