@@ -18,11 +18,13 @@ void EventManager::emit(const std::string &eventName, IEvent *event)
 
 EventManager::iterator_t EventManager::_on(const std::string &eventName, listener_t listener)
 {
+    std::lock_guard<std::mutex> lock(mutex);
     return _listeners.insert({ eventName, listener });
 }
 
 void EventManager::_remove(iterator_t iterator)
 {
+    std::lock_guard<std::mutex> lock(mutex);
     _listeners.erase(iterator);
 }
 

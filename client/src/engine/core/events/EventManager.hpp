@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include <functional>
+#include <mutex>
 
 #include "../../utils/Singleton.hpp"
 #include "IEvent.hpp"
@@ -22,6 +23,7 @@ private:
      * Multimap of event listeners
      */
     map_t _listeners;
+    std::mutex mutex;
 
 protected:
 	~EventManager() = default;
