@@ -15,8 +15,11 @@ set(WARNING_FLAG
         -Wextra
         -Wpedantic)
 
+include_directories(src)
+
 set(SRCS
-        src/main.cpp)
+        src/main.cpp
+        src/engine/core/events/EventManager.cpp)
 
 add_executable(r-type_client ${SRCS})
 
