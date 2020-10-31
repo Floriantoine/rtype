@@ -17,6 +17,8 @@ set(WARNING_FLAG
 
 include_directories(src)
 
+include_directories(src)
+
 set(SRCS
         src/main.cpp
         src/engine/core/events/EventManager.cpp)
