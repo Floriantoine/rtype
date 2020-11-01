@@ -2,3 +2,5 @@ include(default)
 
 [settings]
 compiler.libcxx=libstdc++11
+compiler.version=10.1
+build_type=Release

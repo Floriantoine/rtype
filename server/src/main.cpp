@@ -1,14 +1,14 @@
 /*
 ** EPITECH PROJECT, 2020
-** B-CPP-501-BDX-5-1-rtype-albert.corson
+** server
 ** File description:
 ** main
 */
 
-#include <iostream>
-#include <boost/asio.hpp>
+#include "Server.hpp"
 
 int main(void)
 {
+
     return 0;
 }

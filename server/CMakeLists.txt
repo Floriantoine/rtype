@@ -17,7 +17,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SRCS
-        src/main.cpp)
+        src/main.cpp
+        src/Network/Server.cpp)
 
 add_executable(r-type_server ${SRCS})
 
