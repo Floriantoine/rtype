@@ -26,6 +26,7 @@ set(SRCS
         lobby/LobbyManagerThread.cpp
         lobby/LobbyDispatcher.cpp
         lobby/Lobby.cpp
+	Network/Server.cpp
 )
 
 list(TRANSFORM SRCS PREPEND ${SRC_DIR})
