@@ -1,11 +1,11 @@
 #!/bin/bash
 
-WORKDIR="$(dirname "$(readlink -f "$0")")"
-CONAN_PROFILE="$WORKDIR/conanprofile"
+WORK_DIR="$(dirname "$(readlink -f "$0")")"
+BUILD_DIR="$WORK_DIR/build"
+CONAN_PROFILE="$WORK_DIR/conanprofile"
 
-rm -rf build && \
-mkdir build && \
-cd build && \
-conan install "$WORKDIR" --build=missing --profile="$CONAN_PROFILE" && \
-cmake .. -G "Unix Makefiles" && \
+mkdir -p "$BUILD_DIR" && \
+cd "$BUILD_DIR" && \
+conan install "$WORK_DIR" --build=missing --profile="$CONAN_PROFILE" && \
+cmake "$WORK_DIR" -G "Unix Makefiles" && \
 cmake --build .
