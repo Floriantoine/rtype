@@ -17,8 +17,6 @@ set(WARNING_FLAG
         -Wextra
         -Wpedantic)
 
-include_directories(src)
-
 set(SRCS
         main.cpp
         Network/Client.cpp
