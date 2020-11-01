@@ -5,6 +5,7 @@ project("R-type's server" LANGUAGES CXX)
 set(SRC_DIR src/)
 
 include_directories(
+	./include
         ../deps
         ${SRC_DIR}
 )
