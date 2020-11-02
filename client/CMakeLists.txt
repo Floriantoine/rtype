@@ -19,7 +19,12 @@ include_directories(src)
 
 set(SRCS
         src/main.cpp
-        src/engine/core/events/EventManager.cpp)
+        src/engine/core/events/EventManager.cpp
+        src/engine/core/ecs/component/IComponent.hpp
+        src/engine/core/ecs/component/ComponentManager.hpp
+        src/engine/core/ecs/memory/IObjectPool.hpp
+        src/engine/core/ecs/memory/ObjectPool.hpp
+        )
 
 add_executable(r-type_client ${SRCS})
 
