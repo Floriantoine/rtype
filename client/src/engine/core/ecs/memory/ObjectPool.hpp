@@ -5,6 +5,8 @@
 #include <numeric>
 #include <stdexcept>
 
+#include "../memory/IObjectPool.hpp"
+
 /**
  * ObjectPool design pattern implementation
  *
@@ -16,7 +18,7 @@
  * @tparam chunkSize size of a chunk (pre-allocated pool of objects)
  */
 template<class T, std::size_t chunkSize = 1024>
-class ObjectPool
+class ObjectPool: public IObjectPool
 {
     private:
         /**
@@ -38,8 +40,8 @@ class ObjectPool
                  * @constructor
                  */
                 Chunk()
-                    : unusedIds_ { std::vector<std::size_t>(chunkSize) }
-                    , objects_ { std::vector<T>(chunkSize) }
+                    : unusedIds_ ( chunkSize )
+                    , objects_ ( chunkSize )
                 {
                     std::iota(this->unusedIds_.begin(), this->unusedIds_.end(), 0);
                 }
