@@ -63,14 +63,15 @@ class ObjectPool: public IObjectPool
                  *
                  * @return object from the pool
                  */
-                T *get()
+                template<typename ...Args>
+                T *get(Args&&...args)
                 {
                     if (isFull()) {
                         throw std::out_of_range("Cannot get object from a full chunk");
                     }
                     std::size_t id = this->unusedIds_.back();
                     this->unusedIds_.pop_back();
-                    this->objects_[id] = T();
+                    this->objects_[id] = T(std::forward<Args>(args)...);
                     return &this->objects_[id];
                 }
 
@@ -128,7 +129,7 @@ class ObjectPool: public IObjectPool
          *
          * @return object from the pool
          */
-        T *get()
+        void *get() override
         {
             for (auto &chunk: this->chunks_) {
                 if (!chunk.isFull()) {
@@ -148,11 +149,12 @@ class ObjectPool: public IObjectPool
          * @throws std::invalid_argument if the given pointer does not belong 
          * to the pool
          */
-        void release(T *ptr)
+        void release(void *ptr) override
         {
+            T *typePtr = static_cast<T *>(ptr);
             for (auto &chunk: this->chunks_) {
-                if (chunk.contains(ptr)) {
-                    chunk.release(ptr);
+                if (chunk.contains(typePtr)) {
+                    chunk.release(typePtr);
                     return;
                 }
             }

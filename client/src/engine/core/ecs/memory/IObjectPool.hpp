@@ -4,6 +4,10 @@
  */
 class IObjectPool
 {
-    protected:
-        virtual ~IObjectPool() = default;
+protected:
+    virtual ~IObjectPool() = default;
+
+    public:
+        virtual void *get() = 0;
+        virtual void release(void *) = 0;
 };
