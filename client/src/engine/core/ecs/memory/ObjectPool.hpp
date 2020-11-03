@@ -141,6 +141,24 @@ class ObjectPool: public IObjectPool
         }
 
         /**
+         * Get an object from the pool if one is available, otherwise
+         * creates one
+         *
+         * @return object from the pool
+         */
+        template<typename ...Args>
+        void *get(Args&&... args)
+        {
+            for (auto &chunk: this->chunks_) {
+                if (!chunk.isFull()) {
+                    return chunk.get(std::forward<Args>(args)...);
+                }
+            }
+            this->grow();
+            return this->chunks_.back().get(std::forward<Args>(args)...);
+        }
+
+        /**
          * Return an object back to the pool, tagging it as unused and 
          * available for reuse
          *
