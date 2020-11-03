@@ -26,6 +26,11 @@ set(SRCS
         src/engine/core/ecs/component/ComponentManager.hpp
         src/engine/core/ecs/memory/IObjectPool.hpp
         src/engine/core/ecs/memory/ObjectPool.hpp
+        src/engine/core/ecs/entity/Entity.hpp
+        src/engine/core/ecs/entity/EntityManager.hpp
+        src/engine/core/ecs/system/SystemManager.hpp
+        src/engine/core/ecs/system/ISystem.hpp
+        src/engine/core/ecs/system/System.hpp
         )
 
 add_executable(r-type_client ${SRCS})

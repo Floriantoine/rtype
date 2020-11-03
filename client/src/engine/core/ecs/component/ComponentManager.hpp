@@ -74,8 +74,17 @@ public:
         std::size_t typeId = getComponentTypeId<T>();
 
         for (auto &component: this->componentsType_[typeId]) {
-            function(static_cast<T *>(component));
+            if (component != nullptr)
+                function(static_cast<T *>(component));
         }
+    }
+
+    template<typename T>
+    void apply(std::size_t entityId, std::function<void (T *)> function)
+    {
+        std::size_t typeId = getComponentTypeId<T>();
+
+        function(static_cast<T *>(this->componentsType_[typeId][entityId]));
     }
 
     void delAll(std::size_t entityId)
