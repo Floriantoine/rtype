@@ -15,12 +15,12 @@
 #include <thread>
 #include <utility>
 
-namespace RType {
+namespace rtype::server {
     LobbyManagerThread::LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher, unsigned index)
         : dispatcher_ { dispatcher }
         , index_ { index }
         , thread_([&] {
-            this->run();
+            this->run_();
         })
     {
     }
@@ -31,7 +31,7 @@ namespace RType {
         this->thread_.join();
     }
 
-    void LobbyManagerThread::run()
+    void LobbyManagerThread::run_()
     {
         this->isRunning_ = true;
         while (this->isRunning_) {
@@ -41,7 +41,7 @@ namespace RType {
         }
     }
 
-    void LobbyManagerThread::onTick_()
+    void LobbyManagerThread::onTick_() const
     {
         auto range = this->dispatcher_->dispatch(this->index_);
 

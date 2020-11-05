@@ -2,10 +2,12 @@ cmake_minimum_required(VERSION 3.6)
 
 project("R-type's server" LANGUAGES CXX)
 
+set(SRC_DIR src/)
+
 include_directories(
-        ./include
         ../deps
-        )
+        ${SRC_DIR}
+)
 
 set(CMAKE_EXE_LINKER_FLAGS -lpthread)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -16,12 +18,11 @@ set(WARNING_FLAG
         -Wextra
         -Wpedantic)
 
-set(SRC_DIR src/)
-
 set(SRCS
         main.cpp
         Config.cpp
         Server.cpp
+        Exception.cpp
         lobby/LobbyManagerThread.cpp
         lobby/LobbyDispatcher.cpp
         lobby/Lobby.cpp

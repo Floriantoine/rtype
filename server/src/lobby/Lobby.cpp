@@ -7,8 +7,13 @@
 
 #include "Lobby.hpp"
 
-namespace RType {
+namespace rtype::server {
     void Lobby::onTick()
     {
+    }
+
+    bool Lobby::isRunning() const noexcept
+    {
+        return this->isRunning_;
     }
 }

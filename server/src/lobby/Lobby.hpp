@@ -7,12 +7,27 @@
 
 #pragma once
 
-namespace RType {
+namespace rtype::server {
+    /**
+    * @brief representation of a lobby, where the game logic is processed
+    */
     class Lobby {
       private:
+        bool isRunning_ { true };
+
       public:
         Lobby() = default;
         ~Lobby() = default;
+
+        /**
+        * @brief processes the game logic
+        */
         void onTick();
+
+        /**
+        * @return true the lobby is running
+        * @return false the lobby has closed
+        */
+        bool isRunning() const noexcept;
     };
 }

@@ -11,11 +11,17 @@
 
 #include <cstdint>
 
-namespace RType {
+namespace rtype::server {
+    /**
+    * @brief data class describing the server's configuration
+    */
     struct Config {
-        unsigned maxThreads;
+        unsigned maxGameThreads;
         uint16_t port;
     };
 
+    /**
+    * @brief nlohmann::json to rtype::server::Config class converter
+    */
     void from_json(const nlohmann::json &json, Config &conf);
 }

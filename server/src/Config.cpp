@@ -7,14 +7,14 @@
 
 #include "Config.hpp"
 
-namespace RType {
+namespace rtype::server {
     void from_json(const nlohmann::json &json, Config &conf)
     {
         json.at("port").get_to(conf.port);
         try {
-            json.at("maxThreads").get_to(conf.maxThreads);
+            json.at("maxGameThreads").get_to(conf.maxGameThreads);
         } catch (const nlohmann::json::exception &e) {
-            conf.maxThreads = 0;
+            conf.maxGameThreads = 0;
         }
     }
 }

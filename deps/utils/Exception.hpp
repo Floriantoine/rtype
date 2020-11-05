@@ -10,7 +10,7 @@
 #include <exception>
 #include <string>
 
-namespace RType {
+namespace rtype {
     /**
      * @brief generic exception class for the R-Type project
      */
@@ -26,7 +26,7 @@ namespace RType {
         {
         }
 
-        virtual ~Exception() = default;
+        virtual ~Exception() override = default;
 
         virtual const char *what() const noexcept override
         {

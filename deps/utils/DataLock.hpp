@@ -7,13 +7,11 @@
 
 #pragma once
 
-#include "Exception.hpp"
-
 #include <condition_variable>
 #include <functional>
 #include <mutex>
 
-namespace RType {
+namespace rtype {
 
     /**
      * @brief A child of std::recursive_mutex allowing you to store a variable directly associated to it's mutex
@@ -132,7 +130,7 @@ namespace RType {
          **/
         void apply(std::function<void(T &)> function)
         {
-            auto lock = unique_lock();
+            auto lock = this->unique_lock();
 
             function(this->resource_);
         }
@@ -144,7 +142,7 @@ namespace RType {
         void try_apply(std::function<void(T &, bool)> function)
         {
             function(this->resource_, std::recursive_mutex::try_lock());
-            unlock();
+            this->unlock();
         }
 
         /**
@@ -165,7 +163,7 @@ namespace RType {
          **/
         std::unique_lock<DataLock<T>> wait(std::function<bool(const T &)> predicate)
         {
-            auto unqLock = unique_lock();
+            auto unqLock = this->unique_lock();
 
             this->condVar_.wait(unqLock, [&]() {
                 return predicate(this->resource_);

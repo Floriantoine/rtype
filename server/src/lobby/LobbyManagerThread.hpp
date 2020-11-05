@@ -14,7 +14,7 @@
 #include <memory>
 #include <thread>
 
-namespace RType {
+namespace rtype::server {
 
     /**
     * @brief a threaded lobby manager to process a list of lobbies
@@ -28,11 +28,11 @@ namespace RType {
         unsigned index_;
         std::thread thread_;
 
-        void onTick_();
+        void onTick_() const;
+        void run_();
 
       public:
         LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher, unsigned index);
         ~LobbyManagerThread();
-        void run();
     };
 }

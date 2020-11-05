@@ -10,7 +10,7 @@
 #include <chrono>
 #include <string>
 
-namespace RType {
+namespace rtype {
     class Clock {
       public:
         typedef std::chrono::steady_clock::time_point time_point_t;
