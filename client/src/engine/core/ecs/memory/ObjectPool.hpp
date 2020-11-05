@@ -5,7 +5,7 @@
 #include <numeric>
 #include <stdexcept>
 
-#include "../memory/IObjectPool.hpp"
+#include "engine/core/ecs/memory/IObjectPool.hpp"
 
 /**
  * ObjectPool design pattern implementation

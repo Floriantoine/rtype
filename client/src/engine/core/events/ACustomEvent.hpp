@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IEvent.hpp"
+#include "engine/core/events/IEvent.hpp"
 
 /**
  * Custom Event abstract class

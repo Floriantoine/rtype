@@ -9,7 +9,8 @@
 
 #include <vector>
 #include <memory>
-#include "Entity.hpp"
+
+#include "engine/core/ecs/entity/Entity.hpp"
 
 class EntityManager
 {

@@ -8,8 +8,11 @@
 #pragma once
 
 #include <vector>
-#include <src/engine/core/ecs/memory/ObjectPool.hpp>
-#include "IComponent.hpp"
+#include <functional>
+#include <memory>
+
+#include "engine/core/ecs/memory/ObjectPool.hpp"
+#include "engine/core/ecs/component/IComponent.hpp"
 
 const int ENTITY_MAX = 3000;
 

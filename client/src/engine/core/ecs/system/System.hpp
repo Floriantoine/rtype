@@ -1,7 +1,8 @@
 #pragma once
 
 #include <functional>
-#include "ISystem.hpp"
+
+#include "engine/core/ecs/system/ISystem.hpp"
 
 template<class T>
 class System : public ISystem
