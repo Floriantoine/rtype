@@ -1,5 +1,7 @@
-build
+build/
 cmake-build-debug/
+.clangd/
 .idea/
 .vscode/
+.vim/
 compile_commands.json
