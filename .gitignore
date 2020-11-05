@@ -5,3 +5,4 @@ cmake-build-debug/
 .vscode/
 .vim/
 compile_commands.json
+r-type_server.json

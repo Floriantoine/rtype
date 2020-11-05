@@ -10,30 +10,32 @@
 #include <chrono>
 #include <string>
 
-namespace Utils {
-
+namespace RType {
     class Clock {
+      public:
+        typedef std::chrono::steady_clock::time_point time_point_t;
+        typedef long millisec_t;
 
-    private:
-        std::chrono::_V2::steady_clock::time_point start_;
+      private:
+        time_point_t start_;
 
-    public:
-        Clock() : start_ { std::chrono::steady_clock::now() }
+      public:
+        Clock()
+            : start_ { this->now() }
         {
         }
-        Clock(const Clock &other) : start_ { other.start_ }
+        Clock(const Clock &other)
+            : start_ { other.start_ }
         {
         }
         ~Clock() = default;
-
-        typedef long millisec_t;
 
         /**
          * @brief Reset the internal time reference
          **/
         void reset()
         {
-            this->start_ = std::chrono::steady_clock::now();
+            this->start_ = this->now();
         }
 
         /**
@@ -43,8 +45,18 @@ namespace Utils {
          **/
         millisec_t getElapsedMillisecond() const
         {
-            const auto &end = std::chrono::steady_clock::now();
+            const auto &end = this->now();
             return (std::chrono::duration_cast<std::chrono::milliseconds>(end - this->start_).count());
+        }
+
+        time_point_t getStartPoint() const
+        {
+            return this->start_;
+        }
+
+        static time_point_t now() noexcept
+        {
+            return std::chrono::steady_clock::now();
         }
 
         static std::string getCurrentTime() noexcept

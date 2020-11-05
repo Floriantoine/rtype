@@ -7,13 +7,13 @@
 
 #pragma once
 
-#include <mutex>
-#include <functional>
-#include <condition_variable>
-
 #include "Exception.hpp"
 
-namespace Utils {
+#include <condition_variable>
+#include <functional>
+#include <mutex>
+
+namespace RType {
 
     /**
      * @brief A child of std::recursive_mutex allowing you to store a variable directly associated to it's mutex
@@ -22,18 +22,18 @@ namespace Utils {
      */
     template <typename T>
     class DataLock : private std::recursive_mutex {
-
-    private:
+      private:
         T resource_;
         std::condition_variable_any condVar_;
 
-    public:
+      public:
         /**
          * @brief Construct a new DataLock object and stores a T variable
          *
          * @param data the variable to store
          **/
-        DataLock(const T &data) : resource_ { std::move(data) }
+        DataLock(const T &data)
+            : resource_ { std::move(data) }
         {
         }
         DataLock(DataLock<T> &&other)

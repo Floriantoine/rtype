@@ -10,14 +10,19 @@
 #include <exception>
 #include <string>
 
-namespace Utils {
+namespace RType {
+    /**
+     * @brief generic exception class for the R-Type project
+     */
     class Exception : public std::exception {
-    public:
-        Exception(const std::string &msg) : _msg(msg)
+      public:
+        Exception(const std::string &msg)
+            : _msg(msg)
         {
         }
 
-        Exception(std::string &&msg) : _msg(std::move(msg))
+        Exception(std::string &&msg)
+            : _msg(std::move(msg))
         {
         }
 
@@ -28,7 +33,7 @@ namespace Utils {
             return (_msg.c_str());
         }
 
-    protected:
+      protected:
         const std::string _msg;
     };
 }

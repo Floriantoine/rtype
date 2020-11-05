@@ -9,16 +9,25 @@ include_directories(
 
 set(CMAKE_EXE_LINKER_FLAGS -lpthread)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(WARNING_FLAG
         -Wall
         -Wextra
         -Wpedantic)
 
+set(SRC_DIR src/)
+
 set(SRCS
-        src/main.cpp
-        src/Network/Server.cpp)
+        main.cpp
+        Config.cpp
+        Server.cpp
+        lobby/LobbyManagerThread.cpp
+        lobby/LobbyDispatcher.cpp
+        lobby/Lobby.cpp
+)
+
+list(TRANSFORM SRCS PREPEND ${SRC_DIR})
 
 add_executable(r-type_server ${SRCS})
 
