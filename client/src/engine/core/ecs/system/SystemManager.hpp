@@ -10,8 +10,9 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
-#include "ISystem.hpp"
-#include "System.hpp"
+
+#include "engine/core/ecs/system/ISystem.hpp"
+#include "engine/core/ecs/system/System.hpp"
 
 class SystemManager
 {

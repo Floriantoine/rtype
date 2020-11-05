@@ -1,7 +1,6 @@
 #pragma once
 
-#include <src/engine/core/ecs/component/ComponentManager.hpp>
-#include "EntityManager.hpp"
+#include "engine/core/ecs/component/ComponentManager.hpp"
 
 class Entity
 {

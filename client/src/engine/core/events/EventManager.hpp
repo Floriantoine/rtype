@@ -6,8 +6,8 @@
 #include <functional>
 #include <mutex>
 
-#include "../../utils/Singleton.hpp"
-#include "IEvent.hpp"
+#include "engine/utils/Singleton.hpp"
+#include "engine/core/events/IEvent.hpp"
 
 /**
  * Event manager, allowing for event binding, unbinding and triggering
