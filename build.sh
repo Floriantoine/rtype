@@ -8,4 +8,4 @@ mkdir -p "$BUILD_DIR" && \
 cd "$BUILD_DIR" && \
 conan install "$WORK_DIR" --build=missing --profile="$CONAN_PROFILE" && \
 cmake "$WORK_DIR" -G "Unix Makefiles" && \
-cmake --build .
+cmake --build "$BUILD_DIR"
