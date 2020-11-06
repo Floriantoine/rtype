@@ -22,7 +22,7 @@ set(SRCS
         main.cpp
         Exception.cpp
         Config.cpp
-        Server.cpp
+        GameServer.cpp
         lobby/LobbyIDGenerator.cpp
         lobby/LobbyManagerThread.cpp
         lobby/LobbyDispatcher.cpp

@@ -2,10 +2,10 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** Server
+** GameServer
 */
 
-#include "Server.hpp"
+#include "GameServer.hpp"
 
 #include "lobby/LobbyDispatcher.hpp"
 #include "lobby/LobbyManagerThread.hpp"
@@ -15,14 +15,14 @@
 #include <thread>
 
 namespace rtype::server {
-    Server Server::instance_ = Server();
+    GameServer GameServer::instance_ = GameServer();
 
-    void Server::run(const rtype::server::Config &conf)
+    void GameServer::run(const rtype::server::Config &conf)
     {
-        Server::instance_.run_(conf);
+        GameServer::instance_.run_(conf);
     }
 
-    void Server::run_(const rtype::server::Config &conf)
+    void GameServer::run_(const rtype::server::Config &conf)
     {
         this->dispatcher_ = std::make_shared<LobbyDispatcher>(conf.maxGameThreads);
         for (auto idx = 0u; idx < conf.maxGameThreads; ++idx) {

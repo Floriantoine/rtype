@@ -5,8 +5,9 @@
 ** main
 */
 #include "Config.hpp"
-#include "Server.hpp"
+#include "GameServer.hpp"
 #include "Exception.hpp"
+#include "lobby/LobbyIDGenerator.hpp"
 
 #include <exception>
 #include <fstream>
@@ -38,7 +39,7 @@ int main(int argc, const char **argv)
 
     try {
         server::Config conf = parseConfig(configFilePath);
-        server::Server::run(conf);
+        server::GameServer::run(conf);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 1;

@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** Server
+** GameServer
 */
 
 #pragma once
@@ -20,17 +20,17 @@ namespace rtype::server {
     /**
      * @brief The server's master class (is a singleton)
      */
-    class Server {
+    class GameServer {
       private:
-        static Server instance_;
+        static GameServer instance_;
         std::vector<std::unique_ptr<LobbyManagerThread>> lobbyManagers_;
         std::shared_ptr<LobbyDispatcher> dispatcher_;
 
-        Server() = default;
+        GameServer() = default;
         void run_(const rtype::server::Config &conf);
 
       public:
-        ~Server() = default;
+        ~GameServer() = default;
         /**
         * @brief start running the server: accepting connections and running games
         * 
