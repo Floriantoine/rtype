@@ -20,10 +20,10 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 
-namespace BinaryProtocolComunication
+namespace BinaryProtocolCommunication
 {
     using Buffer = std::vector<unsigned char>; // binary to send
-    namespace BPC = BinaryProtocolComunication;
+    namespace BPC = BinaryProtocolCommunication;
 
     enum BaseType {
         REQUEST,
@@ -46,43 +46,14 @@ namespace BinaryProtocolComunication
       ~CommunicationManager() noexcept = default;
       static CommunicationManager Get() { return instance_; };
 
-      void bonjour() { std::cout << "Bonjour" << std::endl; };
-
-    //   size_t getTotalSizeArgs(std::vector<std::string> args)
-    //   {
-    //         size_t size = 0;
-
-    //         for (const auto &arg: args) {
-    //             size += arg.size() + 1;
-    //         }
-    //         return size;
-    //   };
-
-    //   void encodePeerInfos(BPC::Buffer &buffer, const std::string &ip_adress,
-    //                        const std::string &port) {
-    //     auto d_port = std::stoi(port);
-    //     std::vector<std::string> str_vec_ip;
-    //     boost::split(str_vec_ip, ip_adress, boost::is_any_of("."));
-    //     int count = PEER_INFO;
-
-    //     for (const auto &str : str_vec_ip) {
-    //         std::cout << "str: " + str << std::endl;
-    //         buffer[count] = static_cast<unsigned char>(std::atoi(str.c_str()));
-    //         std::cout << "Buffer[" << count << "]:" + str << std::endl;
-    //         count += 1;
-    //     }
-    //     // we encode the port on 16 bits therefore 2 bytes
-    //     buffer[count] = (d_port & 0xFF00) >> 8;
-    //     buffer[count + 1] = (d_port & 0xFF);
-    //   };
-
       BPC::Buffer serialize(BPC::BaseType type, BPC::Method method) //encode Package
       {
-            size_t lengthBuffer = ARG_START;
+            size_t lengthBuffer = 2;
             BPC::Buffer buffer(lengthBuffer, 0); // We prefill the buffer of lengthBuffer 0
   
             // In the first byte we store the type and the methods
             buffer[DEFINITON_BYTE] = (method << 4) + type; // Since type and enum are enums having less than 15 members each we can simply use bitshft to store it in 1 byte;
+            buffer[1] = '\n';
             return buffer;
       };
 
@@ -97,7 +68,7 @@ namespace BinaryProtocolComunication
 
             for (int i = 0 ; i != 3; i++) {
                 if (obj.method_ == i)
-                    std::cout << "Req:" << std::string(qmethods[i]) << std::endl;
+                    std::cout << "Method:" << std::string(qmethods[i]) << std::endl;
                 if (obj.type_ == i)
                     std::cout << "Req:" << std::string(qtype[i]) << std::endl;
             }
@@ -110,7 +81,6 @@ namespace BinaryProtocolComunication
       static CommunicationManager instance_;
     };
 };
-
 
 #endif /* BPC_HPP_ */
 
