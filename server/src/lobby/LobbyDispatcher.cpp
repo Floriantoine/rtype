@@ -102,8 +102,22 @@ namespace rtype::server {
 
     void LobbyDispatcher::emplaceBack(LobbyDispatcher::lobbyUniquePtr_t &lobby)
     {
+        bool restart = true;
+        std::string id;
+
         (*this->needWrite_) = true;
         this->rwMutex_->lock();
+        while (restart) {
+            restart = false;
+            id = this->idGenerator_();
+            for (const auto &it : this->lobbies_) {
+                if (it->id == id) {
+                    restart = true;
+                    break;
+                }
+            }
+        }
+        lobby->id = id;
         this->lobbies_.emplace_back(std::move(lobby));
         this->dispatch_();
         this->rwMutex_->unlock();

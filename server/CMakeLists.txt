@@ -20,9 +20,10 @@ set(WARNING_FLAG
 
 set(SRCS
         main.cpp
+        Exception.cpp
         Config.cpp
         Server.cpp
-        Exception.cpp
+        lobby/LobbyIDGenerator.cpp
         lobby/LobbyManagerThread.cpp
         lobby/LobbyDispatcher.cpp
         lobby/Lobby.cpp

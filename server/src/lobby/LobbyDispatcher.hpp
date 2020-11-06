@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Lobby.hpp"
+#include "lobby/LobbyIDGenerator.hpp"
 #include "utils/DataLock.hpp"
 
 #include <list>
@@ -62,6 +63,7 @@ namespace rtype::server {
         DataLock<bool> needWrite_ { false };
         std::list<lobbyUniquePtr_t> lobbies_;
         std::vector<Range> ranges_;
+        LobbyIDGenerator idGenerator_;
 
         /**
         * @brief dispatches lobbies into this->ranges_

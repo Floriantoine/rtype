@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace rtype::server {
     /**
     * @brief representation of a lobby, where the game logic is processed
@@ -16,6 +18,8 @@ namespace rtype::server {
         bool isRunning_ { true };
 
       public:
+        std::string id;
+
         Lobby() = default;
         ~Lobby() = default;
 
