@@ -8,14 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker:latest
 
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: AddRemoteBincrafters
-        run: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
-
-  build:
-    name: Build Checker
+  build-and-test:
+    name: Build and launch tests
     needs: [ add-conan-remote ]
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker:latest
@@ -23,17 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: BuildStandard
+      - name: "Add conan remote (bincrafters)"
+        run: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
+      - name: Build
         run: ./build.sh
 
-  tests:
-    name: Test Runner
-    needs: [ build ]
-    runs-on: ubuntu-latest
-    container: epitechcontent/epitest-docker:latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: BuildTest
+      - name: Launch tests
         shell: bash
-        run: cd ./build && ctest
+        run: cd build && ctest
