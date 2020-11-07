@@ -4,12 +4,11 @@
 ** File description:
 ** main
 */
-#include "Config.hpp"
-#include "GameServer.hpp"
-#include "Exception.hpp"
-#include "lobby/LobbyIDGenerator.hpp"
 
-#include <exception>
+#include "Config.hpp"
+#include "Exception.hpp"
+#include "GameServer.hpp"
+
 #include <fstream>
 #include <iostream>
 
