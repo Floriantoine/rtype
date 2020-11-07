@@ -3,14 +3,8 @@ name: C/C++ CI
 on: [ push, pull_request ]
 
 jobs:
-  add-conan-remote:
-    name: Add conan remote
-    runs-on: ubuntu-latest
-    container: epitechcontent/epitest-docker:latest
-
   build-and-test:
     name: Build and launch tests
-    needs: [ add-conan-remote ]
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker:latest
 
