@@ -5,61 +5,48 @@
 ** Client main file
 */
 
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/write.hpp>
 #include <iostream>
+#include <boost/asio.hpp>
+#include <sstream>
+#include "BinaryProtocolCommunication.hpp"
 
-#include "engine/core/ecs/entity/Entity.hpp"
-#include "engine/core/ecs/entity/EntityManager.hpp"
-#include "engine/core/ecs/component/ComponentManager.hpp"
-#include "engine/core/ecs/component/Component.hpp"
-#include "engine/core/ecs/system/SystemManager.hpp"
+namespace io = boost::asio;
+namespace BPC = BinaryProtocolCommunication;
+namespace ip = io::ip;
+using tcp = io::ip::tcp;
+using error_code = boost::system::error_code;
 
-using namespace rtype;
-
-class PositionComponent: public Component<PositionComponent>
+int main()
 {
-    public:
-        int x { 0 };
-        int y { 0 };
+    auto cm = BPC::CommunicationManager::Get();
+    io::io_context io_context;
+    tcp::socket socket(io_context);
+    ip::address address = ip::make_address("127.0.0.1");
+    tcp::endpoint endpoint(address, 4219);
+    auto buffer = cm.serialize(BPC::BaseType::REQUEST, BPC::Method::CREATE);
+    std::array<char, 1080> abuffer;
 
-        PositionComponent() = default;
-        PositionComponent(int x, int y)
-            : x { x }
-            , y { y }
-        {};
-        ~PositionComponent() = default;
-};
+    error_code error;
+    socket.connect(endpoint, error);
 
-class GravityComponent: public Component<GravityComponent>
-{
-    public:
-        double g { 9.81 };
+    if(!error) {
+        std::cout << "The connection has been established!";
+    } else {
+        std::cerr << "Something went wrong :(: " + error.message() << std::endl;
+    }
+    std::cout << "Writing " << socket.write_some(boost::asio::buffer(buffer)) << " datas to server" << std::endl;
+    std::cout << "Reading " << socket.read_some(boost::asio::buffer(abuffer)) << " datas to server" << std::endl;
+    //std::stringstream tmp;
+    //tmp << std::istream(&abuffer).rdbuf();
+    //abuffer.consume(1080);
+    //auto str = tmp.str();
+    BPC::Buffer bbuffer(abuffer.begin(), abuffer.end());
+    cm.deserialize(bbuffer);
 
-        GravityComponent() = default;
-        GravityComponent(double g)
-            : g { g }
-        {};
-        ~GravityComponent() = default;
-};
+    
 
-int main(void)
-{
-    ComponentManager cm;
-    EntityManager em(cm);
-    SystemManager sm(cm);
-
-    auto player = em.createEntity();
-    player->addComponent<PositionComponent>(3, 4);
-    player->addComponent<GravityComponent>();
-
-    sm.addSystem<PositionComponent>([&](PositionComponent *position) {
-        id_t entityId = position->getEntityId();
-        std::cout << position->x << ":" << position->y << std::endl;
-        if (cm.hasComponent<GravityComponent>(entityId)) {
-            auto gravity = cm.getComponent<GravityComponent>(entityId);
-            position->x += gravity->g;
-        }
-    });
-
-    sm.update();
-    return (0);
+    while (true);
+    return 0;
 }

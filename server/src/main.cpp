@@ -34,6 +34,7 @@ static server::Config parseConfig(const std::string &filePath)
 
 int main(int argc, const char **argv)
 {
+    //boost::asio::io_context io_context;
     const char *configFilePath = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
 
     try {
@@ -43,5 +44,8 @@ int main(int argc, const char **argv)
         std::cerr << e.what() << std::endl;
         return 1;
     }
+    //rtype::Network::TcpServer tcp_server(io_context, 4219);
+    ////tcp_server.accept_handler();
+    //io_context.run();
     return 0;
 }

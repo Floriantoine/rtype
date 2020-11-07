@@ -10,81 +10,105 @@
 
 #include <boost/asio.hpp>
 #include <iostream>
-#include <memory>
 #include <optional>
+#include <queue>
 #include <unordered_set>
+#include <memory.h>
+#include <cstdint>
+#include "BinaryProtocolCommunication.hpp"
+#include "IServer.hpp"
 
-/*
- * for uid generation
- */
-
-#include <boost/uuid/uuid_generators.hpp>
+namespace BPC = BinaryProtocolCommunication;
 
 using boost::asio::ip::tcp;
+using boost::asio::ip::udp;
 using err_code = boost::system::error_code;
 
-namespace Network  {
-    class UdpSocket {
-        public:
-            UdpSocket() { std::cout << "Udp Socket" << std::endl; };
-            ~UdpSocket() = default;
-    };
+using msg_handler = std::function<void (const BPC::Buffer &)>;
+using err_handler = std::function<void ()>;
 
-    class TcpSocket {
+namespace rtype {
+    namespace Network  {
+        template <typename T>
+        // TODO: typesafety with static_assert
+        class IOServer : public IServer {
         public:
-            TcpSocket(tcp::socket &&socket) : socket_(std::move(socket))
-            { std::cout << "Tcp Socket" << std::endl; };
-            ~TcpSocket() = default;
+          IOServer<T>(boost::asio::io_context &io_context, std::uint16_t port);
+          ~IOServer<T>() noexcept = default;
+          IOServer<T>(const IOServer &) = default;
+          IOServer<T> &operator=(const IOServer<T> &) = default;
+          IOServer<T> &operator=(IOServer<T> &&) = default;
 
-            void read() { this->on_read(); };
+          void start(){};
+          void end(){};
+          void write(){};
+          void read(){};
+
         private:
-            on_read();
-            tcp::socket socket_;
-            uuid id_;
-    };
-
-    template<typename TSocket>
-        class Server {
-            public:
-                Server(int port) { std::cout << "Server" << std::endl; };
-                ~Server() = default;
-                Server(const Server &) = delete;
-                Server(const Server &&) = delete;
-                Server operator=(const Server &) = delete;
-                Server operator=(const Server &&) = delete;
-
-                void start() { std::cout << "Tcp Socket" << std::endl; };
-            private:
-                boost::asio::io_context io_context;
+          T Server_;
         };
 
-    template<>
-        class Server<TcpSocket> {
-            public:
-                Server(int port) : acceptor_(io_context_, tcp::endpoint(tcp::v4(), port))
-                { std::cout << "Udp Server" << std::endl; };
-                ~Server() = default;
-                Server(const Server &) = delete;
-                Server(const Server &&) = delete;
-                Server operator=(const Server &) = delete;
-                Server operator=(const Server &&) = delete;
+        class TcpSession : public std::enable_shared_from_this<TcpSession> {
+            public: TcpSession(tcp::socket &&socket);
+                ~TcpSession() noexcept = default;
+                TcpSession(const TcpSession &) = delete;
+                TcpSession(TcpSession &&) = delete;
+                TcpSession &operator=(const TcpSession &) = delete;
+                TcpSession &operator=(TcpSession &&) = delete;
+
+                tcp::socket &getSocket();
+
+                void start(msg_handler &&on_msg, err_handler &&on_err);
+                void async_read();
 
             private:
-                void accept_handler() {
-                    this->acceptor_.async_accept(
-                            [this](err_code err, this->socket_)
-                            {
-                                std::make_shared<TcpSocket>(std::move(this->socket_))->start();
-                            });
-                };
+                void async_write();
+                void on_read(err_code err, std::size_t nbytes);
+                void on_write(err_code err, std::size_t nbytes);
 
+            private:
+                tcp::socket socket_;
+                boost::asio::streambuf streambuf_;
+                std::queue<BPC::Buffer> outgoing_;
+                msg_handler on_message_;
+                err_handler on_error_;
+        };
+
+        class TcpServer {
+            public:
+              TcpServer(boost::asio::io_context &io_context, std::uint16_t port);
+                ~TcpServer() noexcept = default;
+                TcpServer(const TcpServer &) = delete;
+                TcpServer(TcpServer &&) = delete;
+                TcpServer operator=(const TcpServer &) = delete;
+                TcpServer operator=(TcpServer &&) = delete;
+
+                void accept_handler();
+                void receive_handler(const BPC::Buffer &buffer);
             private:
                 tcp::acceptor acceptor_;
+                boost::asio::io_context &io_context_;
                 std::optional<tcp::socket> socket_;
-                boost::asio::io_context io_context_;
-                std::unordered_set<std::shared_ptr<TcpSocket>>
+                std::unordered_set<std::shared_ptr<TcpSession>> clients_;
         };
-};
+        class UdpServer {
+            public:
+                UdpServer(boost::asio::io_context &io_context, std::uint16_t port);
+                ~UdpServer() = default;
+                UdpServer(const UdpServer &) = delete;
+                UdpServer(UdpServer &&) = delete;
+                UdpServer &operator=(const UdpServer &) = delete;
+                UdpServer &operator=(UdpServer &&) = delete;
 
+                void read(void);
+                void write(void);
+
+            private:
+                boost::asio::io_context &io_context_;
+                udp::endpoint sender_endpoint_;
+                std::optional<udp::socket> socket_;
+        };
+    };
+}
 #endif /* SERVER_HPP_ */
 

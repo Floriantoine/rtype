@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 project("R-type's client" LANGUAGES CXX)
 
 include_directories(
+	../core
         ../deps
         ../deps/engine
         )
