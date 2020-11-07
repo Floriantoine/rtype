@@ -10,28 +10,36 @@
 #include <vector>
 #include <memory>
 
+#include "engine/utils/Singleton.hpp"
+#include "engine/core/ecs/component/ComponentManager.hpp"
 #include "engine/core/ecs/entity/Entity.hpp"
 
-class EntityManager
+class EntityManager: public Singleton<EntityManager>
 {
-private:
-    ObjectPool<Entity> entityPool_;
-    ComponentManager *componentManager_;
+    friend Entity;
 
-public:
-    EntityManager(ComponentManager *componentManager)
-        : componentManager_ { componentManager }
-    {};
-    ~EntityManager() = default;
+    private:
+        ObjectPool<Entity> entityPool_;
+        ComponentManager &componentManager_;
 
-    Entity *get()
-    {
-        void *entity = entityPool_.get(componentManager_);
-        return static_cast<Entity *>(entity);
-    }
+    public:
+        EntityManager()
+            : componentManager_ { ComponentManager::getInstance() }
+        {}
 
-    void release(Entity *ptr)
-    {
-        entityPool_.release(ptr);
-    }
+        ~EntityManager() = default;
+
+        std::shared_ptr<Entity> createEntity()
+        {
+            Entity *entity = static_cast<Entity *>(this->entityPool_.get());
+            return std::shared_ptr<Entity>(entity, [](Entity *self) {
+                EntityManager::getInstance().destroyEntity(self);
+            });
+        }
+
+        void destroyEntity(Entity *entity)
+        {
+            this->componentManager_.removeAllComponents(entity->getId());
+            this->entityPool_.release(entity);
+        }
 };
