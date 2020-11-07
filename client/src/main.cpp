@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "engine/core/ecs/entity/Entity.hpp"
+#include "engine/core/ecs/entity/EntityManager.hpp"
 #include "engine/core/ecs/component/ComponentManager.hpp"
 #include "engine/core/ecs/component/Component.hpp"
 #include "engine/core/ecs/system/SystemManager.hpp"
@@ -33,13 +34,13 @@ class GravityComponent: public Component<GravityComponent>
 
 int main(void)
 {
+    EntityManager &em = EntityManager::getInstance();
     ComponentManager &cm = ComponentManager::getInstance();
     SystemManager &sm = SystemManager::getInstance();
-    
-    Entity player;
 
-    player.addComponent<PositionComponent>(3, 4);
-    player.addComponent<GravityComponent>();
+    auto player = em.createEntity();
+    player->addComponent<PositionComponent>(3, 4);
+    player->addComponent<GravityComponent>();
 
     sm.addSystem<PositionComponent>([&](PositionComponent *position) {
         id_t entityId = position->getEntityId();
