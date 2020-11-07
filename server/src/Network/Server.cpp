@@ -6,7 +6,9 @@
 */
 
 #include "Server.hpp"
+
 #include "BinaryProtocolCommunication.hpp"
+
 #include <boost/asio/write.hpp>
 #include <functional>
 
@@ -30,10 +32,9 @@ void rtype::Network::TcpSession::async_read()
 {
     auto self = shared_from_this();
     boost::asio::async_read_until(this->socket_, this->streambuf_, '\n',
-            [self](err_code err, std::size_t nbytes)
-            {
-                self->on_read(err, nbytes);
-            });
+        [self](err_code err, std::size_t nbytes) {
+            self->on_read(err, nbytes);
+        });
 }
 
 void rtype::Network::TcpSession::async_write()
@@ -42,16 +43,15 @@ void rtype::Network::TcpSession::async_write()
     auto tmp = this->outgoing_.front();
 
     boost::asio::async_write(this->socket_, boost::asio::buffer(tmp),
-            [self](err_code err, std::size_t nbytes) 
-            {
-                if (!err)
-                    self->on_write(err, nbytes);
-                else
-                    self->on_error_();
-            });
+        [self](err_code err, std::size_t nbytes) {
+            if (!err)
+                self->on_write(err, nbytes);
+            else
+                self->on_error_();
+        });
 }
 
-tcp::socket &rtype::Network::TcpSession::getSocket() 
+tcp::socket &rtype::Network::TcpSession::getSocket()
 {
     return this->socket_;
 }
@@ -84,15 +84,17 @@ void rtype::Network::TcpSession::on_write(err_code err, std::size_t nbytes)
 {
     if (!err) {
         this->outgoing_.pop();
-            if (!this->outgoing_.empty()) this->async_write();
+        if (!this->outgoing_.empty())
+            this->async_write();
     } else {
         this->socket_.close();
         this->on_error_();
     }
 }
 
-rtype::Network::TcpServer::TcpServer(boost::asio::io_context &io_context, std::uint16_t port) 
-    : io_context_(io_context), acceptor_(io_context, tcp::endpoint(tcp::v4(), port))
+rtype::Network::TcpServer::TcpServer(boost::asio::io_context &io_context, std::uint16_t port)
+    : io_context_(io_context)
+    , acceptor_(io_context, tcp::endpoint(tcp::v4(), port))
 {
     std::cout << "TCP Server" << std::endl;
 }
@@ -100,22 +102,21 @@ rtype::Network::TcpServer::TcpServer(boost::asio::io_context &io_context, std::u
 void rtype::Network::TcpServer::accept_handler()
 {
     this->socket_.emplace(this->io_context_);
-    this->acceptor_.async_accept(*this->socket_, [&](err_code err)
-        {
-            if (!err) {
-                auto client = std::make_shared<rtype::Network::TcpSession>(std::move(*this->socket_));
-                std::cout <<  client->getSocket().remote_endpoint(err) << " s'est connecté au server" << std::endl;
-                std::cout << "We have a new commer" << std::endl;
-                this->clients_.insert(client);
-                client->start(std::bind(&rtype::Network::TcpServer::receive_handler, this, std::placeholders::_1),
-                        [&, client] { 
-                            if (this->clients_.erase(client))
-                                std::cout << "We have one less" << std::endl;
-                        });
-                this->accept_handler();
-            } else
-                std::cerr << "Error Accept: " + err.message() << std::endl;
-        });
+    this->acceptor_.async_accept(*this->socket_, [&](err_code err) {
+        if (!err) {
+            auto client = std::make_shared<rtype::Network::TcpSession>(std::move(*this->socket_));
+            std::cout << client->getSocket().remote_endpoint(err) << " s'est connecté au server" << std::endl;
+            std::cout << "We have a new commer" << std::endl;
+            this->clients_.insert(client);
+            client->start(std::bind(&rtype::Network::TcpServer::receive_handler, this, std::placeholders::_1),
+                [&, client] {
+                    if (this->clients_.erase(client))
+                        std::cout << "We have one less" << std::endl;
+                });
+            this->accept_handler();
+        } else
+            std::cerr << "Error Accept: " + err.message() << std::endl;
+    });
 }
 
 void rtype::Network::TcpServer::receive_handler(const BPC::Buffer &buffer)
