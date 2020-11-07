@@ -3,8 +3,20 @@ name: C/C++ CI
 on: [ push, pull_request ]
 
 jobs:
+  add-conan-remote:
+    name: Add conan remote
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: AddRemoteBincrafters
+        run: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
   build:
     name: Build Checker
+    needs: [ add-conan-remote ]
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker:latest
 
