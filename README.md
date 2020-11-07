@@ -16,7 +16,7 @@ We provide a simple script to setup the project via conan and cmake
 $ ./build.sh
 ```
 
-You'll get two binaryes located in ./build/bin named `r-type_server` and `r-type_client`.
+You'll get two binaries located in ./build/bin named `r-type_server` and `r-type_client`.
 Launch the former first and then the client.
 
 Enjoy the game
