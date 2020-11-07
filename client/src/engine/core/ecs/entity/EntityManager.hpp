@@ -15,28 +15,23 @@
 class EntityManager
 {
 private:
-    ObjectPool<Entity> entities_;
+    ObjectPool<Entity> entityPool_;
     ComponentManager *componentManager_;
 
 public:
-    EntityManager(ComponentManager *componentManager): componentManager_(componentManager) {};
+    EntityManager(ComponentManager *componentManager)
+        : componentManager_ { componentManager }
+    {};
     ~EntityManager() = default;
-
-    std::size_t getId() {
-        static std::size_t id = 0;
-
-        return id++;
-    }
 
     Entity *get()
     {
-        void *ptr = entities_.get(componentManager_, getId());
-
-        return static_cast<Entity *>(ptr);
+        void *entity = entityPool_.get(componentManager_);
+        return static_cast<Entity *>(entity);
     }
 
     void release(Entity *ptr)
     {
-        entities_.release(ptr);
+        entityPool_.release(ptr);
     }
 };

@@ -15,8 +15,6 @@ set(WARNING_FLAG
 
 include_directories(src)
 
-include_directories(src)
-
 set(SRCS
         src/main.cpp
         src/engine/core/events/EventManager.cpp
@@ -25,3 +23,5 @@ set(SRCS
 add_executable(r-type_client ${SRCS})
 
 target_link_libraries(r-type_client PRIVATE ${CONAN_LIBS})
+
+add_subdirectory(tests)
