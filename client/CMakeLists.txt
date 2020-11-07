@@ -23,5 +23,3 @@ set(SRCS
 add_executable(r-type_client ${SRCS})
 
 target_link_libraries(r-type_client PRIVATE ${CONAN_LIBS})
-
-add_subdirectory(tests)
