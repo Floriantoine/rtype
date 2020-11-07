@@ -1,0 +1,27 @@
+name: C/C++ CI
+
+on: [ push, pull_request ]
+
+jobs:
+  build:
+    name: Build Checker
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: BuildStandard
+        run: ./build.sh
+
+  tests:
+    name: Test Runner
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker:latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: BuildTest
+        shell: bash
+        run: cd ./build && ctest
