@@ -7,5 +7,10 @@ conan_basic_setup()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+enable_testing()
+
 add_subdirectory(server)
 add_subdirectory(client)
+add_subdirectory(client/tests)
+
+add_test(r-type_client ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/r-type_client_tests)
