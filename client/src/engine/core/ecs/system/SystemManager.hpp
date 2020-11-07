@@ -11,61 +11,62 @@
 #include <memory>
 #include <unordered_map>
 
+#include "engine/utils/Singleton.hpp"
+#include "engine/core/ecs/types.hpp"
+#include "engine/core/ecs/assert.hpp"
 #include "engine/core/ecs/system/ISystem.hpp"
 #include "engine/core/ecs/system/System.hpp"
+#include "engine/core/ecs/component/ComponentManager.hpp"
 
-class SystemManager
+class SystemManager: public Singleton<SystemManager>
 {
-private:
-    std::unordered_map<std::size_t, std::shared_ptr<ISystem>> systems_;
-    ComponentManager *componentManager_;
+    private:
+        ComponentManager &componentManager_;
+        std::unordered_map<id_t, std::shared_ptr<ISystem>> systemList_;
 
-public:
-    SystemManager(ComponentManager *componentManager): componentManager_(componentManager) {};
-    ~SystemManager() = default;
+    public:
+        SystemManager()
+            : componentManager_ { ComponentManager::getInstance() }
+        {}
 
-    void update()
-    {
-        for(const auto& system: systems_) {
-            system.second->update();
+        ~SystemManager() = default;
+
+        void update()
+        {
+            for (const auto &system: this->systemList_) {
+                system.second->update();
+            }
         }
-    }
 
-    template<typename T>
-    void update()
-    {
-        std::size_t typeIndex = componentManager_->getComponentTypeId<T>();
-        auto it = systems_.find(typeIndex);
+        template<class T>
+        void update()
+        {
+            STATIC_ASSERT_IS_COMPONENT(T);
+            auto systemIt = this->systemList_.find(T::getTypeId());
+            assert(systemIt != this->systemList_.end() && "No system corresponding to this component type");
+            systemIt->second->update();
+        }
 
-        if (it == systems_.end())
-            throw std::out_of_range("Cannot update, the system is not created");
-        it->second->update();
-    }
+        template<class T>
+        void update(id_t entityId)
+        {
+            STATIC_ASSERT_IS_COMPONENT(T);
+            auto systemIt = this->systemList_.find(T::getTypeId());
+            assert(systemIt != this->systemList_.end() && "No system corresponding to this component type");
+            systemIt->second->update(entityId);
+        }
 
-    template<typename T>
-    void update(std::size_t entityId)
-    {
-        std::size_t typeIndex = componentManager_->getComponentTypeId<T>();
-        auto it = systems_.find(typeIndex);
+        template<class T>
+        void addSystem(std::function<void (T *)> updateFunction)
+        {
+            STATIC_ASSERT_IS_COMPONENT(T);
+            this->systemList_.emplace(T::getTypeId(), std::make_shared<System<T>>(updateFunction));
+        }
 
-        if (it == systems_.end())
-            throw std::out_of_range("Cannot update, the system is not created");
-        it->second->update(entityId);
-    }
-
-    template<typename T>
-    void add(std::function<void (T *)> updateFunction)
-    {
-        std::size_t typeIndex = componentManager_->getComponentTypeId<T>();
-
-        systems_[typeIndex] = std::make_unique<System<T>>(this->componentManager_, updateFunction);
-    }
-
-    template<typename T>
-    void del()
-    {
-        std::size_t typeIndex = componentManager_->getComponentTypeId<T>();
-
-        systems_.erase(typeIndex);
-    }
+        template<class T>
+        void removeSystem()
+        {
+            STATIC_ASSERT_IS_COMPONENT(T);
+            this->systemList_.erase(T::getTypeId());
+        }
 };
