@@ -5,6 +5,7 @@
 #include <numeric>
 #include <stdexcept>
 
+#include "engine/core/ecs/types.hpp"
 #include "engine/core/ecs/memory/IObjectPool.hpp"
 
 /**
@@ -29,7 +30,7 @@ class ObjectPool: public IObjectPool
         {
             private:
                 // List of indices of objects that are available for use
-                std::vector<std::size_t> unusedIds_;
+                std::vector<id_t> unusedIds_;
                 // List of objects
                 std::vector<T> objects_;
 
@@ -69,7 +70,7 @@ class ObjectPool: public IObjectPool
                     if (isFull()) {
                         throw std::out_of_range("Cannot get object from a full chunk");
                     }
-                    std::size_t id = this->unusedIds_.back();
+                    id_t id = this->unusedIds_.back();
                     this->unusedIds_.pop_back();
                     this->objects_[id] = T(std::forward<Args>(args)...);
                     return &this->objects_[id];
@@ -82,7 +83,7 @@ class ObjectPool: public IObjectPool
                  */
                 void release(T *ptr)
                 {
-                    std::size_t index = this->getObjectId(ptr);
+                    id_t index = this->getObjectId(ptr);
                     this->unusedIds_.push_back(index);
                 }
 
@@ -112,7 +113,7 @@ class ObjectPool: public IObjectPool
                  *
                  * @return object index
                  */
-                std::size_t getObjectId(T *ptr) const
+                id_t getObjectId(T *ptr) const
                 {
                     ptrdiff_t index = ptr - &this->objects_[0];
                     return index;
