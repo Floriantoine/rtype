@@ -19,7 +19,7 @@ namespace rtype::server {
     LobbyManagerThread::LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher, unsigned index)
         : dispatcher_ { dispatcher }
         , index_ { index }
-        , thread_([&] {
+        , thread_([this] {
             this->run_();
         })
     {

@@ -11,10 +11,11 @@ namespace rtype::server {
     void from_json(const nlohmann::json &json, Config &conf)
     {
         json.at("port").get_to(conf.port);
-        try {
-            json.at("maxGameThreads").get_to(conf.maxGameThreads);
-        } catch (const nlohmann::json::exception &e) {
+        auto maxGameThreads = json.find("maxGameThreads");
+        if (maxGameThreads == json.end()) {
             conf.maxGameThreads = 0;
+        } else {
+            maxGameThreads->get_to(conf.maxGameThreads);
         }
     }
 }
