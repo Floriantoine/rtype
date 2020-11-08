@@ -11,35 +11,59 @@
 #include <memory>
 
 #include "engine/utils/Singleton.hpp"
-#include "engine/core/ecs/component/ComponentManager.hpp"
 #include "engine/core/ecs/entity/Entity.hpp"
 
-class EntityManager: public Singleton<EntityManager>
+class EntityManager
 {
-    friend Entity;
+    friend class Entity;
 
     private:
         ObjectPool<Entity> entityPool_;
         ComponentManager &componentManager_;
 
-    public:
-        EntityManager()
-            : componentManager_ { ComponentManager::getInstance() }
-        {}
-
-        ~EntityManager() = default;
-
-        std::shared_ptr<Entity> createEntity()
-        {
-            Entity *entity = static_cast<Entity *>(this->entityPool_.get());
-            return std::shared_ptr<Entity>(entity, [](Entity *self) {
-                EntityManager::getInstance().destroyEntity(self);
-            });
-        }
+        std::unordered_map<id_t, std::shared_ptr<Entity>> entities_;
 
         void destroyEntity(Entity *entity)
         {
             this->componentManager_.removeAllComponents(entity->getId());
             this->entityPool_.release(entity);
+        }
+
+    public:
+        EntityManager(ComponentManager &componentManager)
+            : componentManager_ { componentManager }
+        {}
+        EntityManager(const EntityManager &) = delete;
+        EntityManager(EntityManager &&) = delete;
+        ~EntityManager() = default;
+
+        EntityManager &operator=(const EntityManager &) = delete;
+
+        std::shared_ptr<Entity> createEntity()
+        {
+            Entity *ptr = static_cast<Entity *>(this->entityPool_.get());
+            ptr->componentManager_ = &this->componentManager_;
+            this->entities_.emplace(ptr->getId(), std::shared_ptr<Entity>(ptr, [this](Entity *self) {
+                this->destroyEntity(self);
+            }));
+            return this->entities_[ptr->getId()];
+        }
+
+        std::shared_ptr<Entity> getEntity(id_t id)
+        {
+            auto it = this->entities_.find(id);
+
+            if (it != this->entities_.end()) {
+                return it->second;
+            }
+            return std::shared_ptr<Entity>(nullptr);
+        }
+
+        void destroyEntity(id_t id)
+        {
+            std::shared_ptr<Entity> entity = this->getEntity(id);
+            if (entity.get() != nullptr) {
+                this->destroyEntity(entity.get());
+            }
         }
 };

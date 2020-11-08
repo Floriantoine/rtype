@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <cstddef>
 #include <vector>
 #include <numeric>
@@ -46,6 +47,12 @@ class ObjectPool: public IObjectPool
                 {
                     std::iota(this->unusedIds_.begin(), this->unusedIds_.end(), 0);
                 }
+                Chunk(const Chunk &other)
+                    : unusedIds_ { other.unusedIds_ }
+                    , objects_ { other.objects_ }
+                {
+                }
+                Chunk(Chunk &&) = delete;
 
                 /**
                  * Tells whether a Chunk has available objects remaining or not
@@ -124,6 +131,13 @@ class ObjectPool: public IObjectPool
         std::vector<Chunk> chunks_;
 
     public:
+        ObjectPool() = default;
+        ObjectPool(const ObjectPool &) = delete;
+        ObjectPool(const ObjectPool &&) = delete;
+        ~ObjectPool() = default;
+
+        ObjectPool &operator=(const ObjectPool &) = delete;
+
         /**
          * Get an object from the pool if one is available, otherwise 
          * creates one
@@ -186,6 +200,6 @@ class ObjectPool: public IObjectPool
          */
         void grow()
         {
-            this->chunks_.push_back(Chunk());
+            this->chunks_.emplace_back();
         }
 };

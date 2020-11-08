@@ -21,7 +21,7 @@
 
 const int ENTITY_MAX = POOL_PAGE_SIZE;
 
-class ComponentManager: public Singleton<ComponentManager>
+class ComponentManager
 {
     friend class ComponentBase;
 
@@ -97,13 +97,20 @@ class ComponentManager: public Singleton<ComponentManager>
         }
 
     public:
+        ComponentManager() = default;
+        ComponentManager(const ComponentManager &) = delete;
+        ComponentManager(ComponentManager &&) = delete;
+        ~ComponentManager() = default;
+
+        ComponentManager &operator=(const ComponentManager &) = delete;
+
         template<class T, typename ...Args>
         void addComponent(id_t entityId, Args&&...args)
         {
             assert(this->hasComponent<T>(entityId) == false && "Entity already has component");
             auto pool = this->getComponentPool<T>();
             T *component = static_cast<T *>(pool->get(std::forward<Args>(args)...));
-            component->entityId = entityId;
+            component->entityId_ = entityId;
             this->getComponentList<T>()[entityId] = static_cast<ComponentBase *>(component);
         }
 

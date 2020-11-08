@@ -13,12 +13,15 @@ class System: public ISystem
         std::function<void (T *)> updateFunction_;
 
     public:
-        System(std::function<void (T *)> updateFunction)
-            : componentManager_ { ComponentManager::getInstance() }
+        System(ComponentManager &componentManager, std::function<void (T *)> updateFunction)
+            : componentManager_ { componentManager }
             , updateFunction_ { updateFunction }
         {}
-
+        System(const System &) = delete;
+        System(System &&) = delete;
         ~System() override = default;
+
+        System &operator=(const System &) = delete;
 
         void update() override
         {
