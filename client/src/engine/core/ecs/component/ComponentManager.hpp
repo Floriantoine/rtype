@@ -23,8 +23,6 @@ const int ENTITY_MAX = POOL_PAGE_SIZE;
 
 class ComponentManager
 {
-    friend class ComponentBase;
-
     private:
         std::unordered_map<id_t, std::shared_ptr<IObjectPool>> componentPools_;
         std::unordered_map<id_t, std::unordered_map<id_t, ComponentBase *>> componentLists_;
