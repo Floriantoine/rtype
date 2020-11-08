@@ -15,8 +15,6 @@
 
 class EntityManager
 {
-    friend class Entity;
-
     private:
         ObjectPool<Entity> entityPool_;
         ComponentManager &componentManager_;
