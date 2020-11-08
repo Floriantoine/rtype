@@ -17,7 +17,7 @@
 
 namespace rtype::server {
     LobbyDispatcher::Range::Range(const Range &other)
-        : rwMutex_(other.rwMutex_)
+        : rwLock_(other.rwLock_)
         , start(other.start)
         , end(other.end)
     {
@@ -28,27 +28,27 @@ namespace rtype::server {
         this->unlock();
     }
 
-    void LobbyDispatcher::Range::lock(std::shared_ptr<std::shared_mutex> rwMutex) noexcept
+    void LobbyDispatcher::Range::lock(std::shared_ptr<SharedLock> rwLock) noexcept
     {
-        this->rwMutex_ = rwMutex;
+        this->rwLock_ = rwLock;
 
-        if (this->rwMutex_ != nullptr) {
-            this->rwMutex_->lock_shared();
+        if (this->rwLock_ != nullptr) {
+            this->rwLock_->lock_shared();
         }
     }
 
     void LobbyDispatcher::Range::unlock() noexcept
     {
-        if (this->rwMutex_ != nullptr) {
-            this->rwMutex_->unlock_shared();
+        if (this->rwLock_ != nullptr) {
+            this->rwLock_->unlock_shared();
             this->start = lobbyIterator_t();
             this->end = lobbyIterator_t();
-            this->rwMutex_.reset();
+            this->rwLock_ = nullptr;
         }
     }
 
     LobbyDispatcher::LobbyDispatcher(unsigned managerCount)
-        : rwMutex_(std::make_shared<std::shared_mutex>())
+        : rwLock_(std::make_shared<SharedLock>())
         , managerCount_ { managerCount }
     {
         if (this->managerCount_ == 0) {
@@ -85,8 +85,7 @@ namespace rtype::server {
                 ++it;
             } else {
                 if (!locked) {
-                    (*this->needWrite_) = true;
-                    this->rwMutex_->lock();
+                    this->rwLock_->lock();
                     locked = true;
                 }
                 it = this->lobbies_.erase(it);
@@ -94,9 +93,7 @@ namespace rtype::server {
         }
         if (locked) {
             this->dispatch_();
-            this->rwMutex_->unlock();
-            (*this->needWrite_) = false;
-            this->needWrite_.notify_all();
+            this->rwLock_->unlock();
         }
     }
 
@@ -105,8 +102,7 @@ namespace rtype::server {
         bool restart = true;
         std::string id;
 
-        (*this->needWrite_) = true;
-        this->rwMutex_->lock();
+        this->rwLock_->lock();
         while (restart) {
             restart = false;
             id = this->idGenerator_();
@@ -120,19 +116,15 @@ namespace rtype::server {
         lobby->id = id;
         this->lobbies_.emplace_back(std::move(lobby));
         this->dispatch_();
-        this->rwMutex_->unlock();
-        (*this->needWrite_) = false;
-        this->needWrite_.notify_all();
+        this->rwLock_->unlock();
     }
 
     LobbyDispatcher::Range LobbyDispatcher::dispatch(unsigned managerIndex)
     {
-        this->needWrite_.wait([](bool val) {
-            return val == false;
-        });
         removeDeadLobbies_();
+
         Range range(this->ranges_.at(managerIndex));
-        range.lock(this->rwMutex_);
+        range.lock(this->rwLock_);
         return range;
     }
 }

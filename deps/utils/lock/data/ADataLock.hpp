@@ -1,54 +1,43 @@
 /*
 ** EPITECH PROJECT, 2020
-** CCP_plazza_2019
+** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** DataLock
+** ADataLock
 */
 
 #pragma once
 
+#include "../ILock.hpp"
+
 #include <condition_variable>
 #include <functional>
-#include <mutex>
 
 namespace rtype {
 
-    /**
-     * @brief A child of std::recursive_mutex allowing you to store a variable directly associated to it's mutex
-     *
-     * @tparam T the type of variable to store
-     */
     template <typename T>
-    class DataLock : private std::recursive_mutex {
-      private:
+    class ADataLock : public ILock {
+      protected:
         T resource_;
         std::condition_variable_any condVar_;
 
       public:
-        /**
-         * @brief Construct a new DataLock object and stores a T variable
-         *
-         * @param data the variable to store
-         **/
-        DataLock(const T &data)
+        ADataLock(T &&data)
             : resource_ { std::move(data) }
+        { } 
+
+        ADataLock(ADataLock<T> &&other)
         {
+            ADataLock::operator=(std::move(other));
         }
-        DataLock(DataLock<T> &&other)
-        {
-            *this = std::move(other);
-        }
-        DataLock<T> &operator=(DataLock<T> &&other)
+
+        ADataLock<T> &operator=(ADataLock<T> &&other)
         {
             this->resource_ = std::move(other.resource_);
             return (*this);
         }
 
-        DataLock() = default;
-        ~DataLock() = default;
-
-        DataLock(DataLock<T> &other) = delete;
-        DataLock<T> &operator=(const DataLock<T> &other) = delete;
+        ADataLock() = default;
+        virtual ~ADataLock() override = default;
 
         /**
          * @brief access the object stored
@@ -90,7 +79,13 @@ namespace rtype {
             return (this->resource_);
         }
 
-        using std::recursive_mutex::unlock;
+        /**
+         * @brief alias to member function `apply`
+         **/
+        void operator()(std::function<void(T &)> function)
+        {
+            this->apply(function);
+        }
 
         /**
          * @brief returns a read-only reference to the stored variable
@@ -100,29 +95,6 @@ namespace rtype {
         const T &read() const
         {
             return (this->resource_);
-        }
-
-        /**
-         * @brief Locks the mutex assossiated to the stored variable
-         *
-         * @return T &
-         **/
-        T &lock()
-        {
-            std::recursive_mutex::lock();
-            return (this->resource_);
-        }
-
-        /**
-         * @brief Tries to lock the mutex assossiated to the stored variable
-         *
-         * @return T * if it fails, a nullptr is returned
-         **/
-        T *try_lock()
-        {
-            if (!std::recursive_mutex::try_lock())
-                return (nullptr);
-            return (&this->resource_);
         }
 
         /**
@@ -141,27 +113,23 @@ namespace rtype {
          **/
         void try_apply(std::function<void(T &, bool)> function)
         {
-            function(this->resource_, std::recursive_mutex::try_lock());
-            this->unlock();
+            bool locked = this->try_lock();
+
+            function(this->resource_, locked);
+            if (locked) {
+                this->unlock();
+            }
         }
 
         /**
-         * @brief returns a newly created unique_lock of the assossiated mutex
-         **/
-        std::unique_lock<DataLock> unique_lock()
-        {
-            return (std::unique_lock<DataLock>(*this));
-        }
-
-        /**
-         * @brief waits for the stored variable to be modified
-         * loops while `predicate` returns false
+         * @brief waits for a notification before checking the predicate
+         * if the predicate is resolved, the mutex is locked
          * this call is unlocked by a call to notify_one or notify_all
          *
          * @param predicate
-         * @return std::unique_lock<DataLock<T>>
+         * @return std::unique_lock<ADataLock<T>>
          **/
-        std::unique_lock<DataLock<T>> wait(std::function<bool(const T &)> predicate)
+        std::unique_lock<ADataLock<T>> wait(std::function<bool(const T &)> predicate)
         {
             auto unqLock = this->unique_lock();
 
@@ -172,14 +140,13 @@ namespace rtype {
         }
 
         /**
-         * @brief waits for the stored variable to be modified
-         * this call is unlocked by a call to notify_one or notify_all
+         * @brief waits for a notification before locking the mutex
          *
-         * @return std::unique_lock<DataLock<T>>
+         * @return std::unique_lock<ADataLock<T>>
          **/
-        std::unique_lock<DataLock<T>> wait()
+        std::unique_lock<ADataLock<T>> wait()
         {
-            std::unique_lock<DataLock<T>> unqLock(*this);
+            std::unique_lock<ADataLock<T>> unqLock(*this);
 
             this->condVar_.wait(unqLock);
             return (unqLock);

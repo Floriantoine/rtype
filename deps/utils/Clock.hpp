@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2020
-** CCP_plazza_2019
+** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
 ** Clock
 */

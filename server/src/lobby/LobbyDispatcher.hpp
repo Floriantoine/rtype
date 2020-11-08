@@ -9,7 +9,7 @@
 
 #include "Lobby.hpp"
 #include "lobby/LobbyIDGenerator.hpp"
-#include "utils/DataLock.hpp"
+#include "utils/lock/SharedLock.hpp"
 
 #include <list>
 #include <memory>
@@ -32,7 +32,7 @@ namespace rtype::server {
         */
         struct Range {
           private:
-            std::shared_ptr<std::shared_mutex> rwMutex_;
+            std::shared_ptr<SharedLock> rwLock_;
 
           public:
             lobbyIterator_t start;
@@ -49,7 +49,7 @@ namespace rtype::server {
             /**
             * @brief calls lock_shared() on the rwMutex_, allowing reading and processing of the lobbies
             */
-            void lock(std::shared_ptr<std::shared_mutex> rwMutex) noexcept;
+            void lock(std::shared_ptr<SharedLock> rwLock) noexcept;
 
             /**
             * @brief releases ownership of the lobbies
@@ -58,9 +58,8 @@ namespace rtype::server {
         };
 
       private:
-        std::shared_ptr<std::shared_mutex> rwMutex_;
         const unsigned managerCount_;
-        DataLock<bool> needWrite_ { false };
+        std::shared_ptr<SharedLock> rwLock_;
         std::list<lobbyUniquePtr_t> lobbies_;
         std::vector<Range> ranges_;
         LobbyIDGenerator idGenerator_;

@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2020
-** R-type
+** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
 ** Exception
 */
