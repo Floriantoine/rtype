@@ -8,8 +8,6 @@ include_directories(
 
 set(CMAKE_EXE_LINKER_FLAGS -lpthread)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(WARNING_FLAG
         -Wall
         -Wextra
