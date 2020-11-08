@@ -30,7 +30,7 @@ namespace rtype {
          *
          * @param data the variable to store
          **/
-        DataLock(const T &data)
+        DataLock(T &&data)
             : resource_ { std::move(data) }
         {
         }
@@ -47,7 +47,8 @@ namespace rtype {
         DataLock() = default;
         ~DataLock() = default;
 
-        DataLock(DataLock<T> &other) = delete;
+        DataLock(const T &data) = delete;
+        DataLock(const DataLock<T> &other) = delete;
         DataLock<T> &operator=(const DataLock<T> &other) = delete;
 
         /**
@@ -90,6 +91,8 @@ namespace rtype {
             return (this->resource_);
         }
 
+        using std::recursive_mutex::lock;
+        using std::recursive_mutex::try_lock;
         using std::recursive_mutex::unlock;
 
         /**
@@ -100,29 +103,6 @@ namespace rtype {
         const T &read() const
         {
             return (this->resource_);
-        }
-
-        /**
-         * @brief Locks the mutex assossiated to the stored variable
-         *
-         * @return T &
-         **/
-        T &lock()
-        {
-            std::recursive_mutex::lock();
-            return (this->resource_);
-        }
-
-        /**
-         * @brief Tries to lock the mutex assossiated to the stored variable
-         *
-         * @return T * if it fails, a nullptr is returned
-         **/
-        T *try_lock()
-        {
-            if (!std::recursive_mutex::try_lock())
-                return (nullptr);
-            return (&this->resource_);
         }
 
         /**
@@ -141,8 +121,12 @@ namespace rtype {
          **/
         void try_apply(std::function<void(T &, bool)> function)
         {
-            function(this->resource_, std::recursive_mutex::try_lock());
-            this->unlock();
+            bool locked = std::recursive_mutex::try_lock();
+
+            function(this->resource_, locked);
+            if (locked) {
+                this->unlock();
+            }
         }
 
         /**
@@ -154,8 +138,8 @@ namespace rtype {
         }
 
         /**
-         * @brief waits for the stored variable to be modified
-         * loops while `predicate` returns false
+         * @brief waits for a notification before checking the predicate
+         * if the predicate is resolved, the mutex is locked
          * this call is unlocked by a call to notify_one or notify_all
          *
          * @param predicate
@@ -172,8 +156,7 @@ namespace rtype {
         }
 
         /**
-         * @brief waits for the stored variable to be modified
-         * this call is unlocked by a call to notify_one or notify_all
+         * @brief waits for a notification before locking the mutex
          *
          * @return std::unique_lock<DataLock<T>>
          **/
