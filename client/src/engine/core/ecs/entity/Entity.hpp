@@ -5,8 +5,10 @@
 
 class Entity
 {
+    friend class EntityManager;
+
     private:
-        ComponentManager &componentManager_;
+        ComponentManager *componentManager_;
 
         static const id_t getNextId()
         {
@@ -18,10 +20,8 @@ class Entity
 
     public:
         Entity()
-            : componentManager_ { ComponentManager::getInstance() }
-            , id_ { this->getNextId() }
+            : id_ { this->getNextId() }
         {}
-
         ~Entity() = default;
 
         Entity &operator=(const Entity &other)
@@ -39,27 +39,27 @@ class Entity
         void addComponent(Args&&...args)
         {
             STATIC_ASSERT_IS_COMPONENT(T);
-            this->componentManager_.addComponent<T>(this->getId(), std::forward<Args>(args)...);
+            this->componentManager_->addComponent<T>(this->getId(), std::forward<Args>(args)...);
         }
 
         template<class T>
         bool hasComponent()
         {
             STATIC_ASSERT_IS_COMPONENT(T);
-            return this->componentManager_.hasComponent<T>(this->getId());
+            return this->componentManager_->hasComponent<T>(this->getId());
         }
 
         template<class T>
         T *getComponent()
         {
             STATIC_ASSERT_IS_COMPONENT(T);
-            return this->componentManager_.getComponent<T>(this->getId());
+            return this->componentManager_->getComponent<T>(this->getId());
         }
 
         template<class T>
         void removeComponent()
         {
             STATIC_ASSERT_IS_COMPONENT(T);
-            this->componentManager_.removeComponent<T>(this->getId());
+            this->componentManager_->removeComponent<T>(this->getId());
         }
 };

@@ -7,7 +7,7 @@ class ComponentBase
     friend class ComponentManager;
 
     protected:
-        id_t entityId;
+        id_t entityId_;
 
         static id_t getNextTypeId()
         {
@@ -18,6 +18,6 @@ class ComponentBase
     public:
         id_t getEntityId() const
         {
-            return entityId;
+            return this->entityId_;
         }
 };

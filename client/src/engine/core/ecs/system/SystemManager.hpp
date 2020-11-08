@@ -25,11 +25,14 @@ class SystemManager: public Singleton<SystemManager>
         std::unordered_map<id_t, std::shared_ptr<ISystem>> systemList_;
 
     public:
-        SystemManager()
-            : componentManager_ { ComponentManager::getInstance() }
+        SystemManager(ComponentManager &componentManager)
+            : componentManager_ { componentManager }
         {}
-
+        SystemManager(const SystemManager &) = delete;
+        SystemManager(SystemManager &&) = delete;
         ~SystemManager() = default;
+
+        SystemManager &operator=(const SystemManager &) = delete;
 
         void update()
         {
@@ -60,7 +63,7 @@ class SystemManager: public Singleton<SystemManager>
         void addSystem(std::function<void (T *)> updateFunction)
         {
             STATIC_ASSERT_IS_COMPONENT(T);
-            this->systemList_.emplace(T::getTypeId(), std::make_shared<System<T>>(updateFunction));
+            this->systemList_.emplace(T::getTypeId(), std::make_shared<System<T>>(this->componentManager_, updateFunction));
         }
 
         template<class T>

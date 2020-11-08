@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/ecs/types.hpp"
-#include "engine/core/ecs/component/ComponentManager.hpp"
 
 class ISystem
 {
