@@ -1,5 +1,4 @@
 include(default)
 
 [settings]
-compiler.version=9
 compiler.libcxx=libstdc++11
