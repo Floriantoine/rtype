@@ -8,11 +8,9 @@
 #pragma once
 
 #include "ILock.hpp"
-#include "boost/thread/lock_types.hpp"
 #include "boost/thread/condition_variable.hpp"
+#include "boost/thread/lock_types.hpp"
 #include "boost/thread/shared_mutex.hpp"
-
-#include <iostream>
 
 namespace rtype {
     class SharedLock : public ILock, private boost::upgrade_mutex {
@@ -102,7 +100,7 @@ namespace rtype {
         }
 
         using boost::upgrade_mutex::lock_upgrade;
-        using boost::upgrade_mutex::unlock_upgrade;
         using boost::upgrade_mutex::try_lock_upgrade;
+        using boost::upgrade_mutex::unlock_upgrade;
     };
 }
