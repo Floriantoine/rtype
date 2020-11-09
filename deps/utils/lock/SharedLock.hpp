@@ -8,14 +8,15 @@
 #pragma once
 
 #include "ILock.hpp"
-
-#include <shared_mutex>
+#include "boost/thread/condition_variable.hpp"
+#include "boost/thread/lock_types.hpp"
+#include "boost/thread/shared_mutex.hpp"
 
 namespace rtype {
-    class SharedLock : public ILock, private std::shared_mutex {
+    class SharedLock : public ILock, private boost::upgrade_mutex {
       protected:
         unsigned pendingExclusiveLock_ { 0 };
-        std::condition_variable_any rwCondVar_;
+        boost::condition_variable_any rwCondVar_;
 
       public:
         SharedLock() = default;
@@ -30,7 +31,7 @@ namespace rtype {
         void lock() override
         {
             ++this->pendingExclusiveLock_;
-            std::shared_mutex::lock();
+            boost::upgrade_mutex::lock();
             --this->pendingExclusiveLock_;
         }
 
@@ -39,12 +40,12 @@ namespace rtype {
         */
         void lock_shared()
         {
-            std::shared_lock<std::shared_mutex> lock(*this);
+            boost::shared_lock<boost::upgrade_mutex> lock(*this);
 
             this->rwCondVar_.wait(lock, [this] {
                 return this->pendingExclusiveLock_ == 0;
             });
-            std::shared_mutex::lock_shared();
+            lock.release();
         }
 
         /**
@@ -52,27 +53,27 @@ namespace rtype {
         */
         bool try_lock() override
         {
-            return std::shared_mutex::try_lock();
+            return boost::upgrade_mutex::try_lock();
         }
 
         /**
         * @brief try_lock the mutex without exclusivity
         */
-        using std::shared_mutex::try_lock_shared;
+        using boost::upgrade_mutex::try_lock_shared;
 
         /**
         * @brief unlock the exclusivity locked mutex
         */
         void unlock() override
         {
-            std::shared_mutex::unlock();
+            boost::upgrade_mutex::unlock();
             this->rwCondVar_.notify_all();
         }
 
         /**
         * @brief try_lock the shared_locked mutex
         */
-        using std::shared_mutex::unlock_shared;
+        using boost::upgrade_mutex::unlock_shared;
 
         /**
         * @brief returns a newly created unique_lock
@@ -85,9 +86,21 @@ namespace rtype {
         /**
         * @brief returns a newly created shared_lock
         */
-        std::shared_lock<SharedLock> shared_lock()
+        boost::shared_lock<SharedLock> shared_lock()
         {
-            return std::shared_lock<SharedLock>(*this);
+            return boost::shared_lock<SharedLock>(*this);
         }
+
+        /**
+        * @brief returns a newly created shared_lock
+        */
+        boost::upgrade_lock<SharedLock> upgrade_lock()
+        {
+            return boost::upgrade_lock<SharedLock>(*this);
+        }
+
+        using boost::upgrade_mutex::lock_upgrade;
+        using boost::upgrade_mutex::try_lock_upgrade;
+        using boost::upgrade_mutex::unlock_upgrade;
     };
 }
