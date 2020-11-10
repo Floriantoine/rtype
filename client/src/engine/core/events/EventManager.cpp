@@ -1,5 +1,14 @@
-#include <iostream>
-#include "EventManager.hpp"
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** Event manager implementation
+*/
+
+#include "engine/core/events/EventManager.hpp"
+
+namespace rtype
+{
 
 EventManager::iterator_t EventManager::on(const std::string &eventName, listener_t listener)
 {
@@ -37,3 +46,4 @@ void EventManager::_emit(const std::string &eventName, IEvent *event)
     }
 }
 
+}

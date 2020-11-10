@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** Event manager class definition
+*/
+
 #pragma once
 
 #include <string>
@@ -6,8 +13,11 @@
 #include <functional>
 #include <mutex>
 
-#include "../../utils/Singleton.hpp"
-#include "IEvent.hpp"
+#include "engine/utils/Singleton.hpp"
+#include "engine/core/events/IEvent.hpp"
+
+namespace rtype
+{
 
 /**
  * Event manager, allowing for event binding, unbinding and triggering
@@ -59,3 +69,5 @@ private:
 
     void _emit(const std::string &eventName, IEvent *event);
 };
+
+}
