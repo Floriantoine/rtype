@@ -1,4 +1,14 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** Singleton class
+*/
+
 #pragma once
+
+namespace rtype
+{
 
 template <class T>
 class Singleton {
@@ -20,3 +30,5 @@ private:
         Instance() : T() {}
     };
 };
+
+}

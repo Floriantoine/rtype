@@ -1,6 +1,16 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** Mouse event class
+*/
+
 #pragma once
 
 #include "engine/core/events/ACustomEvent.hpp"
+
+namespace rtype
+{
 
 /**
  * Custom Event abstract class
@@ -15,3 +25,5 @@ class MouseEvent: public ACustomEvent
 
         const char *GetType() { return "MouseEvent"; }
 };
+
+}

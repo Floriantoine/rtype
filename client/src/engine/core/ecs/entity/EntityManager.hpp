@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2020
-** client
+** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** ComponentManager
+** Entity manager class
 */
 
 #pragma once
@@ -10,8 +10,10 @@
 #include <vector>
 #include <memory>
 
-#include "engine/utils/Singleton.hpp"
 #include "engine/core/ecs/entity/Entity.hpp"
+
+namespace rtype
+{
 
 class EntityManager
 {
@@ -65,3 +67,5 @@ class EntityManager
             }
         }
 };
+
+}

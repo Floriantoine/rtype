@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2020
-** client
+** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** ComponentManager
+** Component manager class
 */
 
 #pragma once
@@ -13,13 +13,13 @@
 #include <unordered_map>
 #include <memory>
 
-#include "engine/utils/Singleton.hpp"
 #include "engine/core/ecs/types.hpp"
 #include "engine/core/ecs/assert.hpp"
 #include "engine/core/ecs/memory/ObjectPool.hpp"
 #include "engine/core/ecs/component/ComponentBase.hpp"
 
-const int ENTITY_MAX = POOL_PAGE_SIZE;
+namespace rtype
+{
 
 class ComponentManager
 {
@@ -42,7 +42,7 @@ class ComponentManager
         void registerComponentType()
         {
             this->componentPools_.emplace(T::getTypeId(), std::make_shared<ObjectPool<T>>());
-            this->componentLists_.emplace(T::getTypeId(), ENTITY_MAX);
+            this->componentLists_.emplace(T::getTypeId(), 512);
         }
 
         std::shared_ptr<IObjectPool> getComponentPool(id_t typeId) const
@@ -58,7 +58,7 @@ class ComponentManager
             if (this->isComponentTypeRegistered<T>() == false) {
                 this->registerComponentType<T>();
             }
-            return std::dynamic_pointer_cast<ObjectPool<T>>(this->componentPools_[T::getTypeId()]);
+            return std::dynamic_pointer_cast<ObjectPool<T>>(this->componentPools_.at(T::getTypeId()));
         }
 
         std::unordered_map<id_t, ComponentBase *> &getComponentList(id_t typeId)
@@ -153,3 +153,5 @@ class ComponentManager
             function(static_cast<T *>(this->getComponent<T>(entityId)));
         }
 };
+
+}

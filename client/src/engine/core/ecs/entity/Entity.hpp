@@ -1,7 +1,17 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** Entity class
+*/
+
 #pragma once
 
 #include "engine/core/ecs/types.hpp"
 #include "engine/core/ecs/component/ComponentManager.hpp"
+
+namespace rtype
+{
 
 class Entity
 {
@@ -63,3 +73,5 @@ class Entity
             this->componentManager_->removeComponent<T>(this->getId());
         }
 };
+
+}

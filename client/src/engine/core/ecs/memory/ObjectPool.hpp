@@ -1,13 +1,23 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** Object pool class
+*/
+
 #pragma once
 
-#include <iostream>
 #include <cstddef>
 #include <vector>
 #include <numeric>
 #include <stdexcept>
+#include <mutex>
 
 #include "engine/core/ecs/types.hpp"
 #include "engine/core/ecs/memory/IObjectPool.hpp"
+
+namespace rtype
+{
 
 /**
  * ObjectPool design pattern implementation
@@ -50,9 +60,10 @@ class ObjectPool: public IObjectPool
                 Chunk(const Chunk &other)
                     : unusedIds_ { other.unusedIds_ }
                     , objects_ { other.objects_ }
-                {
-                }
+                {}
                 Chunk(Chunk &&) = delete;
+
+                Chunk &operator=(const Chunk &) = delete;
 
                 /**
                  * Tells whether a Chunk has available objects remaining or not
@@ -133,7 +144,7 @@ class ObjectPool: public IObjectPool
     public:
         ObjectPool() = default;
         ObjectPool(const ObjectPool &) = delete;
-        ObjectPool(const ObjectPool &&) = delete;
+        ObjectPool(ObjectPool &&) = delete;
         ~ObjectPool() = default;
 
         ObjectPool &operator=(const ObjectPool &) = delete;
@@ -203,3 +214,5 @@ class ObjectPool: public IObjectPool
             this->chunks_.emplace_back();
         }
 };
+
+}

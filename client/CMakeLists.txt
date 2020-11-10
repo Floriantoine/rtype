@@ -6,8 +6,6 @@ include_directories(
         ../deps
         )
 
-set(CMAKE_EXE_LINKER_FLAGS -lpthread)
-set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(WARNING_FLAG
         -Wall
         -Wextra

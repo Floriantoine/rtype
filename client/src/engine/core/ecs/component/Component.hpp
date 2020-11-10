@@ -1,6 +1,16 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** Component class
+*/
+
 #pragma once
 
 #include "engine/core/ecs/component/ComponentBase.hpp"
+
+namespace rtype
+{
 
 template<typename T>
 class Component: public ComponentBase
@@ -12,3 +22,5 @@ class Component: public ComponentBase
             return id;
         }
 };
+
+}

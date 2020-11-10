@@ -1,9 +1,19 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** System class
+*/
+
 #pragma once
 
 #include <functional>
 
 #include "engine/core/ecs/component/ComponentManager.hpp"
 #include "engine/core/ecs/system/ISystem.hpp"
+
+namespace rtype
+{
 
 template<class T>
 class System: public ISystem
@@ -33,3 +43,5 @@ class System: public ISystem
             this->componentManager_.template apply<T>(entityId, this->updateFunction_);
         }
 };
+
+}

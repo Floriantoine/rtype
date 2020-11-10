@@ -1,6 +1,16 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** Component base class
+*/
+
 #pragma once
 
 #include "engine/core/ecs/types.hpp"
+
+namespace rtype
+{
 
 class ComponentBase
 {
@@ -21,3 +31,5 @@ class ComponentBase
             return this->entityId_;
         }
 };
+
+}

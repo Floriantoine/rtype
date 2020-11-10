@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-BDX-5-1-rtype-albert.corson
+** File description:
+** Client main file
+*/
+
 #include <iostream>
 
 #include "engine/core/ecs/entity/Entity.hpp"
@@ -5,6 +12,8 @@
 #include "engine/core/ecs/component/ComponentManager.hpp"
 #include "engine/core/ecs/component/Component.hpp"
 #include "engine/core/ecs/system/SystemManager.hpp"
+
+using namespace rtype;
 
 class PositionComponent: public Component<PositionComponent>
 {
@@ -34,9 +43,9 @@ class GravityComponent: public Component<GravityComponent>
 
 int main(void)
 {
-    EntityManager &em = EntityManager::getInstance();
-    ComponentManager &cm = ComponentManager::getInstance();
-    SystemManager &sm = SystemManager::getInstance();
+    ComponentManager cm;
+    EntityManager em(cm);
+    SystemManager sm(cm);
 
     auto player = em.createEntity();
     player->addComponent<PositionComponent>(3, 4);
@@ -52,4 +61,5 @@ int main(void)
     });
 
     sm.update();
+    return (0);
 }

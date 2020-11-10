@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2020
-** client
+** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** ComponentManager
+** System manager class
 */
 
 #pragma once
@@ -11,14 +11,16 @@
 #include <memory>
 #include <unordered_map>
 
-#include "engine/utils/Singleton.hpp"
 #include "engine/core/ecs/types.hpp"
 #include "engine/core/ecs/assert.hpp"
 #include "engine/core/ecs/system/ISystem.hpp"
 #include "engine/core/ecs/system/System.hpp"
 #include "engine/core/ecs/component/ComponentManager.hpp"
 
-class SystemManager: public Singleton<SystemManager>
+namespace rtype
+{
+
+class SystemManager
 {
     private:
         ComponentManager &componentManager_;
@@ -73,3 +75,5 @@ class SystemManager: public Singleton<SystemManager>
             this->systemList_.erase(T::getTypeId());
         }
 };
+
+}
