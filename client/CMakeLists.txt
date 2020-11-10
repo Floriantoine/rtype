@@ -4,6 +4,7 @@ project("R-type's client" LANGUAGES CXX)
 
 include_directories(
         ../deps
+        ../deps/engine
         )
 
 set(WARNING_FLAG
@@ -15,7 +16,6 @@ include_directories(src)
 
 set(SRCS
         src/main.cpp
-        src/engine/core/events/EventManager.cpp
         )
 
 add_executable(r-type_client ${SRCS})
