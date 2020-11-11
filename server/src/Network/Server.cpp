@@ -9,6 +9,7 @@
 
 #include "BinaryProtocolCommunication.hpp"
 
+#include <boost/asio/buffer.hpp>
 #include <boost/asio/write.hpp>
 #include <functional>
 
@@ -65,8 +66,8 @@ void rtype::Network::TcpSession::on_read(err_code err, std::size_t nbytes)
         msg << std::istream(&this->streambuf_).rdbuf();
         this->streambuf_.consume(nbytes);
 
-        std::string str = msg.str();
-        std::cout << msg.str() << std::endl;
+        auto str = msg.str();
+        std::cout << str << std::endl;
         BPC::Buffer buffer(str.begin(), str.end());
         std::cout << "Received: " << buffer.size() << " bytes from client" << std::endl;
         g_cm.deserialize(buffer);
@@ -82,6 +83,7 @@ void rtype::Network::TcpSession::on_read(err_code err, std::size_t nbytes)
 
 void rtype::Network::TcpSession::on_write(err_code err, std::size_t nbytes)
 {
+    std::cerr << "Sending.." << std::endl;
     if (!err) {
         this->outgoing_.pop();
         if (!this->outgoing_.empty())
@@ -97,6 +99,7 @@ rtype::Network::TcpServer::TcpServer(boost::asio::io_context &io_context, std::u
     , acceptor_(io_context, tcp::endpoint(tcp::v4(), port))
 {
     std::cout << "TCP Server" << std::endl;
+    this->accept_handler();
 }
 
 void rtype::Network::TcpServer::accept_handler()
@@ -127,11 +130,43 @@ void rtype::Network::TcpServer::receive_handler(const BPC::Buffer &buffer)
 rtype::Network::UdpServer::UdpServer(boost::asio::io_context &io_context, std::uint16_t port)
     : io_context_(io_context)
 {
+    std::cout << "UDP Server" << std::endl;
     this->socket_.emplace(io_context_, udp::endpoint(udp::v4(), port));
-    std::cout << "TCP Server" << std::endl;
+    this->read();
 }
 
 void rtype::Network::UdpServer::read(void)
 {
-    //this->socket_->async_receive(boost::asio::buffer);
+    std::stringstream msg;
+    auto mutableBuffer = this->streambuf_.prepare(4096);
+    this->socket_->async_receive_from(mutableBuffer, this->remote_endpoint_,
+            [&](err_code err, std::size_t nbytes) {
+            if (!err) {
+                std::cout << "Received " << nbytes << " bytes" << std::endl;
+                this->streambuf_.commit(nbytes);
+                std::istream is(&this->streambuf_);
+                std::string str;
+                is >> str;
+                std::cout << str << std::endl;
+                BPC::Buffer buffer(str.begin(), str.end());
+                g_cm.deserialize(buffer);
+                // HERE to resend to server
+                // -------------------------
+                auto buf = g_cm.serialize(BPC::RESPONSE, BPC::CREATE);
+                write(buf);
+                // -------------------------
+                read();
+            }
+                else
+                     std::cerr << "Error SOmewhere" << err.message() << std::endl;
+            });
+}
+
+void rtype::Network::UdpServer::write(const BPC::Buffer &buffer)
+{
+    this->socket_->async_send_to(boost::asio::buffer(buffer), this->remote_endpoint_, 
+            [&](err_code err, std::size_t nsize) {
+                if (err) 
+                    std::cerr << "Write: " + err.message() << std::endl;
+            });
 }

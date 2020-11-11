@@ -5,19 +5,22 @@
 ** Server
 */
 
+#include <stdio.h>
+
 #ifndef SERVER_HPP_
-#define SERVER_HPP_
+    #define SERVER_HPP_
 
-#include "BinaryProtocolCommunication.hpp"
+    #include "BinaryProtocolCommunication.hpp"
 
-#include "IServer"
-#include <boost/asio.hpp>
-#include <cstdint>
-#include <iostream>
-#include <memory.h>
-#include <optional>
-#include <queue>
-#include <unordered_set>
+    #include <boost/asio.hpp>
+    #include <boost/asio/io_context.hpp>
+    #include <cstdint>
+    #include <iostream>
+    #include <memory.h>
+    #include <memory>
+    #include <optional>
+    #include <queue>
+    #include <unordered_set>
 
 namespace BPC = BinaryProtocolCommunication;
 
@@ -31,21 +34,30 @@ using err_handler = std::function<void()>;
 namespace rtype::Network {
     template <typename T>
     // TODO: typesafety with static_assert
-    class IOServer : public IServer{
+    class IOServer {
       public:
-        IOServer<T>(boost::asio::io_context &io_context, std::uint16_t port);
+        IOServer(boost::asio::io_context &io_context, std::uint16_t port)
+            : io_context_(io_context)
+            , Server_(io_context, port)
+        {
+            std::cout << "Start IOServer" << std::endl;
+        };
         ~IOServer<T>() noexcept = default;
-        IOServer<T>(const IOServer &) = default;
-        IOServer<T> &operator=(const IOServer<T> &) = default;
-        IOServer<T> &operator=(IOServer<T> &&) = default;
+        IOServer<T>(const IOServer &) = delete;
+        IOServer &operator=(const IOServer<T> &) = delete;
+        IOServer &operator=(IOServer<T> &&) = delete;
 
-        void start() {};
+        void start()
+        {
+            this->io_context_.run();
+        };
         void end() {};
         void write() {};
         void read() {};
 
       private:
         T Server_;
+        boost::asio::io_context &io_context_;
     };
 
     class TcpSession : public std::enable_shared_from_this<TcpSession> {
@@ -74,7 +86,6 @@ namespace rtype::Network {
         msg_handler on_message_;
         err_handler on_error_;
     };
-
     class TcpServer {
       public:
         TcpServer(boost::asio::io_context &io_context, std::uint16_t port);
@@ -84,8 +95,9 @@ namespace rtype::Network {
         TcpServer operator=(const TcpServer &) = delete;
         TcpServer operator=(TcpServer &&) = delete;
 
-        void accept_handler();
+      private:
         void receive_handler(const BPC::Buffer &buffer);
+        void accept_handler();
 
       private:
         tcp::acceptor acceptor_;
@@ -93,6 +105,7 @@ namespace rtype::Network {
         std::optional<tcp::socket> socket_;
         std::unordered_set<std::shared_ptr<TcpSession>> clients_;
     };
+
     class UdpServer {
       public:
         UdpServer(boost::asio::io_context &io_context, std::uint16_t port);
@@ -102,13 +115,14 @@ namespace rtype::Network {
         UdpServer &operator=(const UdpServer &) = delete;
         UdpServer &operator=(UdpServer &&) = delete;
 
-        void read(void);
-        void write(void);
+        void read();
 
       private:
+        void write(const BPC::Buffer &buffer);
         boost::asio::io_context &io_context_;
-        udp::endpoint sender_endpoint_;
+        udp::endpoint remote_endpoint_;
         std::optional<udp::socket> socket_;
+        boost::asio::streambuf streambuf_;
     };
 }
 #endif /* SERVER_HPP_ */
