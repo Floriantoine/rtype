@@ -2,10 +2,14 @@ cmake_minimum_required(VERSION 3.5)
 
 project("R-type's client" LANGUAGES CXX)
 
+set(SRC_DIR src/)
+
 include_directories(
-	../core
         ../deps
         ../deps/engine
+        ../deps/core
+        ${SRC_DIR}
+        ${SRC_DIR}/Network
         )
 
 set(WARNING_FLAG
@@ -16,8 +20,11 @@ set(WARNING_FLAG
 include_directories(src)
 
 set(SRCS
-        src/main.cpp
-        )
+        main.cpp
+        Network/Client.cpp
+)
+
+list(TRANSFORM SRCS PREPEND ${SRC_DIR})
 
 add_executable(r-type_client ${SRCS})
 
