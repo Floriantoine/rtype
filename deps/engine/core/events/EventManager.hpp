@@ -45,14 +45,20 @@ public:
      * @param eventName event name to bind listener to
      * @param listener function called when event is emitted
      */
-    static iterator_t on(const std::string &eventName, listener_t listener);
+    static iterator_t on(const std::string &eventName, listener_t listener)
+    {
+        return EventManager::getInstance()._on(eventName, listener);
+    }
 
     /**
      * Unbind a specific listener
      *
      * @param iterator listener iterator
      */
-    static void remove(iterator_t iterator);
+    static void remove(iterator_t iterator)
+    {
+        EventManager::getInstance()._remove(iterator);
+    }
 
     /**
      * Emit an event, triggering all associated listeners
@@ -60,14 +66,32 @@ public:
      * @param eventName event name to trigger
      * @param event event data
      */
-    static void emit(const std::string &eventName, IEvent *event);
+    static void emit(const std::string &eventName, IEvent *event)
+    {
+        EventManager::getInstance()._emit(eventName, event);
+    }
 
 private:
-    iterator_t _on(const std::string &eventName, listener_t listener);
+    iterator_t _on(const std::string &eventName, listener_t listener)
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        return _listeners.insert({ eventName, listener });
+    }
 
-    void _remove(iterator_t iterator);
+    void _remove(iterator_t iterator)
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        _listeners.erase(iterator);
+    }
 
-    void _emit(const std::string &eventName, IEvent *event);
+    void _emit(const std::string &eventName, IEvent *event)
+    {
+        auto range = _listeners.equal_range(eventName);
+
+        for (auto &it = range.first; it != range.second; ++it) {
+            it->second(event);
+        }
+    }
 };
 
 }
