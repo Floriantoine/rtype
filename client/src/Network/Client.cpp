@@ -69,9 +69,7 @@ BPC::Buffer &rtype::Network::UdpClient::recv(std::vector<unsigned char> &recbuf)
     int header_size = 8;
     recbuf.resize(header_size);
 
-    std::cout << "mes couilles" << std::endl;
     this->socket_.receive_from(boost::asio::buffer(recbuf), this->serv_endpoints);
-    std::cout << "sur ton front" << std::endl;
 
     // Extract the size of the body
     return recbuf;
