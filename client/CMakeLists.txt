@@ -5,6 +5,7 @@ project("R-type's client" LANGUAGES CXX)
 set(SRC_DIR src/)
 
 include_directories(
+        ./src
         ../deps
         ../deps/engine
         ../deps/core
