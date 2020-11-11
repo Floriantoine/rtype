@@ -31,7 +31,7 @@ The RFC will be availiable soon...
 
 ## Authors
 
-|Engine & Game Mangement | Server/Client & Protocol | 
-|------------------------|--------------------------|
-|Adrien Lucbert          | Albert Corson            |
-|Alexis Delebecque       | Fahad Assoumani          |
+| Engine & Game Management | Server/Client & Protocol |
+|--------------------------|--------------------------|
+| Adrien Lucbert           | Albert Corson            |
+| Alexis Delebecque        | Fahad Assoumani          |
