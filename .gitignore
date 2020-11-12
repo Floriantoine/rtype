@@ -6,3 +6,5 @@ cmake-build-debug/
 .vim/
 compile_commands.json
 r-type_server.json
+server/serv
+client/cli

@@ -5,61 +5,31 @@
 ** Client main file
 */
 
+#include "BinaryProtocolCommunication.hpp"
+
+#include "Client.hpp"
+
+#include <boost/asio.hpp>
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/write.hpp>
 #include <iostream>
+#include <sstream>
 
-#include "engine/core/ecs/entity/Entity.hpp"
-#include "engine/core/ecs/entity/EntityManager.hpp"
-#include "engine/core/ecs/component/ComponentManager.hpp"
-#include "engine/core/ecs/component/Component.hpp"
-#include "engine/core/ecs/system/SystemManager.hpp"
+namespace io = boost::asio;
+namespace ip = io::ip;
+using tcp = io::ip::tcp;
+using error_code = boost::system::error_code;
 
-using namespace rtype;
-
-class PositionComponent: public Component<PositionComponent>
+int main()
 {
-    public:
-        int x { 0 };
-        int y { 0 };
+    auto cm = BPC::CommunicationManager::Get();
+    io::io_context io_context;
 
-        PositionComponent() = default;
-        PositionComponent(int x, int y)
-            : x { x }
-            , y { y }
-        {};
-        ~PositionComponent() = default;
-};
+    rtype::Network::IOClient<rtype::Network::UdpClient> client(io_context, "127.0.0.1", 4219);
 
-class GravityComponent: public Component<GravityComponent>
-{
-    public:
-        double g { 9.81 };
-
-        GravityComponent() = default;
-        GravityComponent(double g)
-            : g { g }
-        {};
-        ~GravityComponent() = default;
-};
-
-int main(void)
-{
-    ComponentManager cm;
-    EntityManager em(cm);
-    SystemManager sm(cm);
-
-    auto player = em.createEntity();
-    player->addComponent<PositionComponent>(3, 4);
-    player->addComponent<GravityComponent>();
-
-    sm.addSystem<PositionComponent>([&](PositionComponent *position) {
-        id_t entityId = position->getEntityId();
-        std::cout << position->x << ":" << position->y << std::endl;
-        if (cm.hasComponent<GravityComponent>(entityId)) {
-            auto gravity = cm.getComponent<GravityComponent>(entityId);
-            position->x += gravity->g;
-        }
-    });
-
-    sm.update();
-    return (0);
+    auto buffer = cm.serialize(BPC::BaseType::REQUEST, BPC::Method::CREATE);
+    client.write(buffer);
+    auto rec = client.read();
+    cm.deserialize(rec);
+    return 0;
 }

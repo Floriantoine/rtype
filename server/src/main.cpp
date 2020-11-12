@@ -8,6 +8,7 @@
 #include "Config.hpp"
 #include "Exception.hpp"
 #include "GameServer.hpp"
+#include "Server.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -34,14 +35,21 @@ static server::Config parseConfig(const std::string &filePath)
 
 int main(int argc, const char **argv)
 {
-    const char *configFilePath = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
+    boost::asio::io_context io_context;
+        rtype::Network::IOServer<rtype::Network::UdpServer> server(io_context, 4219);
 
-    try {
-        server::Config conf = parseConfig(configFilePath);
-        server::GameServer::run(conf);
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
-        return 1;
-    }
+        server.start();
+        //throw rtype::server::Network::IOException(e.msg())
+
+
+    //const char *configFilePath = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
+
+    //try {
+        //server::Config conf = parseConfig(configFilePath);
+        //server::GameServer::run(conf);
+    //} catch (const std::exception &e) {
+        //std::cerr << e.what() << std::endl;
+        //return 1;
+    //}
     return 0;
 }
