@@ -7,16 +7,13 @@
 
 #pragma once
 
-#include "engine/core/ecs/types.hpp"
+#include "../types.hpp"
 
-namespace rtype
-{
+namespace rtype {
+    class ComponentBase {
+        friend class ComponentManager;
 
-class ComponentBase
-{
-    friend class ComponentManager;
-
-    protected:
+      protected:
         id_t entityId_;
 
         static id_t getNextTypeId()
@@ -25,11 +22,11 @@ class ComponentBase
             return id++;
         }
 
-    public:
+      public:
         id_t getEntityId() const
         {
             return this->entityId_;
         }
-};
+    };
 
 }

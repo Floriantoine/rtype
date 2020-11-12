@@ -7,13 +7,10 @@
 
 #pragma once
 
-#include <cstdint>
-
 #include "config.hpp"
 
-namespace rtype
-{
+#include <cstdint>
 
-using id_t = ID_TYPE;
-
+namespace rtype {
+    using id_t = ID_TYPE;
 }

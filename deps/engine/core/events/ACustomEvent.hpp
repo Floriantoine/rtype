@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "engine/core/events/IEvent.hpp"
+#include "./IEvent.hpp"
 
 namespace rtype
 {

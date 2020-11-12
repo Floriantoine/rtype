@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "engine/core/ecs/component/ComponentBase.hpp"
-#include "engine/core/scene/Scene.hpp"
+#include "../engine/core/ecs/component/ComponentBase.hpp"
+#include "../engine/core/scene/Scene.hpp"
 #include "nlohmann/json.hpp"
 #include "utils/Exception.hpp"
 
@@ -21,7 +21,7 @@
 namespace rtype {
     class SceneLoader {
       public:
-        typedef std::function<std::unique_ptr<ComponentBase>(const nlohmann::json &body)> component_factory_t;
+        typedef std::function<void(const std::shared_ptr<Entity> &, const nlohmann::json &)> component_factory_t;
 
         class Exception : public rtype::Exception {
           public:
@@ -141,14 +141,14 @@ namespace rtype {
                 this->loadComponents_(builder, *components);
             }
 
-            std::shared_ptr<Entity> entity = scene.createEntity().lock();
+            std::shared_ptr<Entity> entity = scene.createEntity();
             for (const auto &it : builder.components) {
                 const auto &factory = SceneLoader::componentFactory_.find(it.first);
 
                 if (factory == SceneLoader::componentFactory_.cend()) {
                     throw Exception("no factory defined for `" + it.first + "` component");
                 }
-                // entity.addComponent { this->componentFactory_[it.first](it.second) };
+                this->componentFactory_[it.first](entity, it.second);
             }
         }
 
