@@ -24,9 +24,9 @@ namespace rtype {
         ~SceneManager() = default;
 
         // Create a scene from a file
-        std::shared_ptr<Scene> createScene(std::unique_ptr<Scene> &scene, std::size_t layer)
+        std::shared_ptr<Scene> createScene(std::size_t layer)
         {
-            std::shared_ptr<Scene> new_scene = std::make_shared<Scene>(scene.release());
+            std::shared_ptr<Scene> new_scene = std::make_shared<Scene>();
 
             this->orderedScenes_.emplace(std::make_pair(layer, new_scene));
             return new_scene;
@@ -35,13 +35,15 @@ namespace rtype {
         void destroyScene(std::shared_ptr<Scene> scene)
         {
             id_t sceneId = scene->getId();
+            auto it = this->orderedScenes_.cbegin();
+            auto end = this->orderedScenes_.cend();
 
-            this->orderedScenes_.erase(std::remove_if(
-                this->orderedScenes_.begin(),
-                this->orderedScenes_.end(),
-                [&](const std::shared_ptr<Scene> &it) {
-                    return it->getId() == sceneId;
-                }));
+            for (; it != end; ++it) {
+                if (it->second->getId() == sceneId) {
+                    this->orderedScenes_.erase(it);
+                    break;
+                }
+            }
         }
 
         std::shared_ptr<Scene> getScene(id_t sceneId)

@@ -9,9 +9,11 @@
 
 #include "../engine/core/ecs/component/ComponentBase.hpp"
 #include "../engine/core/scene/Scene.hpp"
+#include "core/scene/SceneManager.hpp"
 #include "nlohmann/json.hpp"
 #include "utils/Exception.hpp"
 
+#include <cstdint>
 #include <fstream>
 #include <functional>
 #include <memory>
@@ -174,12 +176,14 @@ namespace rtype {
             SceneLoader::componentFactory_[type] = factory;
         }
 
-        std::unique_ptr<Scene> load()
+        std::shared_ptr<Scene> load(SceneManager &sceneManager)
         {
             if (!this->good_)
                 throw Exception("parsing error");
 
-            std::unique_ptr scenePtr = std::make_unique<Scene>();
+            std::size_t layer = this->jsonAt_(this->json_, "layer")->get<std::size_t>();
+
+            std::shared_ptr scenePtr = sceneManager.createScene(layer);
 
             this->loadDefinitions_();
             this->loadState_(*scenePtr);
