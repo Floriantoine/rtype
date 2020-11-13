@@ -38,11 +38,16 @@ namespace rtype::BinaryProtocolCommunication {
     };
 
     class CommunicationManager { // singleton
+      private:
+        CommunicationManager() = default;
+
       public:
         ~CommunicationManager() noexcept = default;
         static CommunicationManager &Get()
         {
-            return instance_;
+            static CommunicationManager instance;
+
+            return instance;
         };
 
         Buffer serialize(BaseType type, Method method) //encode Package
@@ -64,12 +69,6 @@ namespace rtype::BinaryProtocolCommunication {
             };
             return obj;
         };
-
-      private:
-        CommunicationManager();
-
-      private:
-        static CommunicationManager instance_;
     };
 };
 
