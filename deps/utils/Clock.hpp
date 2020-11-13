@@ -21,7 +21,7 @@ namespace rtype {
 
       public:
         Clock()
-            : start_ { this->now() }
+            : start_ { this->Now() }
         {
         }
         Clock(const Clock &other)
@@ -35,7 +35,7 @@ namespace rtype {
          **/
         void reset()
         {
-            this->start_ = this->now();
+            this->start_ = this->Now();
         }
 
         /**
@@ -45,7 +45,7 @@ namespace rtype {
          **/
         millisec_t getElapsedMillisecond() const
         {
-            const auto &end = this->now();
+            const auto &end = this->Now();
             return (std::chrono::duration_cast<std::chrono::milliseconds>(end - this->start_).count());
         }
 
@@ -54,12 +54,12 @@ namespace rtype {
             return this->start_;
         }
 
-        static time_point_t now() noexcept
+        static time_point_t Now() noexcept
         {
             return std::chrono::steady_clock::now();
         }
 
-        static std::string getCurrentTime() noexcept
+        static std::string GetCurrentTime() noexcept
         {
             auto timePoint = std::chrono::system_clock::now();
             std::time_t time = std::chrono::system_clock::to_time_t(timePoint);

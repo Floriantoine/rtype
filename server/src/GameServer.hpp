@@ -22,7 +22,7 @@ namespace rtype::server {
      */
     class GameServer {
       private:
-        static GameServer instance_;
+        static GameServer Instance_;
         std::vector<std::unique_ptr<LobbyManagerThread>> lobbyManagers_;
         std::shared_ptr<LobbyDispatcher> dispatcher_;
 
@@ -36,6 +36,6 @@ namespace rtype::server {
         * 
         * @param conf server's configuration
         */
-        static void run(const rtype::server::Config &conf);
+        static void Run(const rtype::server::Config &conf);
     };
 }

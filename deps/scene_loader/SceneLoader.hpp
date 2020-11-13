@@ -47,13 +47,13 @@ namespace rtype {
             }
         };
 
-        static std::unordered_map<std::string, component_factory_t> componentFactory_;
+        static std::unordered_map<std::string, component_factory_t> ComponentFactory_;
 
         bool good_ { true };
         nlohmann::json json_;
         std::unordered_map<std::string, EntityDefinition> definitions_;
 
-        static const auto jsonAt_(const nlohmann::json &json, const std::string &key, const std::string &errorContext = "")
+        static const auto JsonAt_(const nlohmann::json &json, const std::string &key, const std::string &errorContext = "")
         {
             const auto &value = json.find(key);
             if (value == json.end())
@@ -63,7 +63,7 @@ namespace rtype {
 
         void addComponent_(EntityDefinition &def, const nlohmann::json &body)
         {
-            const auto &typeJson = this->jsonAt_(body, "type", "for an object of type `component`");
+            const auto &typeJson = this->JsonAt_(body, "type", "for an object of type `component`");
             const std::string &type = typeJson->get<std::string>();
 
             def.components[typeJson->get<std::string>()] = body;
@@ -79,17 +79,17 @@ namespace rtype {
 
         void loadState_(Scene &scene) const
         {
-            static const std::unordered_map<std::string, Scene::State> states = {
+            static const std::unordered_map<std::string, Scene::State> States = {
                 { "INACTIVE", Scene::STATE_INACTIVE },
                 { "RUNNING", Scene::STATE_RUNNING },
                 { "PAUSED", Scene::STATE_PAUSED }
             };
 
-            const auto &stateJson = this->jsonAt_(this->json_, "state");
+            const auto &stateJson = this->JsonAt_(this->json_, "state");
             const auto &stateStr = stateJson->get<std::string>();
-            const auto &state = states.find(stateStr);
+            const auto &state = States.find(stateStr);
 
-            if (state == states.cend()) {
+            if (state == States.cend()) {
                 throw Exception("value `" + stateStr + "` for `state` isn't valid");
             }
             scene.setState(state->second);
@@ -97,15 +97,15 @@ namespace rtype {
 
         void loadDefinitions_()
         {
-            static bool loaded = false;
+            static bool Loaded = false;
 
-            if (loaded)
+            if (Loaded)
                 return;
-            loaded = true;
+            Loaded = true;
 
             auto defs = this->json_.find("definitions");
             for (const auto &it : *defs) {
-                const auto &id = this->jsonAt_(it, "id", "for an object of type `definition`")->get<std::string>();
+                const auto &id = this->JsonAt_(it, "id", "for an object of type `definition`")->get<std::string>();
                 const auto &check = this->getDefinition_(id, false);
                 if (check != this->definitions_.cend()) {
                     throw Exception("multiple definition of `" + id + "`");
@@ -113,7 +113,7 @@ namespace rtype {
 
                 EntityDefinition &def = this->definitions_[id];
 
-                const auto &components = this->jsonAt_(it, "components", " object for definition of `" + id + "`");
+                const auto &components = this->JsonAt_(it, "components", " object for definition of `" + id + "`");
 
                 for (const auto &component : *components) {
                     addComponent_(def, component);
@@ -124,7 +124,7 @@ namespace rtype {
         void loadComponents_(EntityDefinition &entity, const nlohmann::json &json) const
         {
             for (const auto &component : json) {
-                std::string type = this->jsonAt_(json, "type")->get<std::string>();
+                std::string type = this->JsonAt_(json, "type")->get<std::string>();
                 entity.components[type].merge_patch(json);
             }
         }
@@ -145,12 +145,12 @@ namespace rtype {
 
             std::shared_ptr<Entity> entity = scene.createEntity();
             for (const auto &it : builder.components) {
-                const auto &factory = SceneLoader::componentFactory_.find(it.first);
+                const auto &factory = SceneLoader::ComponentFactory_.find(it.first);
 
-                if (factory == SceneLoader::componentFactory_.cend()) {
+                if (factory == SceneLoader::ComponentFactory_.cend()) {
                     throw Exception("no factory defined for `" + it.first + "` component");
                 }
-                this->componentFactory_[it.first](entity, it.second);
+                this->ComponentFactory_[it.first](entity, it.second);
             }
         }
 
@@ -171,9 +171,9 @@ namespace rtype {
             }
         }
 
-        static void addComponentFactory(const std::string &type, component_factory_t factory)
+        static void AddComponentFactory(const std::string &type, component_factory_t factory)
         {
-            SceneLoader::componentFactory_[type] = factory;
+            SceneLoader::ComponentFactory_[type] = factory;
         }
 
         std::shared_ptr<Scene> load(SceneManager &sceneManager)
@@ -181,14 +181,14 @@ namespace rtype {
             if (!this->good_)
                 throw Exception("parsing error");
 
-            std::size_t layer = this->jsonAt_(this->json_, "layer")->get<std::size_t>();
+            std::size_t layer = this->JsonAt_(this->json_, "layer")->get<std::size_t>();
 
             std::shared_ptr scenePtr = sceneManager.createScene(layer);
 
             this->loadDefinitions_();
             this->loadState_(*scenePtr);
 
-            const auto &json = this->jsonAt_(this->json_, "entities");
+            const auto &json = this->JsonAt_(this->json_, "entities");
 
             for (const auto &it : *json) {
                 this->loadEntity_(*scenePtr, it);

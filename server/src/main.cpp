@@ -17,7 +17,7 @@
 
 using namespace rtype;
 
-static server::Config parseConfig(const std::string &filePath)
+static server::Config ParseConfig(const std::string &filePath)
 {
     std::ifstream configFile(filePath.data());
     server::Config conf;
@@ -45,8 +45,8 @@ int main(int argc, const char **argv)
     //const char *configFilePath = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
 
     //try {
-        //server::Config conf = parseConfig(configFilePath);
-        //server::GameServer::run(conf);
+        //server::Config conf = ParseConfig(configFilePath);
+        //server::GameServer::Run(conf);
     //} catch (const std::exception &e) {
         //std::cerr << e.what() << std::endl;
         //return 1;

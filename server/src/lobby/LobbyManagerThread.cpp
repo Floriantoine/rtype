@@ -35,7 +35,7 @@ namespace rtype::server {
     {
         this->isRunning_ = true;
         while (this->isRunning_) {
-            auto expectedEnd = Clock::now() + TICK_TIME;
+            auto expectedEnd = Clock::Now() + TICK_TIME;
             this->onTick_();
             std::this_thread::sleep_until(expectedEnd);
         }

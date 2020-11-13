@@ -15,11 +15,11 @@
 #include <thread>
 
 namespace rtype::server {
-    GameServer GameServer::instance_ = GameServer();
+    GameServer GameServer::Instance_ = GameServer();
 
-    void GameServer::run(const rtype::server::Config &conf)
+    void GameServer::Run(const rtype::server::Config &conf)
     {
-        GameServer::instance_.run_(conf);
+        GameServer::Instance_.run_(conf);
     }
 
     void GameServer::run_(const rtype::server::Config &conf)
