@@ -36,11 +36,10 @@ static server::Config ParseConfig(const std::string &filePath)
 int main(int argc, const char **argv)
 {
     boost::asio::io_context io_context;
-        rtype::Network::IOServer<rtype::Network::UdpServer> server(io_context, 4219);
+    rtype::Network::IOServer<rtype::Network::UdpServer> server(io_context, 4219);
 
-        server.start();
-        //throw rtype::server::Network::IOException(e.msg())
-
+    server.start();
+    //throw rtype::server::Network::IOException(e.msg())
 
     //const char *configFilePath = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
 
