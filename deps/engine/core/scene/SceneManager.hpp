@@ -63,11 +63,10 @@ namespace rtype {
             }
         }
 
-        template <typename T>
-        void update()
+        void update(ASystem::system_group_e group)
         {
             for (auto &scene : this->orderedScenes_) {
-                scene.second->update<T>();
+                scene.second->update(group);
             }
         }
     };

@@ -11,6 +11,7 @@
 #include "../ecs/system/SystemManager.hpp"
 
 namespace rtype {
+
     class Scene {
       public:
         enum State {
@@ -56,35 +57,38 @@ namespace rtype {
         std::shared_ptr<Entity> createEntity()
         {
             return this->entityManager_.createEntity();
-        };
+        }
 
         void removeEntity(std::shared_ptr<Entity> entity)
         {
             this->entityManager_.destroyEntity(entity->getId());
-        };
+        }
+
+        template <class T, typename... Args>
+        std::shared_ptr<T> createSystem(Args &&... args)
+        {
+            return this->systemManager_.createSystem<T>(std::forward(args)...);
+        }
+
+        template <class T>
+        void removeSystem(std::shared_ptr<T> system)
+        {
+            this->systemManager_.removeSystem(system);
+        }
 
         void update()
         {
             if (this->state_ == STATE_INACTIVE)
                 return;
             this->systemManager_.update();
-        };
+        }
 
-        template <typename T>
-        void update()
+        void update(ASystem::system_group_e group)
         {
             if (this->state_ == STATE_INACTIVE)
                 return;
-            this->systemManager_.update<T>();
-        };
-
-        void addSystem(std::shared_ptr<ISystem> system)
-        {
-        }
-
-        template <class T>
-        void removeSystem(std::shared_ptr<T> system)
-        {
+            this->systemManager_.update(group);
         }
     };
+
 }

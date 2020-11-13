@@ -10,6 +10,7 @@
 #include "../types.hpp"
 
 namespace rtype {
+
     class ComponentBase {
         friend class ComponentManager;
 
