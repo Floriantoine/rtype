@@ -7,29 +7,27 @@
 
 #pragma once
 
-#include <vector>
+#include "../assert.hpp"
+#include "../component/ComponentManager.hpp"
+#include "../types.hpp"
+#include "./ISystem.hpp"
+#include "./System.hpp"
+
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
-#include "engine/core/ecs/types.hpp"
-#include "engine/core/ecs/assert.hpp"
-#include "engine/core/ecs/system/ISystem.hpp"
-#include "engine/core/ecs/system/System.hpp"
-#include "engine/core/ecs/component/ComponentManager.hpp"
+namespace rtype {
 
-namespace rtype
-{
-
-class SystemManager
-{
-    private:
+    class SystemManager {
+      private:
         ComponentManager &componentManager_;
         std::unordered_map<id_t, std::shared_ptr<ISystem>> systemList_;
 
-    public:
+      public:
         SystemManager(ComponentManager &componentManager)
             : componentManager_ { componentManager }
-        {}
+        { }
         SystemManager(const SystemManager &) = delete;
         SystemManager(SystemManager &&) = delete;
         ~SystemManager() = default;
@@ -38,12 +36,12 @@ class SystemManager
 
         void update()
         {
-            for (const auto &system: this->systemList_) {
+            for (const auto &system : this->systemList_) {
                 system.second->update();
             }
         }
 
-        template<class T>
+        template <class T>
         void update()
         {
             STATIC_ASSERT_IS_COMPONENT(T);
@@ -52,7 +50,7 @@ class SystemManager
             systemIt->second->update();
         }
 
-        template<class T>
+        template <class T>
         void update(id_t entityId)
         {
             STATIC_ASSERT_IS_COMPONENT(T);
@@ -61,19 +59,19 @@ class SystemManager
             systemIt->second->update(entityId);
         }
 
-        template<class T>
-        void addSystem(std::function<void (T *)> updateFunction)
+        template <class T>
+        void addSystem(std::function<void(T *)> updateFunction)
         {
             STATIC_ASSERT_IS_COMPONENT(T);
             this->systemList_.emplace(T::getTypeId(), std::make_shared<System<T>>(this->componentManager_, updateFunction));
         }
 
-        template<class T>
+        template <class T>
         void removeSystem()
         {
             STATIC_ASSERT_IS_COMPONENT(T);
             this->systemList_.erase(T::getTypeId());
         }
-};
+    };
 
 }

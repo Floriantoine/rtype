@@ -9,21 +9,18 @@
 
 #include <string>
 
-namespace rtype
-{
+namespace rtype {
 
-/**
- * Event interface
- *
- * Stores data related to an event
- */
-class IEvent
-{
-    protected:
-        virtual ~IEvent() {}
+    /**
+     * Event interface
+     *
+     * Stores data related to an event
+     */
+    class IEvent {
+      protected:
+        virtual ~IEvent() { }
 
-    public:
+      public:
         virtual const char *GetType() = 0;
-};
-
+    };
 }

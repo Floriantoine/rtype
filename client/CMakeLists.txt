@@ -5,6 +5,7 @@ project("R-type's client" LANGUAGES CXX)
 set(SRC_DIR src/)
 
 include_directories(
+        ./src
         ../deps
         ../deps/engine
         ../deps/core
@@ -16,8 +17,6 @@ set(WARNING_FLAG
         -Wall
         -Wextra
         -Wpedantic)
-
-include_directories(src)
 
 set(SRCS
         main.cpp

@@ -7,23 +7,24 @@
 
 #pragma once
 
-#include "engine/core/events/ACustomEvent.hpp"
+#include "./ACustomEvent.hpp"
 
-namespace rtype
-{
+namespace rtype {
 
-/**
- * Custom Event abstract class
- *
- * Use this to create project-specific events
- */
-class MouseEvent: public ACustomEvent
-{
-    public:
+    /**
+     * Custom Event abstract class
+     *
+     * Use this to create project-specific events
+     */
+    class MouseEvent : public ACustomEvent {
+      public:
         MouseEvent() = default;
         ~MouseEvent() = default;
 
-        const char *GetType() { return "MouseEvent"; }
-};
+        const char *GetType()
+        {
+            return "MouseEvent";
+        }
+    };
 
 }

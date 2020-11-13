@@ -9,16 +9,13 @@
 
 #include "engine/core/ecs/types.hpp"
 
-namespace rtype
-{
+namespace rtype {
+    class ISystem {
+      public:
+        virtual ~ISystem() {};
 
-class ISystem
-{
-public:
-    virtual ~ISystem() {};
-
-    virtual void update() = 0;
-    virtual void update(id_t) = 0;
-};
+        virtual void update() = 0;
+        virtual void update(id_t) = 0;
+    };
 
 }

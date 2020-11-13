@@ -7,26 +7,24 @@
 
 #pragma once
 
+#include "../component/ComponentManager.hpp"
+#include "./ISystem.hpp"
+
 #include <functional>
 
-#include "engine/core/ecs/component/ComponentManager.hpp"
-#include "engine/core/ecs/system/ISystem.hpp"
+namespace rtype {
 
-namespace rtype
-{
-
-template<class T>
-class System: public ISystem
-{
-    private:
+    template <class T>
+    class System : public ISystem {
+      private:
         ComponentManager &componentManager_;
-        std::function<void (T *)> updateFunction_;
+        std::function<void(T *)> updateFunction_;
 
-    public:
-        System(ComponentManager &componentManager, std::function<void (T *)> updateFunction)
+      public:
+        System(ComponentManager &componentManager, std::function<void(T *)> updateFunction)
             : componentManager_ { componentManager }
             , updateFunction_ { updateFunction }
-        {}
+        { }
         System(const System &) = delete;
         System(System &&) = delete;
         ~System() override = default;
@@ -42,6 +40,6 @@ class System: public ISystem
         {
             this->componentManager_.template apply<T>(entityId, this->updateFunction_);
         }
-};
+    };
 
 }

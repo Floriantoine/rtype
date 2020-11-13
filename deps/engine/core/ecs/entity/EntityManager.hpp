@@ -7,17 +7,15 @@
 
 #pragma once
 
-#include <vector>
+#include "./Entity.hpp"
+
 #include <memory>
+#include <vector>
 
-#include "engine/core/ecs/entity/Entity.hpp"
+namespace rtype {
 
-namespace rtype
-{
-
-class EntityManager
-{
-    private:
+    class EntityManager {
+      private:
         ObjectPool<Entity> entityPool_;
         ComponentManager &componentManager_;
 
@@ -29,10 +27,10 @@ class EntityManager
             this->entityPool_.release(entity);
         }
 
-    public:
+      public:
         EntityManager(ComponentManager &componentManager)
             : componentManager_ { componentManager }
-        {}
+        { }
         EntityManager(const EntityManager &) = delete;
         EntityManager(EntityManager &&) = delete;
         ~EntityManager() = default;
@@ -66,6 +64,6 @@ class EntityManager
                 this->destroyEntity(entity.get());
             }
         }
-};
+    };
 
 }
