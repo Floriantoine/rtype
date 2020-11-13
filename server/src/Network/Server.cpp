@@ -140,7 +140,7 @@ void rtype::Network::UdpServer::read(void)
     std::stringstream msg;
     auto mutableBuffer = this->streambuf_.prepare(4096);
     this->socket_->async_receive_from(mutableBuffer, this->remote_endpoint_,
-            [&](err_code err, std::size_t nbytes) {
+        [&](err_code err, std::size_t nbytes) {
             if (!err) {
                 std::cout << "Received " << nbytes << " bytes" << std::endl;
                 this->streambuf_.commit(nbytes);
@@ -156,17 +156,17 @@ void rtype::Network::UdpServer::read(void)
                 write(buf);
                 // -------------------------
                 read();
-            }
-                else
-                     std::cerr << "Error SOmewhere" << err.message() << std::endl;
-            });
+            } else
+                std::cerr << "Error SOmewhere" << err.message() << std::endl;
+        });
 }
 
 void rtype::Network::UdpServer::write(const BPC::Buffer &buffer)
 {
-    this->socket_->async_send_to(boost::asio::buffer(buffer), this->remote_endpoint_, 
-            [&](err_code err, std::size_t nsize) {
-                if (err) 
-                    std::cerr << "Write: " + err.message() << std::endl;
-            });
+    this->socket_->async_send_to(boost::asio::buffer(buffer), this->remote_endpoint_,
+        [&](err_code err, std::size_t nsize) {
+            if (err) {
+                std::cerr << "Write: " + err.message() << std::endl;
+            }
+        });
 }

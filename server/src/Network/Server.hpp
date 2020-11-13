@@ -126,4 +126,3 @@ namespace rtype::Network {
     };
 }
 #endif /* SERVER_HPP_ */
-

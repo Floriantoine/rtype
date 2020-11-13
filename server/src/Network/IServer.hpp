@@ -17,4 +17,3 @@ struct IServer {
 };
 
 #endif /* ISERVER_HPP_ */
-
