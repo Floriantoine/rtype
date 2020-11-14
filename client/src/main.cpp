@@ -4,29 +4,59 @@
 ** File description:
 ** Client main file
 */
-
-#include "Client.hpp"
-#include "Protocol.hpp"
+#include "engine/core/Game.hpp"
+#include "engine/core/ecs/component/Component.hpp"
+#include "engine/core/ecs/system/ASystem.hpp"
 
 #include <iostream>
-#include <sstream>
+
+using namespace rtype;
+
+class PositionComponent : public Component<PositionComponent> {
+  public:
+    int x { 0 };
+    int y { 0 };
+
+    PositionComponent() = default;
+    PositionComponent(int x, int y)
+        : x { x }
+        , y { y }
+    { }
+};
+
+class ARenderSystem : public ASystem {
+  protected:
+    ARenderSystem()
+        : ASystem(ASystem::RENDER_SYSTEM_GROUP)
+    { }
+};
+
+class SpriteSystem : public ARenderSystem {
+    void update() override
+    {
+        std::cout << "Updating sprite system" << std::endl;
+    }
+};
+
+class PositionSystem : public ASystem {
+  public:
+    void update() override
+    {
+        std::cout << "Updating position system" << std::endl;
+    }
+};
 
 int main(int ac, char *av[])
 {
-    boost::asio::io_context io_context;
+    Game game;
 
-    //std::uint16_t i = std::stoi(av[1]);
-    rtype::Network::IOClient<rtype::Network::TcpClient> client(io_context, "127.0.0.1", 4000);
+    auto scene = game.createScene(0);
+    auto player = scene->createEntity();
+    player->addComponent<PositionComponent>();
 
-    rtype::BPC::Package package;
-    package.type = rtype::BPC::BaseType::REQUEST;
-    package.method = rtype::BPC::Method::CREATE;
-    package.timestamp = 42;
+    scene->createSystem<PositionSystem>();
+    scene->createSystem<SpriteSystem>();
 
-    auto buffer = rtype::BPC::Serialize(package);
-    client.write(buffer);
-    auto rec = client.read();
-    rtype::BPC::Deserialize(buffer);
-
+    game.run();
     return 0;
 }
