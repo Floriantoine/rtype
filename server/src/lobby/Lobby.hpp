@@ -9,6 +9,7 @@
 
 #include "Server.hpp"
 
+#include <boost/asio/io_context.hpp>
 #include <string>
 
 namespace rtype::server {
@@ -17,13 +18,14 @@ namespace rtype::server {
     */
     class Lobby {
       private:
-        rtype::Network::UdpServer &udp_server_;
+        boost::asio::io_context io_context_;
+        rtype::Network::UdpServer udp_server_;
         bool isRunning_ { true };
 
       public:
         std::string id;
 
-        Lobby(rtype::Network::UdpServer &udp_server);
+        Lobby();
         ~Lobby() = default;
 
         /**

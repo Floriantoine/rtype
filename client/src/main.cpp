@@ -21,9 +21,17 @@ int main()
 
     rtype::Network::IOClient<rtype::Network::UdpClient> client(io_context, "127.0.0.1", 4219);
 
-    auto buffer = cm.serialize(rtype::BPC::BaseType::REQUEST, rtype::BPC::Method::CREATE);
+    rtype::BPC::Package package = {
+        rtype::BPC::BaseType::REQUEST,
+        rtype::BPC::Method::CREATE,
+        42,
+        {"localhost", 4219},
+    };
+
+    auto buffer = cm.Serialize(package);
     client.write(buffer);
     auto rec = client.read();
-    cm.deserialize(rec);
+    cm.Deserialize(buffer);
+
     return 0;
 }

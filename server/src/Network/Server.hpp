@@ -70,15 +70,15 @@ namespace rtype::Network {
 
     class UdpServer {
       public:
-        UdpServer(std::shared_ptr<boost::asio::io_context> &io_context, std::uint16_t port);
+        UdpServer(boost::asio::io_context &io_context);
         ~UdpServer() = default;
         UdpServer(const UdpServer &) = delete;
         UdpServer(UdpServer &&) = delete;
-        UdpServer &operator=(const UdpServer &) = delete;
+        UdpServer &operator=(const UdpServer &);
         UdpServer &operator=(UdpServer &&) = delete;
 
         void read();
-        std::shared_ptr<boost::asio::io_context> &io_context_;
+        boost::asio::io_context &io_context_;
       private:
         void write(const rtype::BPC::Buffer &buffer);
         udp::endpoint remote_endpoint_;
