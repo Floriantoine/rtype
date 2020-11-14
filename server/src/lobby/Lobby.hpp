@@ -9,6 +9,7 @@
 
 #include "Server.hpp"
 
+#include <boost/asio/io_context.hpp>
 #include <string>
 
 namespace rtype::server {

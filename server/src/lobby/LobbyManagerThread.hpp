@@ -22,8 +22,6 @@ namespace rtype::server {
     */
     class LobbyManagerThread {
       private:
-        rtype::Network::UdpServer udp_server_;
-        std::shared_ptr<boost::asio::io_context> io_context_;
         static constexpr unsigned TICKS_PER_SEC = 60;
         static constexpr auto TICK_TIME = std::chrono::seconds(1) / TICKS_PER_SEC;
         bool isRunning_ { false };
@@ -36,7 +34,7 @@ namespace rtype::server {
         void run_();
 
       public:
-        LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher, unsigned index, std::shared_ptr<boost::asio::io_context> io_context);
+        LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher, unsigned index);
         ~LobbyManagerThread();
     };
 }
