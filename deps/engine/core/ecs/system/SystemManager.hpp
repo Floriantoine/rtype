@@ -10,19 +10,16 @@
 #include "../assert.hpp"
 #include "../component/ComponentManager.hpp"
 #include "../types.hpp"
-#include "./ISystem.hpp"
-#include "./System.hpp"
+#include "./ASystem.hpp"
 
 #include <memory>
 #include <unordered_map>
-#include <vector>
 
 namespace rtype {
-
     class SystemManager {
       private:
         ComponentManager &componentManager_;
-        std::unordered_map<id_t, std::shared_ptr<ISystem>> systemList_;
+        std::unordered_multimap<ASystem::system_group_e, std::shared_ptr<ASystem>> systemList_;
 
       public:
         SystemManager(ComponentManager &componentManager)
@@ -41,36 +38,36 @@ namespace rtype {
             }
         }
 
-        template <class T>
-        void update()
+        void update(ASystem::system_group_e group)
         {
-            STATIC_ASSERT_IS_COMPONENT(T);
-            auto systemIt = this->systemList_.find(T::getTypeId());
-            assert(systemIt != this->systemList_.end() && "No system corresponding to this component type");
-            systemIt->second->update();
+            auto range = this->systemList_.equal_range(group);
+
+            for (auto it = range.first; it != range.second; ++it) {
+                it->second->update();
+            }
+        }
+
+        template <class T, typename... Args>
+        std::shared_ptr<T> createSystem(Args &&... args)
+        {
+            STATIC_ASSERT_IS_SYSTEM(T);
+            auto system = std::make_shared<T>(std::forward(args)...);
+            system->componentManager_ = &this->componentManager_;
+            this->systemList_.emplace(std::make_pair(system->getGroup(), system));
+            return system;
         }
 
         template <class T>
-        void update(id_t entityId)
+        void removeSystem(std::shared_ptr<T> system)
         {
-            STATIC_ASSERT_IS_COMPONENT(T);
-            auto systemIt = this->systemList_.find(T::getTypeId());
-            assert(systemIt != this->systemList_.end() && "No system corresponding to this component type");
-            systemIt->second->update(entityId);
-        }
-
-        template <class T>
-        void addSystem(std::function<void(T *)> updateFunction)
-        {
-            STATIC_ASSERT_IS_COMPONENT(T);
-            this->systemList_.emplace(T::getTypeId(), std::make_shared<System<T>>(this->componentManager_, updateFunction));
-        }
-
-        template <class T>
-        void removeSystem()
-        {
-            STATIC_ASSERT_IS_COMPONENT(T);
-            this->systemList_.erase(T::getTypeId());
+            STATIC_ASSERT_IS_SYSTEM(T);
+            for (auto it = this->systemList_.cbegin(); it != this->systemList_.cend(); ++it) {
+                if (it->second == system) {
+                    this->systemList_.erase(it);
+                    return;
+                }
+            }
+            assert("System is not registered in this SystemManager instance");
         }
     };
 

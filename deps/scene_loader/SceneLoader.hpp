@@ -9,7 +9,7 @@
 
 #include "../engine/core/ecs/component/ComponentBase.hpp"
 #include "../engine/core/scene/Scene.hpp"
-#include "core/scene/SceneManager.hpp"
+#include "core/Game.hpp"
 #include "nlohmann/json.hpp"
 #include "utils/Exception.hpp"
 
@@ -176,14 +176,14 @@ namespace rtype {
             SceneLoader::ComponentFactory_[type] = factory;
         }
 
-        std::shared_ptr<Scene> load(SceneManager &sceneManager)
+        std::shared_ptr<Scene> load(Game &game)
         {
             if (!this->good_)
                 throw Exception("parsing error");
 
             std::size_t layer = this->JsonAt_(this->json_, "layer")->get<std::size_t>();
 
-            std::shared_ptr scenePtr = sceneManager.createScene(layer);
+            std::shared_ptr scenePtr = game.createScene(layer);
 
             this->loadDefinitions_();
             this->loadState_(*scenePtr);

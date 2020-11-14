@@ -28,7 +28,7 @@ namespace rtype {
       public:
         Entity()
             : id_ { this->getNextId() }
-        { }
+        {}
         ~Entity() = default;
 
         Entity &operator=(const Entity &other)
