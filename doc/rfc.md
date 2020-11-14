@@ -81,7 +81,6 @@ If a confirmation is required, the response must at least contain a header even 
 
 
 ## TCP pre-game connection
-___
 
 ### **ASK_JOIN**
 * <ins>LOBBY_ID</ins>: ID of the lobby (6 ascii characters)
@@ -132,6 +131,7 @@ ___
 ```
 
 ## UDP in-game connection
+
 ### **GAME_STATE**
 * <ins>STATE</ins>: the state of the game:
     - **0**: game awaiting start
@@ -140,6 +140,7 @@ ___
     - **3**: game won (must only be sent by the server)
     - **4**: game lost (must only be sent by the server)
 #### REQUEST:
+#### *From both:*
 > Change the state of the game
 ```
 +----------+
@@ -164,6 +165,7 @@ ___
     - 9: up and right (up | right)
     - 6: down and left (down | left)
     - 10: down and right (down | right)
+#### REQUEST:
 #### *From server:*
 > Must send an entity's new position
 ```
@@ -186,14 +188,17 @@ ___
 ___
 ### **SPAWN**
 * <ins>ENTITY_ID</ins>: entity unique identifier
+#### REQUEST:
 #### *From server:*
 > Must tell the client a new entity has spawned
+> The component consists of the component name (used to call a factory function) followed by the binary content of the component (used by the factory)
 ```
-+------------+
-| ENTITY_ID  |
-|  unsigned  |
-|   8 bytes  |
-+------------+
+               |<         component list        >|
++------------+?+----------------+----------------+
+| ENTITY_ID  |?| COMPONENT_NAME |                |
+|  unsigned  |?|    unsigned    | COMPONENT_BODY |
+|   8 bytes  |?|   until '\0'   |                |
++------------+?+----------------+----------------+
 ```
 
 ___
@@ -232,10 +237,9 @@ ___
 ### **DROP**
 * <ins>PLAYER_ID</ins>: player unique identifier
 #### REQUEST:
-#### *From client:*
-> Must tell the server that the player dropped his force (shield). No body should be sent.
-#### *From server:*
-> Must notify the clients that a player dropped his force (shield)
+#### *From both:*
+> From client: must tell the server that the player dropped his force (shield). No body should be sent.
+> From server: must notify the clients that a player dropped his force (shield)
 ```
 +-----------+
 | PLAYER_ID |
@@ -271,6 +275,16 @@ ___
 |  1 byte   |
 +-----------+
 ```
+#### RESPONSE:
+#### *From server:*
+> Must give the entity id to assign to the shot
+```
++-----------+
+| ENTITY_ID |
+| unsigned  |
+|  8 bytes  |
++-----------+
+```
 
 ___
 ### **HIT**
@@ -291,6 +305,9 @@ ___
 * <ins>PLAYER_ID</ins>: the players' unique identifier (0-3)
 * <ins>MAP_NAME</ins>: a string containing the name of the map to load
 #### REQUEST:
+#### *From client:*
+> An empty body should be sent
+#### RESPONSE:
 #### *From server:*
 > If <ins>PLAYER_ID</ins> is greater than 3 the client's connection has been refused
 ```
@@ -305,7 +322,7 @@ ___
 ### **LEAVE**
 * <ins>PLAYER_ID</ins>: the players' unique identifier (0-3)
 #### REQUEST:
-#### *From server:*
+#### *From client:*
 > Must notify the server that the client is leaving the game
 ```
 +-----------+
