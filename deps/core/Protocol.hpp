@@ -32,9 +32,10 @@ namespace rtype::BinaryProtocolCommunication {
         SCORE,
     };
 
-    struct BaseObj {
+    struct Package {
         BaseType type_;
         Method method_;
+        Buffer body_;
     };
 
     class CommunicationManager { // singleton
@@ -50,20 +51,19 @@ namespace rtype::BinaryProtocolCommunication {
             return instance;
         };
 
-        Buffer serialize(BaseType type, Method method) //encode Package
+        static Buffer serialize(BaseType type, Method method)
         {
             size_t lengthBuffer = 2;
-            Buffer buffer(lengthBuffer, 0); // We prefill the buffer of lengthBuffer 0
+            Buffer buffer(lengthBuffer, 0);
 
-            // In the first byte we store the type and the methods
-            buffer[DEFINITON_BYTE] = (method << 6) + type; // Since type and enum are enums having less than 15 members each we can simply use bitshft to store it in 1 byte;
+            buffer[DEFINITON_BYTE] = (method << 6) + type;
             buffer[1] = '\n';
             return buffer;
         };
 
-        BaseObj deserialize(const Buffer &buffer) //decode Package
+        static Package deserialize(const Buffer &buffer)
         {
-            BaseObj obj = {
+            const Package obj = {
                 .type_ = static_cast<BaseType>(buffer[DEFINITON_BYTE] & 0xF),
                 .method_ = static_cast<Method>(buffer[DEFINITON_BYTE] >> 4)
             };

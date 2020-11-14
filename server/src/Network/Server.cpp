@@ -7,8 +7,6 @@
 
 #include "Server.hpp"
 
-#include "BinaryProtocolCommunication.hpp"
-
 #include <boost/asio/buffer.hpp>
 #include <boost/asio/write.hpp>
 #include <functional>
@@ -17,7 +15,6 @@
 #define BPC_CM (rtype::BPC::CommunicationManager::Get())
 
 namespace rtype::Network {
-
     TcpSession::TcpSession(tcp::socket &&socket)
         : socket_(std::move(socket))
     {
@@ -130,12 +127,11 @@ namespace rtype::Network {
         std::cout << "RECEIVE PACKAGE:" << std::endl;
     }
 
-    UdpServer::UdpServer(boost::asio::io_context &io_context, std::uint16_t port)
+    UdpServer::UdpServer(std::shared_ptr<boost::asio::io_context> &io_context, std::uint16_t port)
         : io_context_(io_context)
     {
         std::cout << "UDP Server" << std::endl;
-        this->socket_.emplace(io_context_, udp::endpoint(udp::v4(), port));
-        this->read();
+        this->socket_.emplace(*io_context_.get(), udp::endpoint(udp::v4(), port));
     }
 
     void UdpServer::read(void)
@@ -158,7 +154,7 @@ namespace rtype::Network {
                     auto buf = BPC_CM.serialize(BPC::RESPONSE, BPC::CREATE);
                     write(buf);
                     // -------------------------
-                    read();
+                    //read();
                 } else
                     std::cerr << "Error Somewhere" << err.message() << std::endl;
             });
