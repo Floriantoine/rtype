@@ -7,14 +7,11 @@
 
 #pragma once
 
-#include <boost/algorithm/string.hpp>
-#include <string>
 #include <vector>
 
 #define ARG_START 3
-#define HEADER_SIZE 23
 #define DEFINITON_BYTE 0
-#define PEER_INFO DEFINITON_BYTE + 17
+#define PEER_INFO DEFINITON_BYTE + 1
 
 namespace rtype::BinaryProtocolCommunication {
     typedef std::vector<unsigned char> Buffer; // binary to send
@@ -35,17 +32,10 @@ namespace rtype::BinaryProtocolCommunication {
         SCORE,
     };
 
-    struct Endpoint {
-        std::string ip;
-        std::uint16_t port;
-    };
-
     struct Package {
-        BaseType type;
-        Method method;
-        unsigned long timestamp;
-        Endpoint endpoint;
-        Buffer body;
+        BaseType type_;
+        Method method_;
+        Buffer body_;
     };
 
     class CommunicationManager { // singleton
@@ -61,53 +51,22 @@ namespace rtype::BinaryProtocolCommunication {
             return instance;
         };
 
-        static void EncodePeerInfos(Buffer &buffer, const Endpoint &endpoint)
+        static Buffer serialize(BaseType type, Method method)
         {
-            std::vector<std::string> str_vec_ip;
-            boost::split(str_vec_ip, endpoint.ip, boost::is_any_of("."));
-            int count = PEER_INFO;
+            size_t lengthBuffer = 2;
+            Buffer buffer(lengthBuffer, 0);
 
-            for (const auto &str : str_vec_ip) {
-                buffer[count] = static_cast<unsigned char>(std::atoi(str.c_str()));
-                count += 1;
-            }
-            buffer[count] = (endpoint.port & 0xFF00) >> 8;
-            buffer[count + 1] = (endpoint.port & 0xFF);
-        };
-
-        static Endpoint DecodePeerInfos(const Buffer &buffer)
-        {
-            Endpoint endpoint;
-            std::vector<std::string> tmp;
-            std::uint8_t index = PEER_INFO;
-            std::uint8_t i = 0;
-
-            while (i < 4) {
-                tmp.emplace_back(std::string((char *)&buffer[index++]));
-                ++i;
-            }
-            endpoint.ip = boost::algorithm::join(tmp, ".");
-            endpoint.port = (buffer[index++] | 0xFF00) << 8;
-            endpoint.port = buffer[index] | 0xFF;
-            return endpoint;
-        };
-
-        static Buffer Serialize(const Package &package)
-        {
-            Buffer buffer(HEADER_SIZE, 0);
-
-            buffer[DEFINITON_BYTE] = (package.method << 6) + package.type;
-            EncodePeerInfos(buffer, package.endpoint);
+            buffer[DEFINITON_BYTE] = (method << 6) + type;
+            buffer[1] = '\n';
             return buffer;
         };
 
-        static Package Deserialize(const Buffer &buffer)
+        static Package deserialize(const Buffer &buffer)
         {
             const Package obj = {
-                .type = static_cast<BaseType>(buffer[DEFINITON_BYTE] & 0xF),
-                .method = static_cast<Method>(buffer[DEFINITON_BYTE] >> 4)
+                .type_ = static_cast<BaseType>(buffer[DEFINITON_BYTE] & 0xF),
+                .method_ = static_cast<Method>(buffer[DEFINITON_BYTE] >> 4)
             };
-            DecodePeerInfos(buffer);
             return obj;
         };
     };
