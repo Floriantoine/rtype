@@ -28,7 +28,7 @@ namespace rtype::server {
         std::vector<std::unique_ptr<LobbyManagerThread>> lobbyManagers_;
         std::shared_ptr<LobbyDispatcher> dispatcher_;
 
-        GameServer() = default;
+        GameServer();
         void run_(const rtype::server::Config &conf);
 
       public:
