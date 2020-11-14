@@ -1,0 +1,235 @@
+{
+    "layer": 0,
+    "state": "RUNNING",
+    "definitions": [
+        {
+            "id": "Wall",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": ""
+                },
+                {
+                    "type": "collideBox",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "id": "Pata-pata",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "todo" 
+                },
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "type": "animation",
+                    "frame": 0
+                },
+                {
+                    "type": "pataScript",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": "Bug",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "todo"
+                },
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "type": "rotation",
+                    "degree": 0
+                },
+                {
+                    "type": "bugScript",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": "Bink",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "todo"
+                },
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "type": "collideBox",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "shoot",
+                    "missileType": "todo",
+                    "rate": 0
+                },
+                {
+                    "type": "binkScript",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": "TP-2_POW",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "todo"
+                },
+                {
+                    "type": "position",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "collideBox",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "bonusType",
+                    "bonus": ""
+                },
+                {
+                    "type": "powScript",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": "Scant",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "todo"
+                },
+                {
+                    "type": "position",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "collideBox",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "scantScript",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": "Cancer",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "todo"
+                },
+                {
+                    "type": "position",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "collideBox",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "cancerScript",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": "Blaster",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "todo"
+                },
+                {
+                    "type": "position",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "rotation",
+                    "degree": 0
+                },
+                {
+                    "type": "blasterScript",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": "Tabrok",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "todo"
+                },
+                {
+                    "type": "position",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "rotation",
+                    "degree": 0
+                },
+                {
+                    "type": "tabrokScript",
+                    "text": ""
+                }
+            ]
+        }
+    ],
+    "entities": [
+        {
+            "base": "the id of the definition",
+            "components": [
+                {
+                    "type": "component type 1",
+                    "attribute1": "overridden value 1",
+                    "attribute2": "overridden value 2"
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "type": "component type",
+                    "attribute1": 1,
+                    "attribute2": 2
+                }
+            ]
+        }
+    ]
+}
