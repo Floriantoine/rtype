@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "BinaryProtocolCommunication.hpp"
+#include "Protocol.hpp"
 
 #include <boost/asio.hpp>
 #include <iostream>
@@ -22,31 +22,6 @@ using msg_handler = std::function<void(const rtype::BPC::Buffer &)>;
 using err_handler = std::function<void()>;
 
 namespace rtype::Network {
-    // TODO: typesafety with static_assert
-    template <typename T>
-    class IOServer {
-      public:
-        IOServer(boost::asio::io_context &io_context, std::uint16_t port)
-            : io_context_(io_context)
-            , Server_(io_context, port)
-        {
-            std::cout << "Start IOServer" << std::endl;
-        };
-        ~IOServer<T>() noexcept = default;
-        IOServer<T>(const IOServer &) = delete;
-        IOServer &operator=(const IOServer<T> &) = delete;
-        IOServer &operator=(IOServer<T> &&) = delete;
-
-        void start()
-        {
-            this->io_context_.run();
-        };
-
-      private:
-        T Server_;
-        boost::asio::io_context &io_context_;
-    };
-
     class TcpSession : public std::enable_shared_from_this<TcpSession> {
       public:
         TcpSession(tcp::socket &&socket);
@@ -95,18 +70,17 @@ namespace rtype::Network {
 
     class UdpServer {
       public:
-        UdpServer(boost::asio::io_context &io_context, std::uint16_t port);
+        UdpServer(boost::asio::io_context &io_context);
         ~UdpServer() = default;
         UdpServer(const UdpServer &) = delete;
         UdpServer(UdpServer &&) = delete;
-        UdpServer &operator=(const UdpServer &) = delete;
+        UdpServer &operator=(const UdpServer &);
         UdpServer &operator=(UdpServer &&) = delete;
 
         void read();
-
+        boost::asio::io_context &io_context_;
       private:
         void write(const rtype::BPC::Buffer &buffer);
-        boost::asio::io_context &io_context_;
         udp::endpoint remote_endpoint_;
         std::optional<udp::socket> socket_;
         boost::asio::streambuf streambuf_;

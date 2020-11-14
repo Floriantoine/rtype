@@ -97,7 +97,7 @@ namespace rtype::server {
         }
     }
 
-    void LobbyDispatcher::emplaceBack(LobbyDispatcher::lobbyUniquePtr_t &lobby)
+    const Lobby &LobbyDispatcher::createLobby(/*const std::unique_ptr<Scene> &scene*/)
     {
         bool restart = true;
         std::string id;
@@ -113,10 +113,11 @@ namespace rtype::server {
                 }
             }
         }
+        std::unique_ptr<Lobby> &lobby = this->lobbies_.emplace_back(std::make_unique<Lobby>(/*scene*/));
         lobby->id = id;
-        this->lobbies_.emplace_back(std::move(lobby));
         this->dispatch_();
         this->rwLock_->unlock();
+        return *lobby;
     }
 
     LobbyDispatcher::Range LobbyDispatcher::dispatch(unsigned managerIndex)

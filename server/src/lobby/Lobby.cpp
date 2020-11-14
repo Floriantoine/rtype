@@ -7,9 +7,17 @@
 
 #include "Lobby.hpp"
 
+#include "Server.hpp"
+
 namespace rtype::server {
+    Lobby::Lobby()
+        : udp_server_(io_context_)
+    {
+    }
+
     void Lobby::onTick()
     {
+        this->udp_server_.io_context_.run();
     }
 
     bool Lobby::isRunning() const noexcept

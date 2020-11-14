@@ -81,7 +81,7 @@ namespace rtype::server {
         /**
         * @brief adds a new lobby to dispatch
         */
-        void emplaceBack(lobbyUniquePtr_t &lobby);
+        const Lobby &createLobby(/*const std::unique_ptr<Scene> &scene*/);
 
         /**
         * @brief get the range of lobbies to process depending on a LobbyManagerThread's index

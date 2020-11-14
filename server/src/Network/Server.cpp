@@ -7,8 +7,6 @@
 
 #include "Server.hpp"
 
-#include "BinaryProtocolCommunication.hpp"
-
 #include <boost/asio/buffer.hpp>
 #include <boost/asio/write.hpp>
 #include <functional>
@@ -17,7 +15,6 @@
 #define BPC_CM (rtype::BPC::CommunicationManager::Get())
 
 namespace rtype::Network {
-
     TcpSession::TcpSession(tcp::socket &&socket)
         : socket_(std::move(socket))
     {
@@ -73,8 +70,15 @@ namespace rtype::Network {
             std::cout << str << std::endl;
             BPC::Buffer buffer(str.begin(), str.end());
             std::cout << "Received: " << buffer.size() << " bytes from client" << std::endl;
-            BPC_CM.deserialize(buffer);
-            buffer = BPC_CM.serialize(BPC::RESPONSE, BPC::CREATE);
+            BPC_CM.Deserialize(buffer);
+            rtype::BPC::Package package = {
+                rtype::BPC::BaseType::REQUEST,
+                rtype::BPC::Method::CREATE,
+                42,
+                { "localhost", 4219 },
+            };
+
+            buffer = BPC_CM.Serialize(package);
             this->outgoing_.push(buffer);
             this->async_write();
         } else {
@@ -130,12 +134,12 @@ namespace rtype::Network {
         std::cout << "RECEIVE PACKAGE:" << std::endl;
     }
 
-    UdpServer::UdpServer(boost::asio::io_context &io_context, std::uint16_t port)
+    UdpServer::UdpServer(boost::asio::io_context &io_context)
         : io_context_(io_context)
     {
         std::cout << "UDP Server" << std::endl;
-        this->socket_.emplace(io_context_, udp::endpoint(udp::v4(), port));
-        this->read();
+        this->socket_.emplace(io_context_, udp::endpoint(udp::v4(), 0));
+        std::cout << "endpoint: " << this->socket_->local_endpoint() << std::endl;
     }
 
     void UdpServer::read(void)
@@ -152,13 +156,20 @@ namespace rtype::Network {
                     is >> str;
                     std::cout << str << std::endl;
                     BPC::Buffer buffer(str.begin(), str.end());
-                    BPC_CM.deserialize(buffer);
+                    BPC_CM.Deserialize(buffer);
                     // HERE to resend to server
                     // -------------------------
-                    auto buf = BPC_CM.serialize(BPC::RESPONSE, BPC::CREATE);
-                    write(buf);
                     // -------------------------
-                    read();
+                    //read();
+                    rtype::BPC::Package package = {
+                        rtype::BPC::BaseType::REQUEST,
+                        rtype::BPC::Method::CREATE,
+                        42,
+                        { "localhost", 4219 },
+                    };
+
+                    auto buf = BPC_CM.Serialize(package);
+                    write(buf);
                 } else
                     std::cerr << "Error Somewhere" << err.message() << std::endl;
             });

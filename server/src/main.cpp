@@ -35,20 +35,14 @@ static server::Config ParseConfig(const std::string &filePath)
 
 int main(int argc, const char **argv)
 {
-    boost::asio::io_context io_context;
-    rtype::Network::IOServer<rtype::Network::UdpServer> server(io_context, 4219);
+    const char *configFilePath = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
 
-    server.start();
-    //throw rtype::server::Network::IOException(e.msg())
-
-    //const char *configFilePath = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
-
-    //try {
-        //server::Config conf = ParseConfig(configFilePath);
-        //server::GameServer::Run(conf);
-    //} catch (const std::exception &e) {
-        //std::cerr << e.what() << std::endl;
-        //return 1;
-    //}
+    try {
+        server::Config conf = ParseConfig(configFilePath);
+        server::GameServer::Run(conf);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
     return 0;
 }

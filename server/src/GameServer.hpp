@@ -12,6 +12,7 @@
 #include "lobby/LobbyDispatcher.hpp"
 #include "lobby/LobbyManagerThread.hpp"
 
+#include <boost/asio.hpp>
 #include <memory>
 #include <vector>
 
@@ -22,6 +23,7 @@ namespace rtype::server {
      */
     class GameServer {
       private:
+        std::shared_ptr<boost::asio::io_context> io_context_;
         static GameServer Instance_;
         std::vector<std::unique_ptr<LobbyManagerThread>> lobbyManagers_;
         std::shared_ptr<LobbyDispatcher> dispatcher_;

@@ -22,6 +22,7 @@ namespace rtype::server {
         , thread_([this] {
             this->run_();
         })
+
     {
     }
 

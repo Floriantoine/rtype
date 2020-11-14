@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "Server.hpp"
+
 #include <string>
 
 namespace rtype::server {
@@ -15,12 +17,14 @@ namespace rtype::server {
     */
     class Lobby {
       private:
+        boost::asio::io_context io_context_;
+        rtype::Network::UdpServer udp_server_;
         bool isRunning_ { true };
 
       public:
         std::string id;
 
-        Lobby() = default;
+        Lobby();
         ~Lobby() = default;
 
         /**
