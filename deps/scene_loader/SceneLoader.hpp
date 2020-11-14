@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include "../engine/core/AGame.hpp"
 #include "../engine/core/ecs/component/ComponentBase.hpp"
 #include "../engine/core/scene/Scene.hpp"
-#include "core/Game.hpp"
 #include "nlohmann/json.hpp"
 #include "utils/Exception.hpp"
 
@@ -124,8 +124,8 @@ namespace rtype {
         void loadComponents_(EntityDefinition &entity, const nlohmann::json &json) const
         {
             for (const auto &component : json) {
-                std::string type = this->JsonAt_(json, "type")->get<std::string>();
-                entity.components[type].merge_patch(json);
+                std::string type = this->JsonAt_(component, "type")->get<std::string>();
+                entity.components[type].merge_patch(component);
             }
         }
 
@@ -176,7 +176,7 @@ namespace rtype {
             SceneLoader::ComponentFactory_[type] = factory;
         }
 
-        std::shared_ptr<Scene> load(Game &game)
+        std::shared_ptr<Scene> load(AGame &game)
         {
             if (!this->good_)
                 throw Exception("parsing error");

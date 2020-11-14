@@ -14,9 +14,6 @@
                     "heigth": 21
                 },
                 {
-                    "type": "collideBox"
-                },
-                {
                     "type": "rotation",
                     "degree": 0
                 },
@@ -37,9 +34,6 @@
                     "y": 130,
                     "width": 80,
                     "heigth": 43
-                },
-                {
-                    "type": "collideBox"
                 },
                 {
                     "type": "rotation",
@@ -64,9 +58,6 @@
                     "heigth": 66
                 },
                 {
-                    "type": "collideBox"
-                },
-                {
                     "type": "position",
                     "x": 0,
                     "y": 0
@@ -85,9 +76,6 @@
                     "heigth": 24
                 },
                 {
-                    "type": "collideBox"
-                },
-                {
                     "type": "position",
                     "x": 0,
                     "y": 0
@@ -96,10 +84,6 @@
                     "type": "animation",
                     "currentFrame": 0,
                     "totalFrame": 8
-                },
-                {
-                    "type": "pataScript",
-                    "text": ""
                 }
             ]
         },
@@ -115,9 +99,6 @@
                     "heigth": 22
                 },
                 {
-                    "type": "collideBox"
-                },
-                {
                     "type": "position",
                     "x": 0,
                     "y": 0
@@ -125,10 +106,6 @@
                 {
                     "type": "rotation",
                     "degree": 0
-                },
-                {
-                    "type": "bugScript",
-                    "text": ""
                 }
             ]
         },
@@ -144,9 +121,6 @@
                     "heigth": 56
                 },
                 {
-                    "type": "collideBox"
-                },
-                {
                     "type": "position",
                     "heigth": 0,
                     "width": 0
@@ -155,15 +129,6 @@
                     "type": "animation",
                     "currentFrame": 0,
                     "totalFrame": 3
-                },
-                {
-                    "type": "missile",
-                    "missileType": "missile_mini_boss_1.png",
-                    "rate": 0
-                },
-                {
-                    "type": "scantScript",
-                    "text": ""
                 }
             ]
         }
