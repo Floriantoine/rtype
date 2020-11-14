@@ -52,7 +52,7 @@ namespace rtype {
                 if (it.second->getId() == sceneId) {
                     return it.second;
                 }
-            };
+            }
             return nullptr;
         }
 

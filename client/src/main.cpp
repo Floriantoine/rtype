@@ -4,13 +4,14 @@
 ** File description:
 ** Client main file
 */
-#include "engine/core/Game.hpp"
+#include "engine/client/Game.hpp"
 #include "engine/core/ecs/component/Component.hpp"
 #include "engine/core/ecs/system/ASystem.hpp"
 
 #include <iostream>
 
 using namespace rtype;
+using namespace rtype::client;
 
 class PositionComponent : public Component<PositionComponent> {
   public:
@@ -34,7 +35,6 @@ class ARenderSystem : public ASystem {
 class SpriteSystem : public ARenderSystem {
     void update() override
     {
-        std::cout << "Updating sprite system" << std::endl;
     }
 };
 
@@ -42,7 +42,6 @@ class PositionSystem : public ASystem {
   public:
     void update() override
     {
-        std::cout << "Updating position system" << std::endl;
     }
 };
 
@@ -57,6 +56,6 @@ int main(int ac, char *av[])
     scene->createSystem<PositionSystem>();
     scene->createSystem<SpriteSystem>();
 
-    game.run();
+    game.start();
     return 0;
 }
