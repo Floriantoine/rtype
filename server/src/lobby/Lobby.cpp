@@ -17,7 +17,6 @@ namespace rtype::server {
 
     void Lobby::onTick()
     {
-        std::cout << "Here" << std::endl;
         this->udp_server_.io_context_.run();
     }
 
