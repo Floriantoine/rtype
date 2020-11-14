@@ -1,25 +1,39 @@
 cmake_minimum_required(VERSION 3.6)
 
-project("R-type's server" VERSION 1.0)
+project("R-type's server" LANGUAGES CXX)
 
+set(SRC_DIR src/)
+
+include_directories(
+        ../deps
+        ../deps/core
+        ${SRC_DIR}
+        ${SRC_DIR}/Network
+)
+
+set(CMAKE_CXX_STANDARD 20)
+
+set(CMAKE_EXE_LINKER_FLAGS -lpthread)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(WARNING_FLAG
         -Wall
         -Wextra
         -Wpedantic)
 
-include_directories(./include)
-
-set(CMAKE_EXE_LINKER_FLAGS -lpthread)
-add_definitions("-fPIC")
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 set(SRCS
-        src/main.cpp)
+        main.cpp
+        Exception.cpp
+        Config.cpp
+        GameServer.cpp
+        lobby/LobbyIDGenerator.cpp
+        lobby/LobbyManagerThread.cpp
+        lobby/LobbyDispatcher.cpp
+        lobby/Lobby.cpp
+        Network/Server.cpp
+)
 
-add_executable(server ${SRCS})
+list(TRANSFORM SRCS PREPEND ${SRC_DIR})
 
-target_link_libraries(server PRIVATE ${CONAN_LIBS})
+add_executable(r-type_server ${SRCS})
 
+target_link_libraries(r-type_server PRIVATE ${CONAN_LIBS})

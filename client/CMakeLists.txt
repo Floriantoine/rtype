@@ -1,17 +1,30 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(client LANGUAGES CXX)
+project("R-type's client" LANGUAGES CXX)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(SRC_DIR src/)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread")
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+include_directories(
+        ./src
+        ../deps
+        ../deps/engine
+        ../deps/core
+        ${SRC_DIR}
+        ${SRC_DIR}/Network
+        )
+
+set(WARNING_FLAG
+        -Wall
+        -Wextra
+        -Wpedantic)
 
 set(SRCS
-        src/main.cpp)
+        main.cpp
+        Network/Client.cpp
+)
 
-add_executable(client ${SRCS})
+list(TRANSFORM SRCS PREPEND ${SRC_DIR})
 
-target_link_libraries(client PRIVATE ${CONAN_LIBS})
+add_executable(r-type_client ${SRCS})
 
+target_link_libraries(r-type_client PRIVATE ${CONAN_LIBS})

@@ -1,1 +1,10 @@
-build
+build/
+cmake-build-debug/
+.clangd/
+.idea/
+.vscode/
+.vim/
+compile_commands.json
+r-type_server.json
+server/serv
+client/cli
