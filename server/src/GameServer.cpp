@@ -30,7 +30,7 @@ namespace rtype::server {
     {
         this->dispatcher_ = std::make_shared<LobbyDispatcher>(conf.maxGameThreads);
         for (auto idx = 0u; idx < conf.maxGameThreads; ++idx) {
-            this->lobbyManagers_.emplace_back(std::make_unique<LobbyManagerThread>(this->dispatcher_, idx));
+            this->lobbyManagers_.emplace_back(std::make_unique<LobbyManagerThread>(this->dispatcher_, idx, this->io_context_));
         }
         //auto &lobby = this->dispatcher_->createLobby();
     }
