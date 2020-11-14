@@ -297,7 +297,7 @@ ___
 +-----------+-----------------------+
 | PLAYER_ID |        MAP_NAME       |
 | unsigned  |        unsigned       |
-|  1 byte   | (BODY_SIZE - 4) bytes |
+|  1 byte   | (BODY_SIZE - 1) bytes |
 +-----------+-----------------------+
 ```
 
