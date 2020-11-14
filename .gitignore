@@ -8,3 +8,5 @@ compile_commands.json
 r-type_server.json
 server/serv
 client/cli
+client/compile_flags.txt
+server/compile_flags.txt
