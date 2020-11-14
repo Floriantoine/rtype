@@ -8,10 +8,15 @@
 #pragma once
 
 #include "handlers/IHandler.hpp"
+#include "handlers/UDP/DropHandler/DropHandler.hpp"
 
 namespace rtype {
     class ChargeHandler : public IHandler {
       public:
+        struct ClientRequestBody {
+            player_id_t playerID;
+        };
+
         ChargeHandler() = default;
         ~ChargeHandler() override = default;
 

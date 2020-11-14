@@ -8,10 +8,17 @@
 #pragma once
 
 #include "handlers/IHandler.hpp"
+#include "types.hpp"
 
 namespace rtype {
     class GrabHandler : public IHandler {
       public:
+        struct ServerRequestBody {
+            player_id_t playerID;
+            entity_id_t entityID;
+            side_t side;
+        };
+
         GrabHandler() = default;
         ~GrabHandler() override = default;
 

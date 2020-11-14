@@ -8,10 +8,15 @@
 #pragma once
 
 #include "handlers/IHandler.hpp"
+#include "types.hpp"
 
 namespace rtype {
     class SpawnHandler : public IHandler {
       public:
+        struct ServerRequestBody {
+            entity_id_t entityID;
+        };
+
         SpawnHandler() = default;
         ~SpawnHandler() override = default;
 

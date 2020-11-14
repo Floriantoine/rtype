@@ -8,10 +8,15 @@
 #pragma once
 
 #include "handlers/IHandler.hpp"
+#include "types.hpp"
 
 namespace rtype {
     class ShootHandler : public IHandler {
       public:
+        struct ClientRequestBody {
+            player_id_t playerID;
+        };
+
         ShootHandler() = default;
         ~ShootHandler() override = default;
 

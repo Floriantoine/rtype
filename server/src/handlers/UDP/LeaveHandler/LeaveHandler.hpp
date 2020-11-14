@@ -8,10 +8,15 @@
 #pragma once
 
 #include "handlers/IHandler.hpp"
+#include "types.hpp"
 
 namespace rtype {
     class LeaveHandler : public IHandler {
       public:
+        struct ClientRequestBody {
+            player_id_t playerID;
+        };
+
         LeaveHandler() = default;
         ~LeaveHandler() override = default;
 
