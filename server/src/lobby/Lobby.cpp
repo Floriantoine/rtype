@@ -8,8 +8,15 @@
 #include "Lobby.hpp"
 
 namespace rtype::server {
+    Lobby::Lobby(rtype::Network::UdpServer &udp_server)
+        : udp_server_(udp_server)
+    {
+    }
+
     void Lobby::onTick()
     {
+        std::cout << "Here" << std::endl;
+        this->udp_server_.io_context_->run();
     }
 
     bool Lobby::isRunning() const noexcept

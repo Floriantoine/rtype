@@ -16,12 +16,15 @@
 #include <utility>
 
 namespace rtype::server {
-    LobbyManagerThread::LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher, unsigned index)
+    LobbyManagerThread::LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher, unsigned index, std::shared_ptr<boost::asio::io_context> io_context)
         : dispatcher_ { dispatcher }
         , index_ { index }
+        //, io_context_ { io_context }
+        , udp_server_ (io_context, 1199)
         , thread_([this] {
             this->run_();
         })
+
     {
     }
 
