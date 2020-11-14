@@ -7,13 +7,12 @@
 
 #pragma once
 
-#include "engine/core/ecs/component/Component.hpp"
+#include "../ecs/component/Component.hpp"
 
 namespace rtype {
 
-    class ScriptComponent : public Component<ScriptComponent>
-    {
-    public:
+    class ScriptComponent : public Component<ScriptComponent> {
+      public:
         ScriptComponent() = default;
     };
 }

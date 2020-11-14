@@ -76,18 +76,18 @@ namespace rtype {
             this->systemManager_.removeSystem(system);
         }
 
-        void update()
+        void update(long elapsedTime)
         {
             if (this->state_ == STATE_INACTIVE)
                 return;
-            this->systemManager_.update();
+            this->systemManager_.update(elapsedTime);
         }
 
-        void update(ASystem::system_group_e group)
+        void update(ASystem::system_group_e group, long elapsedTime)
         {
             if (this->state_ == STATE_INACTIVE)
                 return;
-            this->systemManager_.update(group);
+            this->systemManager_.update(group, elapsedTime);
         }
     };
 

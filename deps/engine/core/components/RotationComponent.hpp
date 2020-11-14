@@ -7,18 +7,17 @@
 
 #pragma once
 
-#include "engine/core/ecs/component/Component.hpp"
+#include "../ecs/component/Component.hpp"
 
 namespace rtype {
 
-    class RotationComponent : public Component<RotationComponent>
-    {
-    public:
+    class RotationComponent : public Component<RotationComponent> {
+      public:
         int degree { 0 };
 
-    public:
+      public:
         RotationComponent() = default;
-        RotationComponent(int degree) :
-        degree { degree } {};
+        RotationComponent(int degree)
+            : degree { degree } {};
     };
 }

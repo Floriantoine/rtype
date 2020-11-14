@@ -7,25 +7,24 @@
 
 #pragma once
 
-#include "engine/core/ecs/system/ASystem.hpp"
-#include "engine/core/components/MissileComponent.hpp"
+#include "../components/MissileComponent.hpp"
+#include "../ecs/system/ASystem.hpp"
 
 #include <functional>
 
 namespace rtype {
 
-    class MissileSystem : public ASystem
-    {
+    class MissileSystem : public ASystem {
       private:
-        std::function<void(MissileComponent *)> function = [](MissileComponent *position)
-        {
+        std::function<void(MissileComponent *)> function = [](MissileComponent *position) {
         };
 
       public:
-        MissileSystem() : ASystem() {};
+        MissileSystem()
+            : ASystem() {};
         ~MissileSystem() = default;
 
-        void update() override
+        void update(long elapsedTime) override
         {
             this->componentManager_->apply<MissileComponent>(function);
         };

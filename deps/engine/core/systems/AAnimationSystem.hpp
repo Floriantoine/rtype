@@ -7,17 +7,10 @@
 
 #pragma once
 
-#include "engine/core/ecs/system/ASystem.hpp"
+#include "./ARenderSystem.hpp"
 
 namespace rtype {
 
-    class AAnimationSystem : public ASystem
-    {
-      protected:
-        AAnimationSystem() : ASystem() {};
-        ~AAnimationSystem() = default;
-
-      public:
-        virtual void update() = 0;
+    class AAnimationSystem : public ARenderSystem {
     };
 }

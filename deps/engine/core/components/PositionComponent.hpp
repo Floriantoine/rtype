@@ -7,19 +7,19 @@
 
 #pragma once
 
-#include "engine/core/ecs/component/Component.hpp"
+#include "../ecs/component/Component.hpp"
 
 namespace rtype {
 
-    class PositionComponent : public Component<PositionComponent>
-    {
-    public:
+    class PositionComponent : public Component<PositionComponent> {
+      public:
         std::size_t x { 0 };
         std::size_t y { 0 };
 
-    public:
+      public:
         PositionComponent() = default;
-        PositionComponent(std::size_t x, std::size_t y) :
-        x { x }, y { y } {};
+        PositionComponent(std::size_t x, std::size_t y)
+            : x { x }
+            , y { y } {};
     };
 }

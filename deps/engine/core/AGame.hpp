@@ -139,7 +139,7 @@ namespace rtype {
          */
         void update()
         {
-            this->sceneManager_.update();
+            this->sceneManager_.update(this->getElapsedMillisecond());
         }
 
         /**
