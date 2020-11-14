@@ -3,16 +3,68 @@
     "state": "RUNNING",
     "definitions": [
         {
-            "id": "Wall",
+            "id": "SmallWall",
             "components": [
                 {
                     "type": "texture",
-                    "path": ""
+                    "path": "all_wall.png",
+                    "x": 0,
+                    "y": 130,
+                    "width": 80,
+                    "heigth": 21
                 },
                 {
-                    "type": "collideBox",
-                    "heigth": 0,
-                    "width": 0
+                    "type": "collideBox"
+                },
+                {
+                    "type": "rotation",
+                    "degree": 0
+                },
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "id": "MediumWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "all_wall.png",
+                    "x": 240,
+                    "y": 130,
+                    "width": 80,
+                    "heigth": 43
+                },
+                {
+                    "type": "collideBox"
+                },
+                {
+                    "type": "rotation",
+                    "degree": 0
+                },
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "id": "BigWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "path": "all_wall.png",
+                    "x": 320,
+                    "y": 130,
+                    "width": 80,
+                    "heigth": 66
+                },
+                {
+                    "type": "collideBox"
                 },
                 {
                     "type": "position",
@@ -26,7 +78,14 @@
             "components": [
                 {
                     "type": "texture",
-                    "path": "todo" 
+                    "path": "enemy_1.png",
+                    "x": 0,
+                    "y": 0,
+                    "width": 21,
+                    "heigth": 24
+                },
+                {
+                    "type": "collideBox"
                 },
                 {
                     "type": "position",
@@ -35,7 +94,8 @@
                 },
                 {
                     "type": "animation",
-                    "frame": 0
+                    "currentFrame": 0,
+                    "totalFrame": 8
                 },
                 {
                     "type": "pataScript",
@@ -48,7 +108,14 @@
             "components": [
                 {
                     "type": "texture",
-                    "path": "todo"
+                    "path": "enemy_2.png",
+                    "x": 0,
+                    "y": 0,
+                    "width": 22,
+                    "heigth": 22
+                },
+                {
+                    "type": "collideBox"
                 },
                 {
                     "type": "position",
@@ -66,66 +133,18 @@
             ]
         },
         {
-            "id": "Bink",
-            "components": [
-                {
-                    "type": "texture",
-                    "path": "todo"
-                },
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                },
-                {
-                    "type": "collideBox",
-                    "heigth": 0,
-                    "width": 0
-                },
-                {
-                    "type": "shoot",
-                    "missileType": "todo",
-                    "rate": 0
-                },
-                {
-                    "type": "binkScript",
-                    "text": ""
-                }
-            ]
-        },
-        {
-            "id": "TP-2_POW",
-            "components": [
-                {
-                    "type": "texture",
-                    "path": "todo"
-                },
-                {
-                    "type": "position",
-                    "heigth": 0,
-                    "width": 0
-                },
-                {
-                    "type": "collideBox",
-                    "heigth": 0,
-                    "width": 0
-                },
-                {
-                    "type": "bonusType",
-                    "bonus": ""
-                },
-                {
-                    "type": "powScript",
-                    "text": ""
-                }
-            ]
-        },
-        {
             "id": "Scant",
             "components": [
                 {
                     "type": "texture",
-                    "path": "todo"
+                    "path": "mini_boss_1.png",
+                    "x": 0,
+                    "y": 0,
+                    "width": 56,
+                    "heigth": 56
+                },
+                {
+                    "type": "collideBox"
                 },
                 {
                     "type": "position",
@@ -133,79 +152,17 @@
                     "width": 0
                 },
                 {
-                    "type": "collideBox",
-                    "heigth": 0,
-                    "width": 0
+                    "type": "animation",
+                    "currentFrame": 0,
+                    "totalFrame": 3
+                },
+                {
+                    "type": "missile",
+                    "missileType": "missile_mini_boss_1.png",
+                    "rate": 0
                 },
                 {
                     "type": "scantScript",
-                    "text": ""
-                }
-            ]
-        },
-        {
-            "id": "Cancer",
-            "components": [
-                {
-                    "type": "texture",
-                    "path": "todo"
-                },
-                {
-                    "type": "position",
-                    "heigth": 0,
-                    "width": 0
-                },
-                {
-                    "type": "collideBox",
-                    "heigth": 0,
-                    "width": 0
-                },
-                {
-                    "type": "cancerScript",
-                    "text": ""
-                }
-            ]
-        },
-        {
-            "id": "Blaster",
-            "components": [
-                {
-                    "type": "texture",
-                    "path": "todo"
-                },
-                {
-                    "type": "position",
-                    "heigth": 0,
-                    "width": 0
-                },
-                {
-                    "type": "rotation",
-                    "degree": 0
-                },
-                {
-                    "type": "blasterScript",
-                    "text": ""
-                }
-            ]
-        },
-        {
-            "id": "Tabrok",
-            "components": [
-                {
-                    "type": "texture",
-                    "path": "todo"
-                },
-                {
-                    "type": "position",
-                    "heigth": 0,
-                    "width": 0
-                },
-                {
-                    "type": "rotation",
-                    "degree": 0
-                },
-                {
-                    "type": "tabrokScript",
                     "text": ""
                 }
             ]
@@ -213,23 +170,273 @@
     ],
     "entities": [
         {
-            "base": "the id of the definition",
+            "base": "SmallWall",
+            "components": []
+        },
+        {
+            "base": "SmallWall",
             "components": [
                 {
-                    "type": "component type 1",
-                    "attribute1": "overridden value 1",
-                    "attribute2": "overridden value 2"
+                    "type": "texture",
+                    "x": 80
+                },
+                {
+                    "type": "position",
+                    "x": 80
                 }
             ]
         },
         {
+            "base": "SmallWall",
             "components": [
                 {
-                    "type": "component type",
-                    "attribute1": 1,
-                    "attribute2": 2
+                    "type": "texture",
+                    "x": 160
+                },
+                {
+                    "type": "position",
+                    "x": 160
+                }
+            ]
+        },
+        {
+            "base": "SmallWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "x": 160
+                },
+                {
+                    "type": "position",
+                    "x": 240
+                }
+            ]
+        },
+        {
+            "base": "MediumWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "x": 240
+                },
+                {
+                    "type": "position",
+                    "x": 320
+                }
+            ]
+        },
+        {
+            "base": "SmallWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "x": 80
+                },
+                {
+                    "type": "position",
+                    "x": 400
+                }
+            ]
+        },
+        {
+            "base": "BigWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "x": 320
+                },
+                {
+                    "type": "position",
+                    "x": 480
+                }
+            ]
+        },
+        {
+            "base": "SmallWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "x": 160
+                },
+                {
+                    "type": "position",
+                    "x": 560
+                }
+            ]
+        },
+        {
+            "base": "SmallWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "x": 160
+                },
+                {
+                    "type": "position",
+                    "x": 640
+                }
+            ]
+        },
+        {
+            "base": "MediumWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "x": 240
+                },
+                {
+                    "type": "position",
+                    "x": 720
+                }
+            ]
+        },
+        {
+            "base": "SmallWall",
+            "components": [
+                {
+                    "type": "texture",
+                    "x": 80
+                },
+                {
+                    "type": "position",
+                    "x": 800
+                }
+            ]
+        },
+        {
+            "base": "SmallWall",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 880
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Bug",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Bug",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Bug",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Bug",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "base": "Scant",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
                 }
             ]
         }
+
     ]
 }
