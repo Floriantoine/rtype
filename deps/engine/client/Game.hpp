@@ -9,8 +9,8 @@
 
 #include "../core/AGame.hpp"
 #include "../utils/Singleton.hpp"
-
 #include "SFML/Window.hpp"
+
 #include <chrono>
 #include <iostream>
 #include <thread>
@@ -77,8 +77,7 @@ namespace rtype {
                 this->window_ = std::make_unique<sf::Window>(
                     this->videoMode_,
                     this->windowTitle_,
-                    this->windowStyle_
-                );
+                    this->windowStyle_);
             }
 
             void onTick() override

@@ -16,68 +16,6 @@
             ]
         },
         {
-            "id": "SmallWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "path": "all_wall.png",
-                    "x": 0,
-                    "y": 130,
-                    "width": 80,
-                    "heigth": 21
-                },
-                {
-                    "type": "rotation",
-                    "degree": 0
-                },
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                }
-            ]
-        },
-        {
-            "id": "MediumWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "path": "all_wall.png",
-                    "x": 240,
-                    "y": 130,
-                    "width": 80,
-                    "heigth": 43
-                },
-                {
-                    "type": "rotation",
-                    "degree": 0
-                },
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                }
-            ]
-        },
-        {
-            "id": "BigWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "path": "all_wall.png",
-                    "x": 320,
-                    "y": 130,
-                    "width": 80,
-                    "heigth": 66
-                },
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                }
-            ]
-        },
-        {
             "id": "Pata-pata",
             "components": [
                 {
@@ -89,37 +27,16 @@
                     "heigth": 24
                 },
                 {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
+                    "type": "position"
                 },
                 {
                     "type": "animation",
                     "currentFrame": 0,
                     "totalFrame": 8,
                     "rate": 500
-                }
-            ]
-        },
-        {
-            "id": "Bug",
-            "components": [
-                {
-                    "type": "texture",
-                    "path": "enemy_2.png",
-                    "x": 0,
-                    "y": 0,
-                    "width": 22,
-                    "heigth": 22
                 },
                 {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                },
-                {
-                    "type": "rotation",
-                    "degree": 0
+                    "type": "pata_script"
                 }
             ]
         },
@@ -150,159 +67,11 @@
     ],
     "entities": [
         {
-            "base": "SmallWall",
-            "components": []
-        },
-        {
-            "base": "SmallWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 80
-                },
-                {
-                    "type": "position",
-                    "x": 80
-                }
-            ]
-        },
-        {
-            "base": "SmallWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 160
-                },
-                {
-                    "type": "position",
-                    "x": 160
-                }
-            ]
-        },
-        {
-            "base": "SmallWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 160
-                },
-                {
-                    "type": "position",
-                    "x": 240
-                }
-            ]
-        },
-        {
-            "base": "MediumWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 240
-                },
-                {
-                    "type": "position",
-                    "x": 320
-                }
-            ]
-        },
-        {
-            "base": "SmallWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 80
-                },
-                {
-                    "type": "position",
-                    "x": 400
-                }
-            ]
-        },
-        {
-            "base": "BigWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 320
-                },
-                {
-                    "type": "position",
-                    "x": 480
-                }
-            ]
-        },
-        {
-            "base": "SmallWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 160
-                },
-                {
-                    "type": "position",
-                    "x": 560
-                }
-            ]
-        },
-        {
-            "base": "SmallWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 160
-                },
-                {
-                    "type": "position",
-                    "x": 640
-                }
-            ]
-        },
-        {
-            "base": "MediumWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 240
-                },
-                {
-                    "type": "position",
-                    "x": 720
-                }
-            ]
-        },
-        {
-            "base": "SmallWall",
-            "components": [
-                {
-                    "type": "texture",
-                    "x": 80
-                },
-                {
-                    "type": "position",
-                    "x": 800
-                }
-            ]
-        },
-        {
-            "base": "SmallWall",
-            "components": [
-                {
-                    "type": "position",
-                    "x": 880
-                }
-            ]
-        },
-        {
-            "base": "Pata-pata",
-            "components": [
-            ]
-        },
-        {
             "base": "Pata-pata",
             "components": [
                 {
                     "type": "position",
-                    "x": 0,
+                    "x": 400,
                     "y": 0
                 }
             ]
@@ -322,7 +91,7 @@
             "components": [
                 {
                     "type": "position",
-                    "x": 0,
+                    "x": 140,
                     "y": 0
                 }
             ]
@@ -332,7 +101,7 @@
             "components": [
                 {
                     "type": "position",
-                    "x": 0,
+                    "x": 400,
                     "y": 0
                 }
             ]
@@ -342,67 +111,7 @@
             "components": [
                 {
                     "type": "position",
-                    "x": 0,
-                    "y": 0
-                }
-            ]
-        },
-        {
-            "base": "Pata-pata",
-            "components": [
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                }
-            ]
-        },
-        {
-            "base": "Pata-pata",
-            "components": [
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                }
-            ]
-        },
-        {
-            "base": "Bug",
-            "components": [
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                }
-            ]
-        },
-        {
-            "base": "Bug",
-            "components": [
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                }
-            ]
-        },
-        {
-            "base": "Bug",
-            "components": [
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
-                }
-            ]
-        },
-        {
-            "base": "Bug",
-            "components": [
-                {
-                    "type": "position",
-                    "x": 0,
+                    "x": 320,
                     "y": 0
                 }
             ]
@@ -416,10 +125,6 @@
                     "y": 0
                 }
             ]
-        },
-        {
-            "base": "Player"
         }
-
     ]
 }

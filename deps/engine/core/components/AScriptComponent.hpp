@@ -64,10 +64,25 @@ namespace rtype {
          */
         virtual void onMouseButtonReleased(const sf::Event &) {};
 
+        /**
+         * Get component of type T associated to the Sript's owner entity
+         *
+         * @tparam T component type
+         *
+         * @return a component of type T associated to the Sript's owner entity
+         */
         template<class T>
         T *getComponent()
         {
             return this->entity_->getComponent<T>();
+        }
+
+        /**
+         * Destroy the Sript's owner entity
+         */
+        void destroyEntity()
+        {
+            this->entity_->getEntityManager()->destroyEntity(this->entity_->getId());
         }
 
         /**

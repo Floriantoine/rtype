@@ -17,19 +17,19 @@ namespace rtype {
 
     class PositionComponent : public Component<PositionComponent> {
       public:
-        std::size_t x { 0 };
-        std::size_t y { 0 };
+        int x { 0 };
+        int y { 0 };
 
       public:
         PositionComponent() = default;
-        PositionComponent(std::size_t x, std::size_t y)
+        PositionComponent(int x, int y)
             : x { x }
             , y { y } {};
 
         static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
-            std::size_t x { 0 };
-            std::size_t y { 0 };
+            int x { 0 };
+            int y { 0 };
 
             auto xJson = body.find("x");
             if (xJson != body.end()) {

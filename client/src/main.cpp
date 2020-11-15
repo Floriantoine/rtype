@@ -14,6 +14,7 @@
 #include "engine/core/components/RotationComponent.hpp"
 #include "engine/core/components/TextureComponent.hpp"
 #include "engine/core/components/PlayerScriptComponent.hpp"
+#include "engine/core/components/PataScriptComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/client/systems/AnimationSystem.hpp"
 #include "engine/core/systems/ScriptSystem.hpp"
@@ -38,7 +39,8 @@ int main()
     sceneLoader.AddComponentFactory("position", PositionComponent::factory);
     sceneLoader.AddComponentFactory("animation", AnimationComponent::factory);
     sceneLoader.AddComponentFactory("missile", MissileComponent::factory);
-    sceneLoader.AddComponentFactory("player_script", PlayerScriptComponent::getFactory<PlayerScriptComponent>());
+    // sceneLoader.AddComponentFactory("player_script", PlayerScriptComponent::getFactory<PlayerScriptComponent>());
+    sceneLoader.AddComponentFactory("pata_script", PataScriptComponent::getFactory<PataScriptComponent>());
 
     auto scene = sceneLoader.load(Game::getInstance());
 

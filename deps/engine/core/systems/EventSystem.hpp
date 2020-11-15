@@ -10,7 +10,6 @@
 #include "../../client/Game.hpp"
 #include "../components/AScriptComponent.hpp"
 #include "../ecs/system/ASystem.hpp"
-
 #include "SFML/Window/Event.hpp"
 
 namespace rtype {

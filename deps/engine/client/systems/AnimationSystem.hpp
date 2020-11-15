@@ -19,15 +19,15 @@ namespace rtype::client {
         void update(long elapsedTime) override
         {
             this->componentManager_->apply<AnimationComponent>([&](AnimationComponent *anim) {
+                if (anim->rate)
+                    return;
                 anim->totalElapsedTime += elapsedTime;
                 int step = anim->totalElapsedTime / anim->rate;
 
-                if (step == 0) {
+                if (step == 0)
                     return;
-                }
                 anim->totalElapsedTime -= step * anim->rate;
                 anim->currentFrame = (anim->currentFrame + step) % anim->totalFrame;
-                // std::cout << "frame " << anim->currentFrame << std::endl;
             });
         };
     };
