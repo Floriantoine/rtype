@@ -13,11 +13,11 @@ namespace rtype::server {
     {
     }
 
-    void GameStateHandler::response(const BPC::Package &package)
+    void GameStateHandler::response(const Network::UdpPackage &package)
     {
     }
 
-    void GameStateHandler::request(const BPC::Package &package)
+    void GameStateHandler::request(const Network::UdpPackage &package)
     {
     }
 }

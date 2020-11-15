@@ -8,17 +8,35 @@
 #include "AHandlerUDP.hpp"
 
 #include "Protocol.hpp"
+#include "Server.hpp"
 #include "utils/Clock.hpp"
 
 #include <algorithm>
 
 namespace rtype::server {
-    AHandlerUDP::AHandlerUDP(std::vector<Player> &players)
-        : players_ { players }
-
+    AHandlerUDP::HandlerPtrWrapper::HandlerPtrWrapper(AHandlerUDP &handler, HandlerPtrWrapper::method_ptr_t pointer)
+        : pointer_(pointer)
+        , handler_(handler)
     { }
 
-    bool AHandlerUDP::resend_(BPC::Package &package)
+    void AHandlerUDP::HandlerPtrWrapper::operator()(const Network::UdpPackage &package)
+    {
+        (this->handler_.*this->pointer_)(package);
+    }
+
+    AHandlerUDP::AHandlerUDP(std::vector<Player> &players)
+        : players_ { players }
+    { }
+
+    AHandlerUDP::HandlerPtrWrapper AHandlerUDP::operator[](BPC::BaseType type)
+    {
+        if (type == BPC::BaseType::REQUEST) {
+            return AHandlerUDP::HandlerPtrWrapper(*this, &AHandlerUDP::request);
+        }
+        return AHandlerUDP::HandlerPtrWrapper(*this, &AHandlerUDP::response);
+    }
+
+    bool AHandlerUDP::resend_(Network::UdpPackage &package)
     {
         const auto &player = std::find_if(this->players_.begin(), this->players_.end(),
             [&package](const auto &it) {

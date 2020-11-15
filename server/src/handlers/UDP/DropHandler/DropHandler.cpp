@@ -13,11 +13,11 @@ namespace rtype::server {
     {
     }
 
-    void DropHandler::response(const BPC::Package &package)
+    void DropHandler::response(const Network::UdpPackage &package)
     {
     }
 
-    void DropHandler::request(const BPC::Package &package)
+    void DropHandler::request(const Network::UdpPackage &package)
     {
     }
 }

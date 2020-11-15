@@ -13,11 +13,11 @@ namespace rtype::server {
     {
     }
 
-    void SpawnHandler::response(const BPC::Package &package)
+    void SpawnHandler::response(const Network::UdpPackage &package)
     {
     }
 
-    void SpawnHandler::request(const BPC::Package &package)
+    void SpawnHandler::request(const Network::UdpPackage &package)
     {
     }
 }

@@ -30,7 +30,7 @@ set(SRCS
         lobby/LobbyDispatcher.cpp
         lobby/Lobby.cpp
         Network/Server.cpp
-        handlers/AHandler.cpp
+        handlers/AHandlerTCP.cpp
         handlers/AHandlerUDP.cpp
         handlers/TCP/AskJoinHandler/AskJoinHandler.cpp
         handlers/TCP/CreateHandler/CreateHandler.cpp

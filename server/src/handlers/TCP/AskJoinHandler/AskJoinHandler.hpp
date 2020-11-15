@@ -7,11 +7,12 @@
 
 #pragma once
 
-#include "handlers/AHandler.hpp"
+#include "handlers/AHandlerTCP.hpp"
+#include "lobby/LobbyDispatcher.hpp"
 #include "types.hpp"
 
 namespace rtype::server {
-    class AskJoinHandler : public AHandler {
+    class AskJoinHandler : public AHandlerTCP {
       public:
         struct ClientRequestBody {
             lobby_id_t lobbyID;
@@ -21,11 +22,11 @@ namespace rtype::server {
             port_t port;
         };
 
-        AskJoinHandler() = default;
+        AskJoinHandler(LobbyDispatcher &dispatcher);
         ~AskJoinHandler() override = default;
 
       protected:
-        void response(const BPC::Package &package) override;
-        void request(const BPC::Package &package) override;
+        void response(const BPC::Package &package, Network::TcpSession &session) override;
+        void request(const BPC::Package &package, Network::TcpSession &session) override;
     };
 }

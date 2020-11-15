@@ -19,28 +19,29 @@
 
 namespace rtype::server {
     GameServer::GameServer(const server::Config &conf)
-        : handlers_ {
-            { BPC::ASK_JOIN, std::make_shared<AskJoinHandler>() },
-            { BPC::CREATE, std::make_shared<CreateHandler>() }
+        : dispatcher_ { std::make_shared<LobbyDispatcher>(conf.maxGameThreads) }
+        , handlers_ {
+            { BPC::ASK_JOIN, std::make_shared<AskJoinHandler>(*this->dispatcher_) },
+            { BPC::CREATE, std::make_shared<CreateHandler>(*this->dispatcher_) }
         }
-        , master_(io_context_, conf.port, [&](const BPC::Package &package) {
-            (*this->handlers_[package.method])[package.type](package);
+        , master_(io_context_, conf.port, [&](const BPC::Package &package, Network::TcpSession &client) {
+            (*this->handlers_[package.method])[package.type](package, client);
         })
-    { }
+    {
+        for (auto idx = 0u; idx < conf.maxGameThreads; ++idx) {
+            this->lobbyManagers_.emplace_back(std::make_unique<LobbyManagerThread>(this->dispatcher_, idx));
+        }
+    }
 
     void GameServer::Run(const Config &conf)
     {
         static GameServer instance(conf);
 
-        instance.run_(conf);
+        instance.run_();
     }
 
-    void GameServer::run_(const Config &conf)
+    void GameServer::run_()
     {
-        this->dispatcher_ = std::make_shared<LobbyDispatcher>(conf.maxGameThreads);
-        for (auto idx = 0u; idx < conf.maxGameThreads; ++idx) {
-            this->lobbyManagers_.emplace_back(std::make_unique<LobbyManagerThread>(this->dispatcher_, idx));
-        }
         this->io_context_.run();
     }
 }

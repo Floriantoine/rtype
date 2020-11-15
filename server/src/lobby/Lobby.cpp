@@ -25,9 +25,10 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
 
 namespace rtype::server {
-    Lobby::Lobby()
+    Lobby::Lobby(const std::string &id)
         : udp_server_(io_context_)
         , handlers_ {
             { BPC::GAME_STATE, std::make_shared<GameStateHandler>(this->players_) },
@@ -42,8 +43,9 @@ namespace rtype::server {
             { BPC::JOIN, std::make_shared<JoinHandler>(this->players_) },
             { BPC::LEAVE, std::make_shared<LeaveHandler>(this->players_) }
         }
+        , id { id }
     {
-        this->udp_server_.read([&](const BPC::Package &package) {
+        this->udp_server_.async_read([&](const Network::UdpPackage &package) {
             (*this->handlers_[package.method])[package.type](package);
         });
     }
@@ -61,5 +63,15 @@ namespace rtype::server {
     bool Lobby::isRunning() const noexcept
     {
         return this->isRunning_;
+    }
+    
+    bool Lobby::isFull() const noexcept
+    {
+        return this->players_.size() >= MAX_PLAYERS;
+    }
+    
+    unsigned short Lobby::getPort() const
+    {
+        return this->udp_server_.getPort();
     }
 }

@@ -15,50 +15,62 @@
 #include <iostream>
 #include <pstl/glue_algorithm_defs.h>
 
-#define BPC_CM (rtype::BPC::CommunicationManager::Get())
-
 namespace rtype::server::Network {
-    TcpSession::TcpSession(tcp::socket &&socket)
-        : socket_(std::move(socket))
+    TcpSession::TcpSession(tcp::socket &&socket, const msg_handler &on_message, const err_handler &on_error)
+        : socket_{ std::move(socket) }
+        , streambuf_(HEADER_SIZE)
+        , on_message_{ on_message }
+        , on_error_{ on_error }
     {
         std::cout << "Session begin..." << std::endl;
     }
 
-    void TcpSession::start(msg_handler on_msg, err_handler on_err)
+    void TcpSession::start()
     {
-        this->on_message_ = on_msg;
-        this->on_error_ = on_err;
-
         this->async_read();
     }
 
     void TcpSession::async_read()
     {
         auto self = shared_from_this();
-        boost::asio::async_read_until(this->socket_, this->streambuf_, '\n',
+
+        this->socket_.async_read_some(boost::asio::buffer(self->streambuf_),
             [self](err_code err, std::size_t nbytes) {
-                if (err == boost::asio::error::eof || err == boost::asio::error::connection_refused || err == boost::asio::error::connection_aborted) {
-                    std::cerr << "Client: " << self->socket_.remote_endpoint() << " disconnected." << std::endl;
-                    self->socket_.close();
-                    self->on_error_();
-                } else {
-                    self->on_read(err, nbytes);
+                if (!self->isErrorAndHandle(err)) {
+                    BPC::Package pkg = BPC::Deserialize(self->streambuf_);
+                    pkg.body.reserve(pkg.bodySize);
+                    int toto = self->socket_.read_some(boost::asio::buffer(pkg.body), err);
+                    if (!self->isErrorAndHandle(err)) {
+                        self->on_message_(pkg, *self);
+                        self->async_read();
+                    }
                 }
             });
     }
 
-    void TcpSession::async_write()
+    void TcpSession::async_write(const BPC::Package &package, std::function<void()> onSent)
     {
         auto self = shared_from_this();
-        auto tmp = this->outgoing_.front();
 
-        boost::asio::async_write(this->socket_, boost::asio::buffer(tmp),
-            [self](err_code err, std::size_t nbytes) {
-                if (!err)
-                    self->on_write(err, nbytes);
-                else
+        auto buffer = BPC::Serialize(package);
+        boost::asio::async_write(this->socket_, boost::asio::buffer(buffer),
+            [&self, &onSent](err_code err, std::size_t nbytes) {
+                if (err)
                     self->on_error_();
+                else
+                    onSent();
             });
+    }
+
+    bool TcpSession::isErrorAndHandle(const err_code &err) 
+    {
+        if (err == boost::asio::error::eof || err == boost::asio::error::connection_refused || err == boost::asio::error::connection_aborted) {
+            std::cerr << "Client: " << this->socket_.remote_endpoint() << " disconnected." << std::endl;
+            this->socket_.close();
+            this->on_error_();
+            return true;
+        }
+        return false;
     }
 
     tcp::socket &TcpSession::getSocket()
@@ -66,78 +78,59 @@ namespace rtype::server::Network {
         return this->socket_;
     }
 
-    void TcpSession::on_read(err_code err, std::size_t nbytes)
-    {
-        std::stringstream msg;
-
-        std::cout << "Reading something..." << std::endl;
-        if (!err) {
-            msg << std::istream(&this->streambuf_).rdbuf();
-            this->streambuf_.consume(nbytes);
-
-            auto str = msg.str();
-            std::cout << str << std::endl;
-            BPC::Buffer buffer(str.begin(), str.end());
-            std::cout << "Received: " << buffer.size() << " bytes from client" << std::endl;
-            this->on_message_(BPC_CM.Deserialize(buffer));
-            this->outgoing_.push(buffer);
-        } else {
-            std::cerr << "Reading failed: " << err.message() << std::endl;
-            this->socket_.close();
-            this->on_error_();
-        }
-    }
-
-    void TcpSession::on_write(err_code err, std::size_t nbytes)
-    {
-        std::cerr << "Sending.." << std::endl;
-        if (!err) {
-            this->outgoing_.pop();
-            if (!this->outgoing_.empty())
-                this->async_write();
-        } else {
-            this->socket_.close();
-            this->on_error_();
-        }
-    }
-
-    TcpServer::TcpServer(boost::asio::io_context &io_context, std::uint16_t port, msg_handler onRead)
+    TcpServer::TcpServer(boost::asio::io_context &io_context, std::uint16_t port, const TcpSession::msg_handler &onRead)
         : io_context_(io_context)
         , acceptor_(io_context, tcp::endpoint(tcp::v4(), port))
+        , on_error_ { [&] { this->disconnect_handler(); } }
     {
         std::cout << "TCP Server" << std::endl;
         this->accept_handler(onRead);
     }
 
-    void TcpServer::accept_handler(msg_handler onRead)
+    void TcpServer::accept_handler(const TcpSession::msg_handler &onRead)
     {
         this->socket_.emplace(this->io_context_);
         this->acceptor_.async_accept(*this->socket_, [&](err_code err) {
             if (!err) {
-                auto client = std::make_shared<TcpSession>(std::move(*this->socket_));
+                auto client = std::make_shared<TcpSession>(std::move(*this->socket_), onRead, this->on_error_);
                 std::cout << client->getSocket().remote_endpoint(err) << " s'est connecté au server" << std::endl;
                 std::cout << "We have a new commer" << std::endl;
                 this->clients_.insert(client);
-                client->start(onRead,
-                    [&, client] {
-                        std::erase_if(this->clients_, [&](const std::shared_ptr<TcpSession> &session) {
-                            return (!session->getSocket().is_open());
-                        });
-                        for (auto it = this->clients_.begin(); it != this->clients_.end(); it++) {
-                            auto &sock = it->get()->getSocket();
-                            std::cout << "Client: " << sock.remote_endpoint() << " still alive." << std::endl;
-                        }
-                    });
+                client->start();
                 this->accept_handler(onRead);
-            } else
+            } else {
                 std::cerr << "Error Accept: " + err.message() << std::endl;
+            }
         });
     }
 
-    //void TcpServer::receive_handler(const BPC::Buffer &buffer)
-    //{
-    //std::cout << "RECEIVE PACKAGE:" << std::endl;
-    //}
+    void TcpServer::disconnect_handler()
+    {
+        std::erase_if(this->clients_, [&](const std::shared_ptr<TcpSession> &session) {
+            return (!session->getSocket().is_open());
+        });
+        for (auto it = this->clients_.begin(); it != this->clients_.end(); it++) {
+            auto &sock = it->get()->getSocket();
+            std::cout << "Client: " << sock.remote_endpoint() << " still alive." << std::endl;
+        }
+    }
+
+    UdpPackage::UdpPackage(const UdpPackage &other, BPC::BaseType type)
+        : BPC::Package(other, type)
+        , endpoint(other.endpoint)
+    { }
+
+    UdpPackage::UdpPackage(const UdpPackage &other)
+        : BPC::Package(other)
+        , endpoint(other.endpoint)
+    { }
+
+    UdpPackage &UdpPackage::operator=(const UdpPackage &other)
+    {
+        BPC::Package::operator=(other);
+        this->endpoint = other.endpoint;
+        return *this;
+    }
 
     UdpServer::UdpServer(boost::asio::io_context &io_context)
         : io_context_(io_context)
@@ -147,7 +140,7 @@ namespace rtype::server::Network {
         std::cout << "endpoint: " << this->socket_->local_endpoint() << std::endl;
     }
 
-    void UdpServer::read(std::function<void(const BPC::Package &)> onRead)
+    void UdpServer::async_read(std::function<void(const UdpPackage &)> onRead)
     {
         std::stringstream msg;
         auto mutableBuffer = this->streambuf_.prepare(4096);
@@ -161,28 +154,29 @@ namespace rtype::server::Network {
                     is >> str;
                     std::cout << str << std::endl;
                     BPC::Buffer buffer(str.begin(), str.end());
-                    onRead(BPC_CM.Deserialize(buffer));
-                    read(onRead);
-                    rtype::BPC::Package package;
-                    package.type = rtype::BPC::BaseType::REQUEST;
-                    package.method = rtype::BPC::Method::CREATE;
-                    package.timestamp = 42;
-                    package.endpoint = { "localhost", 4219 };
-
-                    auto buf = BPC_CM.Serialize(package);
-                    write(buf);
-                } else
+                    UdpPackage package;
+                    BPC::Deserialize(package, buffer);
+                    package.endpoint = this->remote_endpoint_;
+                    onRead(package);
+                    this->async_read(onRead);
+                } else {
                     std::cerr << "Error Somewhere" << err.message() << std::endl;
+                }
             });
     }
 
-    void UdpServer::write(const BPC::Buffer &buffer)
+    void UdpServer::async_write(const UdpPackage &package)
     {
+        BPC::Buffer buffer = BPC::Serialize(package);
         this->socket_->async_send_to(boost::asio::buffer(buffer), this->remote_endpoint_,
             [&](err_code err, std::size_t nsize) {
-                if (err) {
+                if (err)
                     std::cerr << "Write: " + err.message() << std::endl;
-                }
             });
+    }
+
+    unsigned short UdpServer::getPort() const
+    {
+        return this->socket_->local_endpoint().port();
     }
 }

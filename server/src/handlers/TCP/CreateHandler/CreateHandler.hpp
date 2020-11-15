@@ -7,14 +7,15 @@
 
 #pragma once
 
-#include "handlers/AHandler.hpp"
+#include "handlers/AHandlerTCP.hpp"
+#include "lobby/LobbyDispatcher.hpp"
 #include "types.hpp"
 
 #include <string>
 #include <vector>
 
 namespace rtype::server {
-    class CreateHandler : public AHandler {
+    class CreateHandler : public AHandlerTCP {
       public:
         struct ServerResponseBody {
             port_t port;
@@ -23,14 +24,14 @@ namespace rtype::server {
         struct ClientRequestBody {
             std::string mapName;
 
-            ClientRequestBody(std::vector<unsigned char> buffer);
+            ClientRequestBody(const std::vector<unsigned char> &buffer);
         };
 
-        CreateHandler() = default;
+        CreateHandler(LobbyDispatcher &dispatcher);
         ~CreateHandler() override = default;
 
       protected:
-        void response(const BPC::Package &package) override;
-        void request(const BPC::Package &package) override;
+        void response(const BPC::Package &package, Network::TcpSession &session) override;
+        void request(const BPC::Package &package, Network::TcpSession &session) override;
     };
 }

@@ -13,11 +13,11 @@ namespace rtype::server {
     {
     }
 
-    void JoinHandler::response(const BPC::Package &package)
+    void JoinHandler::response(const Network::UdpPackage &package)
     {
     }
 
-    void JoinHandler::request(const BPC::Package &package)
+    void JoinHandler::request(const Network::UdpPackage &package)
     {
     }
 }

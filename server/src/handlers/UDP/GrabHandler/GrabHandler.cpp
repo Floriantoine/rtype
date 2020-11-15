@@ -13,11 +13,11 @@ namespace rtype::server {
     {
     }
 
-    void GrabHandler::response(const BPC::Package &package)
+    void GrabHandler::response(const Network::UdpPackage &package)
     {
     }
 
-    void GrabHandler::request(const BPC::Package &package)
+    void GrabHandler::request(const Network::UdpPackage &package)
     {
     }
 }

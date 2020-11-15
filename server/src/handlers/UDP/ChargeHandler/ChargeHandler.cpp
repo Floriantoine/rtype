@@ -13,11 +13,11 @@ namespace rtype::server {
     {
     }
 
-    void ChargeHandler::response(const BPC::Package &package)
+    void ChargeHandler::response(const Network::UdpPackage &package)
     {
     }
 
-    void ChargeHandler::request(const BPC::Package &package)
+    void ChargeHandler::request(const Network::UdpPackage &package)
     {
     }
 }

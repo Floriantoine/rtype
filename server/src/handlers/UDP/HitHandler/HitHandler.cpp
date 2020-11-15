@@ -13,11 +13,11 @@ namespace rtype::server {
     {
     }
 
-    void HitHandler::response(const BPC::Package &package)
+    void HitHandler::response(const Network::UdpPackage &package)
     {
     }
 
-    void HitHandler::request(const BPC::Package &package)
+    void HitHandler::request(const Network::UdpPackage &package)
     {
     }
 }

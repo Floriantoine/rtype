@@ -13,7 +13,7 @@ namespace rtype {
     typedef size_t entity_id_t;
     typedef ssize_t coordinate_t;
     typedef char lobby_id_t[6];
-    typedef unsigned port_t;
+    typedef unsigned short port_t;
     typedef unsigned char game_state_t;
     typedef unsigned char player_id_t;
     typedef unsigned char direction_t;

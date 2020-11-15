@@ -16,7 +16,6 @@
 
 int main(int ac, char *av[])
 {
-    auto cm = rtype::BPC::CommunicationManager::Get();
     boost::asio::io_context io_context;
 
     //std::uint16_t i = std::stoi(av[1]);
@@ -26,12 +25,11 @@ int main(int ac, char *av[])
     package.type = rtype::BPC::BaseType::REQUEST;
     package.method = rtype::BPC::Method::CREATE;
     package.timestamp = 42;
-    package.endpoint = { "localhost", 4219 };
 
-    auto buffer = cm.Serialize(package);
+    auto buffer = rtype::BPC::Serialize(package);
     client.write(buffer);
     auto rec = client.read();
-    cm.Deserialize(buffer);
+    rtype::BPC::Deserialize(buffer);
 
     return 0;
 }

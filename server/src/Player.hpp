@@ -7,13 +7,14 @@
 
 #pragma once
 
+#include "boost/asio/ip/udp.hpp"
 #include "types.hpp"
 #include "core/Protocol.hpp"
 
 namespace rtype::server {
     struct Player {
         player_id_t id;
-        BPC::Endpoint endpoint;
+        boost::asio::ip::udp::endpoint endpoint;
         long lastReception;
     };
 }

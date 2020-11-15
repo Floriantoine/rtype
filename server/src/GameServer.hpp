@@ -12,6 +12,7 @@
 #include "lobby/Lobby.hpp"
 #include "lobby/LobbyDispatcher.hpp"
 #include "lobby/LobbyManagerThread.hpp"
+#include "handlers/AHandlerTCP.hpp"
 
 #include <memory>
 #include <unordered_map>
@@ -25,14 +26,15 @@ namespace rtype::server {
     class GameServer {
       private:
         static GameServer Instance_;
+
+        boost::asio::io_context io_context_;
         std::vector<std::unique_ptr<LobbyManagerThread>> lobbyManagers_;
         std::shared_ptr<LobbyDispatcher> dispatcher_;
-        boost::asio::io_context io_context_;
-        std::unordered_map<BPC::Method, std::shared_ptr<AHandler>> handlers_;
+        std::unordered_map<BPC::Method, std::shared_ptr<AHandlerTCP>> handlers_;
         Network::TcpServer master_;
 
         GameServer(const Config &conf);
-        void run_(const Config &conf);
+        void run_();
 
       public:
         ~GameServer() = default;

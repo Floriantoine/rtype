@@ -13,11 +13,11 @@ namespace rtype::server {
     {
     }
 
-    void ShootHandler::response(const BPC::Package &package)
+    void ShootHandler::response(const Network::UdpPackage &package)
     {
     }
 
-    void ShootHandler::request(const BPC::Package &package)
+    void ShootHandler::request(const Network::UdpPackage &package)
     {
     }
 }

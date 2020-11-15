@@ -13,11 +13,11 @@ namespace rtype::server {
     {
     }
 
-    void DestroyHandler::response(const BPC::Package &package)
+    void DestroyHandler::response(const Network::UdpPackage &package)
     {
     }
 
-    void DestroyHandler::request(const BPC::Package &package)
+    void DestroyHandler::request(const Network::UdpPackage &package)
     {
     }
 }

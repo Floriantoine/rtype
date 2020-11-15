@@ -28,7 +28,7 @@ namespace rtype::server {
         ~DropHandler() override = default;
 
       protected:
-        void response(const BPC::Package &package) override;
-        void request(const BPC::Package &package) override;
+        void response(const Network::UdpPackage &package) override;
+        void request(const Network::UdpPackage &package) override;
     };
 }
