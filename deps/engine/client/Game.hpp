@@ -45,12 +45,6 @@ namespace rtype {
                 this->lastUpdate_ = nextTickTime - expectedInterval;
                 std::this_thread::sleep_until(nextTickTime);
             }
-
-          private:
-            void onTick() override
-            {
-                std::cout << this->getFramerate() << std::endl;
-            }
         };
 
     }

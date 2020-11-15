@@ -3,6 +3,19 @@
     "state": "RUNNING",
     "definitions": [
         {
+            "id": "Player",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "type": "player_script"
+                }
+            ]
+        },
+        {
             "id": "SmallWall",
             "components": [
                 {
@@ -401,6 +414,9 @@
                     "y": 0
                 }
             ]
+        },
+        {
+            "base": "Player"
         }
 
     ]
