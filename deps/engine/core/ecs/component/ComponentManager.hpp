@@ -150,8 +150,10 @@ namespace rtype {
         void apply(std::function<void(T *)> function)
         {
             if (this->isComponentTypeRegistered<T>()) {
-                for (const auto &component : this->getComponentList<T>()) {
-                    function(static_cast<T *>(component.second));
+                auto list = this->getComponentList<T>();
+                for (auto it = list.begin(), next = it; it != list.end(); it = next) {
+                    next++;
+                    function(static_cast<T *>(it->second));
                 }
             }
         }

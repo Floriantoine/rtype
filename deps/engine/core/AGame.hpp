@@ -71,8 +71,9 @@ namespace rtype {
             this->isRunning = true;
             this->onStart();
             while (this->isRunning) {
+                this->onBeforeUpdate();
                 this->update();
-                this->onTick();
+                this->onAfterUpdate();
                 this->tick();
             }
         }
@@ -151,9 +152,13 @@ namespace rtype {
          */
         virtual void onStart() { }
         /**
+         * Method called before each game update
+         */
+        virtual void onBeforeUpdate() { }
+        /**
          * Method called after each game update
          */
-        virtual void onTick() { }
+        virtual void onAfterUpdate() { }
         /**
          * Method called when the game ends
          */

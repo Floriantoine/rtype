@@ -19,6 +19,7 @@
 #include "engine/client/systems/AnimationSystem.hpp"
 #include "engine/core/systems/ScriptSystem.hpp"
 #include "engine/core/systems/EventSystem.hpp"
+#include "engine/client/systems/SpriteSystem.hpp"
 
 #include <iostream>
 
@@ -37,12 +38,13 @@ int main()
     JsonLoader::registerComponentFactory("position", PositionComponent::factory);
     JsonLoader::registerComponentFactory("animation", AnimationComponent::factory);
     JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
-    // JsonLoader::registerComponentFactory("player_script", PlayerScriptComponent::getFactory<PlayerScriptComponent>());
+    JsonLoader::registerComponentFactory("player_script", PlayerScriptComponent::getFactory<PlayerScriptComponent>());
     JsonLoader::registerComponentFactory("pata_script", PataScriptComponent::getFactory<PataScriptComponent>());
 
     auto scene = JsonLoader::createScene(Game::getInstance(), "./config_file/scene/stage1.json");
 
     scene->createSystem<EventSystem>();
+    scene->createSystem<SpriteSystem>();
     scene->createSystem<ScriptSystem>();
     scene->createSystem<AnimationSystem>();
 

@@ -19,7 +19,7 @@ namespace rtype::client {
         void update(long elapsedTime) override
         {
             this->componentManager_->apply<AnimationComponent>([&](AnimationComponent *anim) {
-                if (anim->rate)
+                if (anim->rate == 0)
                     return;
                 anim->totalElapsedTime += elapsedTime;
                 int step = anim->totalElapsedTime / anim->rate;

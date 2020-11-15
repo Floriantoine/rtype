@@ -9,7 +9,7 @@
 
 #include "../core/AGame.hpp"
 #include "../../utils/Singleton.hpp"
-#include "SFML/Window.hpp"
+#include "SFML/Graphics/RenderWindow.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -21,7 +21,7 @@ namespace rtype {
         class Game : public AGame, public Singleton<Game> {
           private:
             std::chrono::steady_clock::time_point lastUpdate_;
-            std::unique_ptr<sf::Window> window_;
+            std::unique_ptr<sf::RenderWindow> window_;
             sf::VideoMode videoMode_ { 1920, 1080 };
             sf::Uint32 windowStyle_ { sf::Style::Default };
             std::string windowTitle_ { "Game" };
@@ -67,20 +67,25 @@ namespace rtype {
                 this->windowStyle_ = style;
             }
 
-            sf::Window *getWindow() const
+            sf::RenderWindow *getWindow() const
             {
                 return this->window_.get();
             }
 
             void onInit() override
             {
-                this->window_ = std::make_unique<sf::Window>(
+                this->window_ = std::make_unique<sf::RenderWindow>(
                     this->videoMode_,
                     this->windowTitle_,
                     this->windowStyle_);
             }
 
-            void onTick() override
+            void onBeforeUpdate() override
+            {
+                this->window_->clear();
+            }
+
+            void onAfterUpdate() override
             {
                 this->window_->display();
             }

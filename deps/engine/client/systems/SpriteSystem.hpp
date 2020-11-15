@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include "../core/components/SpriteComponent.hpp"
-#include "../core/components/PositionComponent.hpp"
-#include "../core/components/AnimationComponent.hpp"
-#include "../core/systems/ARenderSystem.hpp"
+#include "../../core/components/SpriteComponent.hpp"
+#include "../../core/components/PositionComponent.hpp"
+#include "../../core/components/AnimationComponent.hpp"
+#include "../../core/systems/ARenderSystem.hpp"
 
 namespace rtype::client {
     class SpriteSystem : public ARenderSystem {
@@ -22,8 +22,8 @@ namespace rtype::client {
         void update(long elapsedTime) override
         {
             this->componentManager_->apply<SpriteComponent>([&](SpriteComponent *sprite) {
-                PositionComponent *position = sprite->entity->getComponent<PositionComponent>();
-                AnimationComponent *animation = sprite->entity->getComponent<AnimationComponent>();
+                PositionComponent *position = sprite->getEntity()->getComponent<PositionComponent>();
+                AnimationComponent *animation = sprite->getEntity()->getComponent<AnimationComponent>();
 
                 if (position != nullptr) {
                     sprite->sprite.setPosition(position->x, position->y);
