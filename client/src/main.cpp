@@ -15,8 +15,9 @@
 #include "engine/core/components/TextureComponent.hpp"
 #include "engine/core/components/PlayerScriptComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
-#include "engine/core/systems/ScriptSystem.hpp"
 #include "engine/client/systems/AnimationSystem.hpp"
+#include "engine/core/systems/ScriptSystem.hpp"
+#include "engine/core/systems/EventSystem.hpp"
 
 #include <iostream>
 
@@ -27,7 +28,8 @@ std::unordered_map<std::string, SceneLoader::component_factory_t> SceneLoader::C
 
 int main()
 {
-    Game game;
+    Game::getInstance().setWindowTitle("R-Type");
+
     SceneLoader sceneLoader = SceneLoader("./scene/stage1.json");
 
     sceneLoader.AddComponentFactory("texture", TextureComponent::factory);
@@ -37,11 +39,12 @@ int main()
     sceneLoader.AddComponentFactory("missile", MissileComponent::factory);
     sceneLoader.AddComponentFactory("player_script", PlayerScriptComponent::getFactory<PlayerScriptComponent>());
 
-    auto scene = sceneLoader.load(game);
+    auto scene = sceneLoader.load(Game::getInstance());
 
+    scene->createSystem<EventSystem>();
     scene->createSystem<ScriptSystem>();
     scene->createSystem<AnimationSystem>();
 
-    game.start();
+    Game::getInstance().start();
     return 0;
 }
