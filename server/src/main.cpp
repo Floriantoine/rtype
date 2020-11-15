@@ -36,10 +36,14 @@ static server::Config ParseConfig(const std::string &filePath)
 int main(int argc, const char **argv)
 {
     const char *configFilePath = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
+    boost::asio::io_context io_context;
 
     try {
         server::Config conf = ParseConfig(configFilePath);
+        Network::TcpServer connection_serv(io_context, conf.port);
+
         server::GameServer::Run(conf);
+        io_context.run();
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 1;
