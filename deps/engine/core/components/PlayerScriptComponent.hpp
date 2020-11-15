@@ -22,6 +22,7 @@ namespace rtype {
 
         void onUpdate(long elapsedTime) override
         {
+            static PositionComponent *position = this->getComponent<PositionComponent>();
         }
 
         void onKeyPressed(const sf::Event &event) override

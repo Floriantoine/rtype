@@ -107,6 +107,7 @@ namespace rtype {
             auto pool = this->getComponentPool<T>();
             T *component = static_cast<T *>(pool->get(std::forward<Args>(args)...));
             component->entityId_ = entityId;
+            component->componentManager_ = this;
             this->getComponentList<T>()[entityId] = static_cast<ComponentBase *>(component);
         }
 

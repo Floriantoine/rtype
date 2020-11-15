@@ -64,6 +64,12 @@ namespace rtype {
          */
         virtual void onMouseButtonReleased(const sf::Event &) {};
 
+        template<class T>
+        T *getComponent()
+        {
+            return this->componentManager_->getComponent<T>(this->entityId_);
+        }
+
         /**
          * Creates a factory for a ScriptComponent derived class
          *

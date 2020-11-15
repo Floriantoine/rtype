@@ -11,10 +11,13 @@
 
 namespace rtype {
 
+    class ComponentManager;
+
     class ComponentBase {
         friend class ComponentManager;
 
       protected:
+        ComponentManager *componentManager_;
         id_t entityId_;
 
         static id_t getNextTypeId()
