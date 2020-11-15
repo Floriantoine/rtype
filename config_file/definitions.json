@@ -1,0 +1,63 @@
+{
+    "definitions": [
+        {
+            "id": "Player",
+            "components": [
+                {
+                    "type": "position"
+                },
+                {
+                    "type": "player_script"
+                }
+            ]
+        },
+        {
+            "id": "Pata-pata",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "enemy_1.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 21,
+                    "heigth": 24
+                },
+                {
+                    "type": "position"
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 0,
+                    "totalFrame": 8,
+                    "rate": 500
+                },
+                {
+                    "type": "pata_script"
+                }
+            ]
+        },
+        {
+            "id": "Scant",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "mini_boss_1.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 56,
+                    "heigth": 56
+                },
+                {
+                    "type": "position",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 0,
+                    "totalFrame": 3
+                }
+            ]
+        }
+    ]
+}

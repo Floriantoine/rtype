@@ -84,8 +84,13 @@ namespace rtype {
 
         ComponentBase *getComponent(id_t typeId, id_t entityId)
         {
-            assert(this->hasComponent(typeId, entityId) && "Entity does not have component");
-            return this->getComponentList(typeId)[entityId];
+            if (this->isComponentTypeRegistered(typeId) == false)
+                return nullptr;
+            auto list = this->getComponentList(typeId);
+            auto it = list.find(entityId);
+            if (it == list.end())
+                return nullptr;
+            return it->second;
         }
 
         void removeComponent(id_t typeId, id_t entityId)

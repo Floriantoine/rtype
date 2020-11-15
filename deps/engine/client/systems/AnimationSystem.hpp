@@ -26,7 +26,7 @@ namespace rtype::client {
 
                 if (step == 0)
                     return;
-                anim->totalElapsedTime -= step * anim->rate;
+                anim->totalElapsedTime %= anim->rate;
                 anim->currentFrame = (anim->currentFrame + step) % anim->totalFrame;
             });
         };

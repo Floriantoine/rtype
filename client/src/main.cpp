@@ -12,7 +12,7 @@
 #include "engine/core/components/MissileComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/components/RotationComponent.hpp"
-#include "engine/core/components/TextureComponent.hpp"
+#include "engine/core/components/SpriteComponent.hpp"
 #include "engine/core/components/PlayerScriptComponent.hpp"
 #include "engine/core/components/PataScriptComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
@@ -25,24 +25,22 @@
 using namespace rtype;
 using namespace rtype::client;
 
-std::unordered_map<std::string, SceneLoader::component_factory_t> SceneLoader::ComponentFactory_;
-
 int main()
 {
     Game::getInstance().setWindowTitle("R-Type");
     Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
 
-    SceneLoader sceneLoader = SceneLoader("./scene/stage1.json");
+    JsonLoader::loadDefinitions("./config_file/definitions.json");
 
-    sceneLoader.AddComponentFactory("texture", TextureComponent::factory);
-    sceneLoader.AddComponentFactory("rotation", RotationComponent::factory);
-    sceneLoader.AddComponentFactory("position", PositionComponent::factory);
-    sceneLoader.AddComponentFactory("animation", AnimationComponent::factory);
-    sceneLoader.AddComponentFactory("missile", MissileComponent::factory);
-    // sceneLoader.AddComponentFactory("player_script", PlayerScriptComponent::getFactory<PlayerScriptComponent>());
-    sceneLoader.AddComponentFactory("pata_script", PataScriptComponent::getFactory<PataScriptComponent>());
+    JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
+    JsonLoader::registerComponentFactory("rotation", RotationComponent::factory);
+    JsonLoader::registerComponentFactory("position", PositionComponent::factory);
+    JsonLoader::registerComponentFactory("animation", AnimationComponent::factory);
+    JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
+    // JsonLoader::registerComponentFactory("player_script", PlayerScriptComponent::getFactory<PlayerScriptComponent>());
+    JsonLoader::registerComponentFactory("pata_script", PataScriptComponent::getFactory<PataScriptComponent>());
 
-    auto scene = sceneLoader.load(Game::getInstance());
+    auto scene = JsonLoader::createScene(Game::getInstance(), "./config_file/scene/stage1.json");
 
     scene->createSystem<EventSystem>();
     scene->createSystem<ScriptSystem>();

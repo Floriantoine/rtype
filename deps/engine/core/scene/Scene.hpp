@@ -49,6 +49,21 @@ namespace rtype {
             return this->id_;
         }
 
+        EntityManager &getEntityManager()
+        {
+            return this->entityManager_;
+        }
+
+        ComponentManager &getComponentManager()
+        {
+            return this->componentManager_;
+        }
+
+        SystemManager &getSystemManager()
+        {
+            return this->systemManager_;
+        }
+
         void setState(State state)
         {
             this->state_ = state;

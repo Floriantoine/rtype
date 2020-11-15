@@ -7,10 +7,14 @@
 
 #pragma once
 
+#include "../utils/Singleton.hpp"
 #include "../engine/core/AGame.hpp"
 #include "../engine/core/ecs/component/ComponentBase.hpp"
+#include "../engine/core/ecs/entity/Entity.hpp"
+#include "../engine/core/ecs/entity/EntityManager.hpp"
 #include "../engine/core/scene/Scene.hpp"
 #include "nlohmann/json.hpp"
+#include "utils/Singleton.hpp"
 #include "utils/Exception.hpp"
 
 #include <cstdint>
@@ -21,23 +25,43 @@
 #include <vector>
 
 namespace rtype {
-    class SceneLoader {
-      public:
-        typedef std::function<void(const std::shared_ptr<Entity> &, const nlohmann::json &)> component_factory_t;
 
+    class JsonLoader : public Singleton<JsonLoader> {
+      public:
         class Exception : public rtype::Exception {
           public:
             Exception(const std::string &msg)
-                : rtype::Exception("SceneLoader exception: " + msg)
+                : rtype::Exception("JsonLoader exception: " + msg)
             { }
             Exception(std::string &&msg)
-                : rtype::Exception("SceneLoader exception: " + std::move(msg))
+                : rtype::Exception("JsonLoader exception: " + std::move(msg))
             { }
             virtual ~Exception() override = default;
         };
 
       private:
-        struct EntityDefinition {
+        struct JsonUtil {
+            static const auto JsonAt(const nlohmann::json &json, const std::string &key, const std::string &errorContext = "")
+            {
+                const auto &value = json.find(key);
+                if (value == json.end())
+                    throw Exception("expected `" + key + "` " + errorContext);
+                return value;
+            }
+
+            static nlohmann::json loadFile(const std::string &file)
+            {
+                std::ifstream fd(file);
+
+                if (!fd.good()) {
+                    return nlohmann::json::value_t::discarded;
+                }
+                return nlohmann::json::parse(fd, nullptr, false, true);
+            }
+        };
+
+        class EntityDefinition {
+          public:
             std::unordered_map<std::string, nlohmann::json> components;
 
             EntityDefinition &operator=(const EntityDefinition &other)
@@ -45,31 +69,29 @@ namespace rtype {
                 this->components = other.components;
                 return *this;
             }
+
+            void addComponent(const nlohmann::json &body)
+            {
+                const auto &typeJson = JsonUtil::JsonAt(body, "type", "for an object of type `component`");
+                const std::string &type = typeJson->get<std::string>();
+                this->components[typeJson->get<std::string>()] = body;
+            }
+
+            void mergeComponents(const nlohmann::json &json)
+            {
+                for (const auto &component : json) {
+                    std::string type = JsonUtil::JsonAt(component, "type")->get<std::string>();
+                    this->components[type].merge_patch(component);
+                }
+            }
         };
 
-        static std::unordered_map<std::string, component_factory_t> ComponentFactory_;
+        typedef std::function<void(const std::shared_ptr<Entity> &, const nlohmann::json &)> component_factory_t;
 
-        bool good_ { true };
-        nlohmann::json json_;
+        std::unordered_map<std::string, component_factory_t> factories_;
         std::unordered_map<std::string, EntityDefinition> definitions_;
 
-        static const auto JsonAt_(const nlohmann::json &json, const std::string &key, const std::string &errorContext = "")
-        {
-            const auto &value = json.find(key);
-            if (value == json.end())
-                throw Exception("expected `" + key + "` " + errorContext);
-            return value;
-        }
-
-        void addComponent_(EntityDefinition &def, const nlohmann::json &body)
-        {
-            const auto &typeJson = this->JsonAt_(body, "type", "for an object of type `component`");
-            const std::string &type = typeJson->get<std::string>();
-
-            def.components[typeJson->get<std::string>()] = body;
-        }
-
-        const auto getDefinition_(const std::string &key, bool throwOnError = true) const
+        const auto getDefinition_(const std::string &key, bool throwOnError = true)
         {
             const auto def = this->definitions_.find(key);
             if (throwOnError && def == this->definitions_.end())
@@ -77,7 +99,7 @@ namespace rtype {
             return (def);
         }
 
-        void loadState_(Scene &scene) const
+        void loadState_(Scene &scene, const nlohmann::json &json)
         {
             static const std::unordered_map<std::string, Scene::State> States = {
                 { "INACTIVE", Scene::STATE_INACTIVE },
@@ -85,7 +107,7 @@ namespace rtype {
                 { "PAUSED", Scene::STATE_PAUSED }
             };
 
-            const auto &stateJson = this->JsonAt_(this->json_, "state");
+            const auto &stateJson = JsonUtil::JsonAt(json, "state");
             const auto &stateStr = stateJson->get<std::string>();
             const auto &state = States.find(stateStr);
 
@@ -95,105 +117,118 @@ namespace rtype {
             scene.setState(state->second);
         }
 
-        void loadDefinitions_()
+      public:
+        /**
+         * Register a component factory for later use
+         * 
+         * @param type component factory name (for consistency, choose the component's class name)
+         * @param factory factory function to register
+         * 
+         * @throw
+         */
+        static void registerComponentFactory(const std::string &type, component_factory_t factory)
         {
-            static bool Loaded = false;
+            JsonLoader::getInstance().factories_[type] = factory;
+        }
 
-            if (Loaded)
-                return;
-            Loaded = true;
+        /**
+         * Load entities definitions from file
+         * 
+         * @param file path to the file to load the definitions from
+         * 
+         * @throw
+         */
+        static void loadDefinitions(const std::string &file)
+        {
+            nlohmann::json json = JsonUtil::loadFile(file);
 
-            auto defs = this->json_.find("definitions");
+            if (json == nlohmann::json::value_t::discarded) {
+                throw Exception("parsing error");
+            }
+
+            auto defs = json.find("definitions");
             for (const auto &it : *defs) {
-                const auto &id = this->JsonAt_(it, "id", "for an object of type `definition`")->get<std::string>();
-                const auto &check = this->getDefinition_(id, false);
-                if (check != this->definitions_.cend()) {
+                const auto &id = JsonUtil::JsonAt(it, "id", "for an object of type `definition`")->get<std::string>();
+                const auto &check = JsonLoader::getInstance().getDefinition_(id, false);
+                if (check != JsonLoader::getInstance().definitions_.cend()) {
                     throw Exception("multiple definition of `" + id + "`");
                 }
 
-                EntityDefinition &def = this->definitions_[id];
+                EntityDefinition &def = JsonLoader::getInstance().definitions_[id];
 
-                const auto &components = this->JsonAt_(it, "components", " object for definition of `" + id + "`");
+                const auto &components = JsonUtil::JsonAt(it, "components", " object for definition of `" + id + "`");
 
                 for (const auto &component : *components) {
-                    addComponent_(def, component);
+                    def.addComponent(component);
                 }
             }
         }
 
-        void loadComponents_(EntityDefinition &entity, const nlohmann::json &json) const
+        /**
+         * Create a new entity and load its components from json
+         * 
+         * @param entityManager entity manager to use to create a new entity
+         * @param json json object describing the entity to create
+         * 
+         * @throw
+         * 
+         * @returns the newly created and loaded entity
+         */
+        static std::shared_ptr<Entity> createEntity(EntityManager &entityManager, const nlohmann::json &json)
         {
-            for (const auto &component : json) {
-                std::string type = this->JsonAt_(component, "type")->get<std::string>();
-                entity.components[type].merge_patch(component);
-            }
-        }
-
-        void loadEntity_(Scene &scene, const nlohmann::json &json) const
-        {
+            std::shared_ptr<Entity> entity = entityManager.createEntity();
             const auto &baseJson = json.find("base");
             EntityDefinition builder;
 
             if (baseJson != json.end()) {
-                builder = this->getDefinition_(baseJson->get<std::string>())->second;
+                builder = JsonLoader::getInstance().getDefinition_(baseJson->get<std::string>())->second;
             }
 
             const auto &components = json.find("components");
             if (components != json.end()) {
-                this->loadComponents_(builder, *components);
+                builder.mergeComponents(*components);
             }
 
-            std::shared_ptr<Entity> entity = scene.createEntity();
             for (const auto &it : builder.components) {
-                const auto &factory = SceneLoader::ComponentFactory_.find(it.first);
+                const auto &factory = JsonLoader::getInstance().factories_.find(it.first);
 
-                if (factory == SceneLoader::ComponentFactory_.cend()) {
+                if (factory == JsonLoader::getInstance().factories_.cend()) {
                     throw Exception("no factory defined for `" + it.first + "` component");
                 }
-                this->ComponentFactory_[it.first](entity, it.second);
+
+                JsonLoader::getInstance().factories_[it.first](entity, it.second);
             }
+            return entity;
         }
 
-      public:
-        ~SceneLoader() = default;
-
-        SceneLoader(const std::string &file)
+        /**
+         * Create a new scene and load its entities from file
+         * 
+         * @param sceneManager scene manager to use to create a new scene
+         * @param file path to the file to load the scene's entities from
+         * 
+         * @throw
+         * 
+         * @returns the newly created and loaded scene
+         */
+        static std::shared_ptr<Scene> createScene(AGame &game, const std::string &file)
         {
-            std::ifstream fd(file);
+            nlohmann::json json = JsonUtil::loadFile(file);
 
-            this->good_ = fd.good();
-            if (!this->good_) {
-                return;
-            }
-            this->json_ = nlohmann::json::parse(fd, nullptr, false, true);
-            if (this->json_ == nlohmann::json::value_t::discarded) {
-                this->good_ = false;
-            }
-        }
-
-        static void AddComponentFactory(const std::string &type, component_factory_t factory)
-        {
-            SceneLoader::ComponentFactory_[type] = factory;
-        }
-
-        std::shared_ptr<Scene> load(AGame &game)
-        {
-            if (!this->good_)
+            if (json == nlohmann::json::value_t::discarded) {
                 throw Exception("parsing error");
-
-            std::size_t layer = this->JsonAt_(this->json_, "layer")->get<std::size_t>();
-
-            std::shared_ptr scenePtr = game.createScene(layer);
-
-            this->loadDefinitions_();
-            this->loadState_(*scenePtr);
-
-            const auto &json = this->JsonAt_(this->json_, "entities");
-
-            for (const auto &it : *json) {
-                this->loadEntity_(*scenePtr, it);
             }
-            return scenePtr;
+
+            std::size_t layer = JsonUtil::JsonAt(json, "layer")->get<std::size_t>();
+            std::shared_ptr scene = game.createScene(layer);
+
+            JsonLoader::getInstance().loadState_(*scene, json);
+
+            const auto &entities = JsonUtil::JsonAt(json, "entities");
+            for (const auto &it : *entities) {
+                JsonLoader::createEntity(scene->getEntityManager(), it);
+            }
+            return scene;
         }
     };
 }

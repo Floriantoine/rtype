@@ -25,7 +25,7 @@ namespace rtype {
         long totalElapsedTime_ = 0;
         long rate_ = 100;
 
-        int limiteMinInX = 0;
+        int limiteMinInX_ = 0;
 
         PositionComponent *position_ = nullptr;
         std::size_t initInY_ = 0;
@@ -49,8 +49,8 @@ namespace rtype {
             this->position_->y = this->initInY_ + (this->amplitude_ * sinValue);
 
             if (step)
-                this->totalElapsedTime_ = 0;
-            if (this->position_->x < this->limiteMinInX)
+                this->totalElapsedTime_ %= this->rate_;
+            if (this->position_->x < this->limiteMinInX_)
                 this->destroyEntity();
         }
 
