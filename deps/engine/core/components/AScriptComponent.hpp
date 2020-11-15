@@ -7,11 +7,12 @@
 
 #pragma once
 
+#include "../ecs/assert.hpp"
 #include "../ecs/component/Component.hpp"
 #include "../ecs/entity/Entity.hpp"
-#include "../ecs/assert.hpp"
 #include "nlohmann/json.hpp"
 
+#include <SFML/Window/Event.hpp>
 #include <memory>
 
 namespace rtype {
@@ -41,14 +42,24 @@ namespace rtype {
         virtual void onCollide() {};
 
         /**
-         * Method called when a keyboard event is triggered
+         * Method called when a keyboard key is pressed
          */
-        virtual void onKeyboardInput() {};
+        virtual void onKeyPressed(const sf::Event::KeyEvent &) {};
 
         /**
-         * Method called when a mouse event is triggered
+         * Method called when a keyboard key is released
          */
-        virtual void onMouseInput() {};
+        virtual void onKeyReleased(const sf::Event::KeyEvent &) {};
+
+        /**
+         * Method called when a mouse button is pressed
+         */
+        virtual void onMouseButtonPressed(const sf::Event::MouseButtonEvent &) {};
+
+        /**
+         * Method called when a mouse button is released
+         */
+        virtual void onMouseButtonReleased(const sf::Event::MouseButtonEvent &) {};
 
         /**
          * Creates a factory for a ScriptComponent derived class

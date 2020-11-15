@@ -29,6 +29,7 @@ std::unordered_map<std::string, SceneLoader::component_factory_t> SceneLoader::C
 int main()
 {
     Game::getInstance().setWindowTitle("R-Type");
+    Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
 
     SceneLoader sceneLoader = SceneLoader("./scene/stage1.json");
 
