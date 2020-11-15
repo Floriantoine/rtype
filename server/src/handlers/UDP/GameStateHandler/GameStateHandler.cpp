@@ -8,11 +8,11 @@
 #include "GameStateHandler.hpp"
 
 namespace rtype {
-    void GameStateHandler::response(char *body)
+    void GameStateHandler::response(const BPC::Package &package)
     {
     }
 
-    void GameStateHandler::request(char *body)
+    void GameStateHandler::request(const BPC::Package &package)
     {
     }
 }

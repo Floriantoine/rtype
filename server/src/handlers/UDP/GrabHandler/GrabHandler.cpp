@@ -8,11 +8,11 @@
 #include "GrabHandler.hpp"
 
 namespace rtype {
-    void GrabHandler::response(char *body)
+    void GrabHandler::response(const BPC::Package &package)
     {
     }
 
-    void GrabHandler::request(char *body)
+    void GrabHandler::request(const BPC::Package &package)
     {
     }
 }

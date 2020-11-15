@@ -8,11 +8,11 @@
 #include "DropHandler.hpp"
 
 namespace rtype {
-    void DropHandler::response(char *body)
+    void DropHandler::response(const BPC::Package &package)
     {
     }
 
-    void DropHandler::request(char *body)
+    void DropHandler::request(const BPC::Package &package)
     {
     }
 }

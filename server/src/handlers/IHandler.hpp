@@ -7,14 +7,14 @@
 
 #pragma once
 
-#include "BinaryProtocolCommunication.hpp"
+#include "Protocol.hpp"
 
 namespace rtype {
     class IHandler {
       private:
         struct HandlerPtrWrapper {
           public:
-            typedef void (IHandler::*method_ptr_t)(char *);
+            typedef void (IHandler::*method_ptr_t)(const BPC::Package &);
 
           private:
             method_ptr_t pointer_;
@@ -22,12 +22,12 @@ namespace rtype {
 
           public:
             HandlerPtrWrapper(IHandler &handler, method_ptr_t pointer);
-            void operator()(char *body);
+            void operator()(const BPC::Package &package);
         };
 
       protected:
-        virtual void request(char *body) = 0;
-        virtual void response(char *body) = 0;
+        virtual void request(const BPC::Package &package) = 0;
+        virtual void response(const BPC::Package &package) = 0;
 
       public:
         IHandler() = default;

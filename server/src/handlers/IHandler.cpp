@@ -13,9 +13,9 @@ namespace rtype {
         , handler_(handler)
     { }
 
-    void IHandler::HandlerPtrWrapper::operator()(char *body)
+    void IHandler::HandlerPtrWrapper::operator()(const BPC::Package &package)
     {
-        (this->handler_.*pointer_)(body);
+        (this->handler_.*pointer_)(package);
     }
 
     IHandler::HandlerPtrWrapper IHandler::operator[](BPC::BaseType type)

@@ -8,11 +8,11 @@
 #include "MoveHandler.hpp"
 
 namespace rtype {
-    void MoveHandler::response(char *body)
+    void MoveHandler::response(const BPC::Package &package)
     {
     }
 
-    void MoveHandler::request(char *body)
+    void MoveHandler::request(const BPC::Package &package)
     {
     }
 }

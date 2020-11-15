@@ -8,6 +8,7 @@
 #pragma once
 
 #include <boost/algorithm/string.hpp>
+#include <cassert>
 #include <string>
 #include <vector>
 
@@ -46,6 +47,13 @@ namespace rtype::BinaryProtocolCommunication {
         unsigned long timestamp;
         Endpoint endpoint;
         Buffer body;
+
+        template<typename T>
+        const T *getBodyTo() const
+        {
+            assert(sizeof(T) == this->body.size());
+            return reinterpret_cast<const T *>(this->body.data());
+        }
     };
 
     class CommunicationManager { // singleton

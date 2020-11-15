@@ -8,11 +8,11 @@
 #include "ChargeHandler.hpp"
 
 namespace rtype {
-    void ChargeHandler::response(char *body)
+    void ChargeHandler::response(const BPC::Package &package)
     {
     }
 
-    void ChargeHandler::request(char *body)
+    void ChargeHandler::request(const BPC::Package &package)
     {
     }
 }

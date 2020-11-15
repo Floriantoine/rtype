@@ -8,11 +8,11 @@
 #include "DestroyHandler.hpp"
 
 namespace rtype {
-    void DestroyHandler::response(char *body)
+    void DestroyHandler::response(const BPC::Package &package)
     {
     }
 
-    void DestroyHandler::request(char *body)
+    void DestroyHandler::request(const BPC::Package &package)
     {
     }
 }

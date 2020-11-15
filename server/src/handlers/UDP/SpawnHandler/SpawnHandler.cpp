@@ -8,11 +8,11 @@
 #include "SpawnHandler.hpp"
 
 namespace rtype {
-    void SpawnHandler::response(char *body)
+    void SpawnHandler::response(const BPC::Package &package)
     {
     }
 
-    void SpawnHandler::request(char *body)
+    void SpawnHandler::request(const BPC::Package &package)
     {
     }
 }

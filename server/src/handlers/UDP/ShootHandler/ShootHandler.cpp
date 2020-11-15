@@ -8,11 +8,11 @@
 #include "ShootHandler.hpp"
 
 namespace rtype {
-    void ShootHandler::response(char *body)
+    void ShootHandler::response(const BPC::Package &package)
     {
     }
 
-    void ShootHandler::request(char *body)
+    void ShootHandler::request(const BPC::Package &package)
     {
     }
 }

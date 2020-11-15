@@ -21,7 +21,7 @@ namespace rtype {
         ~ShootHandler() override = default;
 
       protected:
-        void response(char *body) override;
-        void request(char *body) override;
+        void response(const BPC::Package &package) override;
+        void request(const BPC::Package &package) override;
     };
 }

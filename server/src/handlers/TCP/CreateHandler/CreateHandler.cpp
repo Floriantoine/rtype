@@ -18,11 +18,11 @@ namespace rtype {
         }
     }
 
-    void CreateHandler::response(char *body)
+    void CreateHandler::response(const BPC::Package &package)
     {
     }
 
-    void CreateHandler::request(char *body)
+    void CreateHandler::request(const BPC::Package &package)
     {
     }
 }

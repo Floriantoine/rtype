@@ -8,11 +8,11 @@
 #include "LeaveHandler.hpp"
 
 namespace rtype {
-    void LeaveHandler::response(char *body)
+    void LeaveHandler::response(const BPC::Package &package)
     {
     }
 
-    void LeaveHandler::request(char *body)
+    void LeaveHandler::request(const BPC::Package &package)
     {
     }
 }

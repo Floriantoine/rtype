@@ -8,11 +8,11 @@
 #include "AskJoinHandler.hpp"
 
 namespace rtype {
-    void AskJoinHandler::response(char *body)
+    void AskJoinHandler::response(const BPC::Package &package)
     {
     }
 
-    void AskJoinHandler::request(char *body)
+    void AskJoinHandler::request(const BPC::Package &package)
     {
     }
 }

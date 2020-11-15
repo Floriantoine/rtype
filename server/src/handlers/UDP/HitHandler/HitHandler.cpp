@@ -8,11 +8,11 @@
 #include "HitHandler.hpp"
 
 namespace rtype {
-    void HitHandler::response(char *body)
+    void HitHandler::response(const BPC::Package &package)
     {
     }
 
-    void HitHandler::request(char *body)
+    void HitHandler::request(const BPC::Package &package)
     {
     }
 }
