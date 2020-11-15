@@ -27,13 +27,19 @@ namespace rtype::BinaryProtocolCommunication {
     };
 
     enum Method {
+        ASK_JOIN,
         CREATE,
-        JOIN,
-        LIST,
-        SPAWN, // Create
-        MOVE, // position
+        GAME_STATE,
+        MOVE,
+        SPAWN,
         DESTROY,
-        SCORE,
+        GRAB,
+        DROP,
+        CHARGE,
+        SHOOT,
+        HIT,
+        JOIN,
+        LEAVE
     };
 
     struct Endpoint {

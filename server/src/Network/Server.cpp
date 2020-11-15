@@ -7,6 +7,8 @@
 
 #include "Server.hpp"
 
+#include "Protocol.hpp"
+
 #include <boost/asio/buffer.hpp>
 #include <boost/asio/write.hpp>
 #include <functional>
@@ -153,7 +155,7 @@ namespace rtype::Network {
         std::cout << "endpoint: " << this->socket_->local_endpoint() << std::endl;
     }
 
-    void UdpServer::read(void)
+    void UdpServer::read(std::function<void(const BPC::Package &)> onRead)
     {
         std::stringstream msg;
         auto mutableBuffer = this->streambuf_.prepare(4096);
@@ -167,8 +169,8 @@ namespace rtype::Network {
                     is >> str;
                     std::cout << str << std::endl;
                     BPC::Buffer buffer(str.begin(), str.end());
-                    BPC_CM.Deserialize(buffer);
-                    read();
+                    onRead(BPC_CM.Deserialize(buffer));
+                    read(onRead);
                     rtype::BPC::Package package = {
                         rtype::BPC::BaseType::REQUEST,
                         rtype::BPC::Method::CREATE,

@@ -10,6 +10,7 @@
 #include "Protocol.hpp"
 
 #include <boost/asio.hpp>
+#include <functional>
 #include <iostream>
 #include <queue>
 #include <unordered_set>
@@ -77,7 +78,7 @@ namespace rtype::Network {
         UdpServer &operator=(const UdpServer &);
         UdpServer &operator=(UdpServer &&) = delete;
 
-        void read();
+        void read(std::function<void(const BPC::Package &)> onRead);
         boost::asio::io_context &io_context_;
       private:
         void write(const rtype::BPC::Buffer &buffer);

@@ -8,8 +8,11 @@
 #pragma once
 
 #include "Server.hpp"
+#include "handlers/IHandler.hpp"
 
+#include <memory>
 #include <string>
+#include <unordered_map>
 
 namespace rtype::server {
     /**
@@ -18,8 +21,9 @@ namespace rtype::server {
     class Lobby {
       private:
         boost::asio::io_context io_context_;
-        rtype::Network::UdpServer udp_server_;
         bool isRunning_ { true };
+        rtype::Network::UdpServer udp_server_;
+        std::unordered_map<BPC::Method, std::shared_ptr<IHandler>> handlers_;
 
       public:
         std::string id;
