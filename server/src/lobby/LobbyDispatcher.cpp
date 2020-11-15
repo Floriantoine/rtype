@@ -7,8 +7,8 @@
 
 #include "LobbyDispatcher.hpp"
 
-#include "Lobby.hpp"
 #include "Exception.hpp"
+#include "Lobby.hpp"
 
 #include <atomic>
 #include <memory>
@@ -63,7 +63,7 @@ namespace rtype::server {
         auto leftover = this->lobbies_.size() % this->managerCount_;
         auto it = this->lobbies_.begin();
 
-        this->lobbies_.clear();
+        this->ranges_.clear();
         for (auto i = 0u; i < this->managerCount_; ++i) {
             auto &range = this->ranges_.emplace_back();
             range.start = it;
@@ -117,6 +117,7 @@ namespace rtype::server {
         lobby->id = id;
         this->dispatch_();
         this->rwLock_->unlock();
+        this->condVar_.notify_one();
         return *lobby;
     }
 
@@ -127,5 +128,12 @@ namespace rtype::server {
         Range range(this->ranges_.at(managerIndex));
         range.lock(this->rwLock_);
         return range;
+    }
+
+    void LobbyDispatcher::waitForNewLobby()
+    {
+        auto slock = this->rwLock_->shared_lock();
+
+        this->condVar_.wait(slock);
     }
 }

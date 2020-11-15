@@ -27,6 +27,7 @@ namespace rtype::server {
         std::shared_ptr<LobbyDispatcher> dispatcher_;
         unsigned index_;
         std::thread thread_;
+        mutable bool shouldWait_ { true };
 
         void onTick_() const;
         void run_();
