@@ -20,6 +20,8 @@
 
 namespace rtype {
 
+    class Entity;
+
     class ComponentManager {
       private:
         std::unordered_map<id_t, std::shared_ptr<IObjectPool>> componentPools_;
@@ -101,13 +103,12 @@ namespace rtype {
         ComponentManager &operator=(const ComponentManager &) = delete;
 
         template <class T, typename... Args>
-        void addComponent(id_t entityId, Args &&... args)
+        void addComponent(Entity *entity, id_t entityId, Args &&... args)
         {
             assert(this->hasComponent<T>(entityId) == false && "Entity already has component");
             auto pool = this->getComponentPool<T>();
             T *component = static_cast<T *>(pool->get(std::forward<Args>(args)...));
-            component->entityId_ = entityId;
-            component->componentManager_ = this;
+            component->entity_ = entity;
             this->getComponentList<T>()[entityId] = static_cast<ComponentBase *>(component);
         }
 
@@ -143,8 +144,10 @@ namespace rtype {
         template <class T>
         void apply(std::function<void(T *)> function)
         {
-            for (const auto &component : this->getComponentList<T>()) {
-                function(static_cast<T *>(component.second));
+            if (this->isComponentTypeRegistered<T>()) {
+                for (const auto &component : this->getComponentList<T>()) {
+                    function(static_cast<T *>(component.second));
+                }
             }
         }
 

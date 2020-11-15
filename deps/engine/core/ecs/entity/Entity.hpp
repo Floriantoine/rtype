@@ -11,11 +11,14 @@
 #include "../types.hpp"
 
 namespace rtype {
+    class EntityManager;
+
     class Entity {
         friend class EntityManager;
 
       private:
         ComponentManager *componentManager_;
+        EntityManager *entityManager_;
 
         static const id_t getNextId()
         {
@@ -28,7 +31,7 @@ namespace rtype {
       public:
         Entity()
             : id_ { this->getNextId() }
-        {}
+        { }
         ~Entity() = default;
 
         Entity &operator=(const Entity &other)
@@ -42,11 +45,16 @@ namespace rtype {
             return this->id_;
         }
 
+        EntityManager *getEntityManager() const
+        {
+            return this->entityManager_;
+        }
+
         template <class T, typename... Args>
         void addComponent(Args &&... args)
         {
             STATIC_ASSERT_IS_COMPONENT(T);
-            this->componentManager_->addComponent<T>(this->getId(), std::forward<Args>(args)...);
+            this->componentManager_->addComponent<T>(this, this->getId(), std::forward<Args>(args)...);
         }
 
         template <class T>

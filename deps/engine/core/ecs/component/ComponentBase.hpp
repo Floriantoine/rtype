@@ -11,14 +11,13 @@
 
 namespace rtype {
 
-    class ComponentManager;
+    class Entity;
 
     class ComponentBase {
         friend class ComponentManager;
 
       protected:
-        ComponentManager *componentManager_;
-        id_t entityId_;
+        Entity *entity_;
 
         static id_t getNextTypeId()
         {
@@ -27,9 +26,9 @@ namespace rtype {
         }
 
       public:
-        id_t getEntityId() const
+        Entity *getEntity() const
         {
-            return this->entityId_;
+            return this->entity_;
         }
     };
 

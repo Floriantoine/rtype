@@ -11,7 +11,7 @@
 #include "../components/AScriptComponent.hpp"
 #include "../ecs/system/ASystem.hpp"
 
-#include <SFML/Window/Event.h>
+#include "SFML/Window/Event.hpp"
 
 namespace rtype {
 

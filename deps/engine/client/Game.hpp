@@ -10,7 +10,7 @@
 #include "../core/AGame.hpp"
 #include "../utils/Singleton.hpp"
 
-#include <SFML/Window.hpp>
+#include "SFML/Window.hpp"
 #include <chrono>
 #include <iostream>
 #include <thread>

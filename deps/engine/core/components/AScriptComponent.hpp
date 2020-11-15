@@ -67,7 +67,7 @@ namespace rtype {
         template<class T>
         T *getComponent()
         {
-            return this->componentManager_->getComponent<T>(this->entityId_);
+            return this->entity_->getComponent<T>();
         }
 
         /**
@@ -80,8 +80,8 @@ namespace rtype {
         template <class T>
         static auto getFactory()
         {
+            STATIC_ASSERT_IS_BASE_OF(AScriptComponent, T);
             return [](const std::shared_ptr<Entity> &entity, nlohmann::json body) {
-                STATIC_ASSERT_IS_BASE_OF(AScriptComponent, T);
                 entity->addComponent<T>();
                 entity->getComponent<T>()->onInit();
             };

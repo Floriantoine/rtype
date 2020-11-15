@@ -7,9 +7,11 @@
 
 #pragma once
 
+#include "../ecs/entity/EntityManager.hpp"
+#include "../components/PositionComponent.hpp"
 #include "./AScriptComponent.hpp"
+#include "SFML/Window/Event.hpp"
 
-#include <SFML/Window/Event.hpp>
 #include <iostream>
 
 namespace rtype {
@@ -28,6 +30,8 @@ namespace rtype {
         void onKeyPressed(const sf::Event &event) override
         {
             std::cout << "pressed key" << event.key.code << std::endl;
+            auto entity = this->entity_->getEntityManager()->createEntity();
+            std::cout << entity->getId() << std::endl;
         }
 
         void onMouseButtonPressed(const sf::Event &event) override
