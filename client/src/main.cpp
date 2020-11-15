@@ -16,6 +16,7 @@
 #include "engine/core/components/PlayerScriptComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/systems/ScriptSystem.hpp"
+#include "engine/client/systems/AnimationSystem.hpp"
 
 #include <iostream>
 
@@ -39,6 +40,7 @@ int main()
     auto scene = sceneLoader.load(game);
 
     scene->createSystem<ScriptSystem>();
+    scene->createSystem<AnimationSystem>();
 
     game.start();
     return 0;

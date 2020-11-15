@@ -19,17 +19,21 @@ namespace rtype {
       public:
         std::size_t currentFrame { 0 };
         std::size_t totalFrame { 0 };
+        long totalElapsedTime { 0 };
+        long rate { 0 };
 
       public:
         AnimationComponent() = default;
-        AnimationComponent(std::size_t currentFrame, std::size_t totalFrame)
+        AnimationComponent(std::size_t currentFrame, std::size_t totalFrame, long rate)
             : currentFrame { currentFrame }
-            , totalFrame { totalFrame } {};
+            , totalFrame { totalFrame }
+            , rate { rate } {};
 
         static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
             std::size_t currentFrame { 0 };
             std::size_t totalFrame { 0 };
+            long rate { 0 };
 
             auto currentJson = body.find("currentFrame");
             if (currentJson != body.end()) {
@@ -39,8 +43,12 @@ namespace rtype {
             if (totalJson != body.end()) {
                 totalJson->get_to(totalFrame);
             }
+            auto rateJson = body.find("rate");
+            if (rateJson != body.end()) {
+                rateJson->get_to(rate);
+            }
 
-            entity->addComponent<AnimationComponent>(currentFrame, totalFrame);
+            entity->addComponent<AnimationComponent>(currentFrame, totalFrame, rate);
         }
     };
 }
