@@ -9,7 +9,6 @@
 
 #include "Lobby.hpp"
 #include "LobbyDispatcher.hpp"
-#include "Server.hpp"
 
 #include <list>
 #include <memory>
