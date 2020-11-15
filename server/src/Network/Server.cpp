@@ -11,6 +11,7 @@
 #include <boost/asio/write.hpp>
 #include <functional>
 #include <iostream>
+#include <pstl/glue_algorithm_defs.h>
 
 #define BPC_CM (rtype::BPC::CommunicationManager::Get())
 
@@ -34,7 +35,12 @@ namespace rtype::Network {
         auto self = shared_from_this();
         boost::asio::async_read_until(this->socket_, this->streambuf_, '\n',
             [self](err_code err, std::size_t nbytes) {
-                self->on_read(err, nbytes);
+                if (err == boost::asio::error::eof || err == boost::asio::error::connection_refused || err == boost::asio::error::connection_aborted) {
+                    std::cerr << "Client: " << self->socket_.remote_endpoint() << " disconnected." << std::endl;
+                    self->socket_.close();
+                    self->on_error_();
+                } else
+                    self->on_read(err, nbytes);
             });
     }
 
@@ -118,10 +124,15 @@ namespace rtype::Network {
                 std::cout << client->getSocket().remote_endpoint(err) << " s'est connecté au server" << std::endl;
                 std::cout << "We have a new commer" << std::endl;
                 this->clients_.insert(client);
-                client->start(std::bind(&TcpServer::receive_handler, this, std::placeholders::_1),
+                client->start([&, client](const BPC::Buffer &buffer) {},
                     [&, client] {
-                        if (this->clients_.erase(client))
-                            std::cout << "We have one less" << std::endl;
+                        std::erase_if(this->clients_, [&](const std::shared_ptr<TcpSession> &session) {
+                            return (!session->getSocket().is_open());
+                        });
+                        for (auto it = this->clients_.begin(); it != this->clients_.end(); it++) {
+                            auto &sock = it->get()->getSocket();
+                            std::cout << "Client: " << sock.remote_endpoint() << " still alive." << std::endl;
+                        }
                     });
                 this->accept_handler();
             } else
@@ -129,10 +140,10 @@ namespace rtype::Network {
         });
     }
 
-    void TcpServer::receive_handler(const BPC::Buffer &buffer)
-    {
-        std::cout << "RECEIVE PACKAGE:" << std::endl;
-    }
+    //void TcpServer::receive_handler(const BPC::Buffer &buffer)
+    //{
+    //std::cout << "RECEIVE PACKAGE:" << std::endl;
+    //}
 
     UdpServer::UdpServer(boost::asio::io_context &io_context)
         : io_context_(io_context)
@@ -157,10 +168,7 @@ namespace rtype::Network {
                     std::cout << str << std::endl;
                     BPC::Buffer buffer(str.begin(), str.end());
                     BPC_CM.Deserialize(buffer);
-                    // HERE to resend to server
-                    // -------------------------
-                    // -------------------------
-                    //read();
+                    read();
                     rtype::BPC::Package package = {
                         rtype::BPC::BaseType::REQUEST,
                         rtype::BPC::Method::CREATE,

@@ -14,18 +14,19 @@
 #include <iostream>
 #include <sstream>
 
-int main()
+int main(int ac, char *av[])
 {
     auto cm = rtype::BPC::CommunicationManager::Get();
     boost::asio::io_context io_context;
 
-    rtype::Network::IOClient<rtype::Network::UdpClient> client(io_context, "127.0.0.1", 4219);
+    //std::uint16_t i = std::stoi(av[1]);
+    rtype::Network::IOClient<rtype::Network::TcpClient> client(io_context, "127.0.0.1", 4219);
 
     rtype::BPC::Package package = {
         rtype::BPC::BaseType::REQUEST,
         rtype::BPC::Method::CREATE,
         42,
-        {"localhost", 4219},
+        { "localhost", 12299 }
     };
 
     auto buffer = cm.Serialize(package);
