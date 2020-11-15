@@ -19,10 +19,10 @@ using boost::asio::ip::tcp;
 using boost::asio::ip::udp;
 using err_code = boost::system::error_code;
 
-using msg_handler = std::function<void(const rtype::BPC::Buffer &)>;
+using msg_handler = std::function<void(const rtype::BPC::Package &)>;
 using err_handler = std::function<void()>;
 
-namespace rtype::Network {
+namespace rtype::server::Network {
     class TcpSession : public std::enable_shared_from_this<TcpSession> {
       public:
         TcpSession(tcp::socket &&socket);
@@ -34,7 +34,7 @@ namespace rtype::Network {
 
         tcp::socket &getSocket();
 
-        void start(msg_handler &&on_msg, err_handler &&on_err);
+        void start(msg_handler on_msg, err_handler on_err);
         void async_read();
 
       private:
@@ -51,7 +51,7 @@ namespace rtype::Network {
     };
     class TcpServer {
       public:
-        TcpServer(boost::asio::io_context &io_context, std::uint16_t port);
+        TcpServer(boost::asio::io_context &io_context, std::uint16_t port, msg_handler onRead);
         ~TcpServer() noexcept = default;
         TcpServer(const TcpServer &) = delete;
         TcpServer(TcpServer &&) = delete;
@@ -60,7 +60,7 @@ namespace rtype::Network {
 
       private:
         void receive_handler(const rtype::BPC::Buffer &buffer);
-        void accept_handler();
+        void accept_handler(msg_handler onRead);
 
       private:
         tcp::acceptor acceptor_;

@@ -27,7 +27,7 @@ namespace rtype::server {
 
         boost::asio::io_context io_context_;
         bool isRunning_ { true };
-        rtype::Network::UdpServer udp_server_;
+        Network::UdpServer udp_server_;
         std::vector<Player> players_;
         std::unordered_map<BPC::Method, std::shared_ptr<AHandlerUDP>> handlers_;
 

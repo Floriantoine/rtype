@@ -17,14 +17,14 @@
 
 #define BPC_CM (rtype::BPC::CommunicationManager::Get())
 
-namespace rtype::Network {
+namespace rtype::server::Network {
     TcpSession::TcpSession(tcp::socket &&socket)
         : socket_(std::move(socket))
     {
         std::cout << "Session begin..." << std::endl;
     }
 
-    void TcpSession::start(msg_handler &&on_msg, err_handler &&on_err)
+    void TcpSession::start(msg_handler on_msg, err_handler on_err)
     {
         this->on_message_ = on_msg;
         this->on_error_ = on_err;
@@ -41,8 +41,9 @@ namespace rtype::Network {
                     std::cerr << "Client: " << self->socket_.remote_endpoint() << " disconnected." << std::endl;
                     self->socket_.close();
                     self->on_error_();
-                } else
+                } else {
                     self->on_read(err, nbytes);
+                }
             });
     }
 
@@ -78,16 +79,8 @@ namespace rtype::Network {
             std::cout << str << std::endl;
             BPC::Buffer buffer(str.begin(), str.end());
             std::cout << "Received: " << buffer.size() << " bytes from client" << std::endl;
-            BPC_CM.Deserialize(buffer);
-            rtype::BPC::Package package;
-            package.type = rtype::BPC::BaseType::REQUEST;
-            package.method = rtype::BPC::Method::CREATE;
-            package.timestamp = 42;
-            package.endpoint = { "localhost", 4219 };
-
-            buffer = BPC_CM.Serialize(package);
+            this->on_message_(BPC_CM.Deserialize(buffer));
             this->outgoing_.push(buffer);
-            this->async_write();
         } else {
             std::cerr << "Reading failed: " << err.message() << std::endl;
             this->socket_.close();
@@ -108,15 +101,15 @@ namespace rtype::Network {
         }
     }
 
-    TcpServer::TcpServer(boost::asio::io_context &io_context, std::uint16_t port)
+    TcpServer::TcpServer(boost::asio::io_context &io_context, std::uint16_t port, msg_handler onRead)
         : io_context_(io_context)
         , acceptor_(io_context, tcp::endpoint(tcp::v4(), port))
     {
         std::cout << "TCP Server" << std::endl;
-        this->accept_handler();
+        this->accept_handler(onRead);
     }
 
-    void TcpServer::accept_handler()
+    void TcpServer::accept_handler(msg_handler onRead)
     {
         this->socket_.emplace(this->io_context_);
         this->acceptor_.async_accept(*this->socket_, [&](err_code err) {
@@ -125,7 +118,7 @@ namespace rtype::Network {
                 std::cout << client->getSocket().remote_endpoint(err) << " s'est connecté au server" << std::endl;
                 std::cout << "We have a new commer" << std::endl;
                 this->clients_.insert(client);
-                client->start([&, client](const BPC::Buffer &buffer) {},
+                client->start(onRead,
                     [&, client] {
                         std::erase_if(this->clients_, [&](const std::shared_ptr<TcpSession> &session) {
                             return (!session->getSocket().is_open());
@@ -135,7 +128,7 @@ namespace rtype::Network {
                             std::cout << "Client: " << sock.remote_endpoint() << " still alive." << std::endl;
                         }
                     });
-                this->accept_handler();
+                this->accept_handler(onRead);
             } else
                 std::cerr << "Error Accept: " + err.message() << std::endl;
         });

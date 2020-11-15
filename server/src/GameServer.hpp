@@ -8,12 +8,13 @@
 #pragma once
 
 #include "Config.hpp"
+#include "Server.hpp"
 #include "lobby/Lobby.hpp"
 #include "lobby/LobbyDispatcher.hpp"
 #include "lobby/LobbyManagerThread.hpp"
 
-#include <boost/asio.hpp>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace rtype::server {
@@ -23,13 +24,15 @@ namespace rtype::server {
      */
     class GameServer {
       private:
-        std::shared_ptr<boost::asio::io_context> io_context_;
         static GameServer Instance_;
         std::vector<std::unique_ptr<LobbyManagerThread>> lobbyManagers_;
         std::shared_ptr<LobbyDispatcher> dispatcher_;
+        boost::asio::io_context io_context_;
+        std::unordered_map<BPC::Method, std::shared_ptr<AHandler>> handlers_;
+        Network::TcpServer master_;
 
-        GameServer() = default;
-        void run_(const rtype::server::Config &conf);
+        GameServer(const Config &conf);
+        void run_(const Config &conf);
 
       public:
         ~GameServer() = default;
@@ -38,6 +41,6 @@ namespace rtype::server {
         * 
         * @param conf server's configuration
         */
-        static void Run(const rtype::server::Config &conf);
+        static void Run(const Config &conf);
     };
 }
