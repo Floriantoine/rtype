@@ -22,12 +22,11 @@ int main(int ac, char *av[])
     //std::uint16_t i = std::stoi(av[1]);
     rtype::Network::IOClient<rtype::Network::TcpClient> client(io_context, "127.0.0.1", 4219);
 
-    rtype::BPC::Package package = {
-        rtype::BPC::BaseType::REQUEST,
-        rtype::BPC::Method::CREATE,
-        42,
-        { "localhost", 12299 }
-    };
+    rtype::BPC::Package package;
+    package.type = rtype::BPC::BaseType::REQUEST;
+    package.method = rtype::BPC::Method::CREATE;
+    package.timestamp = 42;
+    package.endpoint = { "localhost", 4219 };
 
     auto buffer = cm.Serialize(package);
     client.write(buffer);

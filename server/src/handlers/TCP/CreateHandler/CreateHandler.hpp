@@ -7,18 +7,19 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
-#include "handlers/TCP/AskJoinHandler/AskJoinHandler.hpp"
+#include "handlers/AHandler.hpp"
+#include "types.hpp"
 
 #include <string>
 #include <vector>
 
-namespace rtype {
-    class CreateHandler : public IHandler {
+namespace rtype::server {
+    class CreateHandler : public AHandler {
       public:
         struct ServerResponseBody {
             port_t port;
         };
+
         struct ClientRequestBody {
             std::string mapName;
 

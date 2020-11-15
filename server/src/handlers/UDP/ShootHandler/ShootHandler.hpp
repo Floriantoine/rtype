@@ -7,17 +7,20 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
-namespace rtype {
-    class ShootHandler : public IHandler {
+#include <vector>
+
+namespace rtype::server {
+    class ShootHandler : public AHandlerUDP {
       public:
         struct ClientRequestBody {
             player_id_t playerID;
         };
 
-        ShootHandler() = default;
+        ShootHandler(std::vector<Player> &players);
         ~ShootHandler() override = default;
 
       protected:

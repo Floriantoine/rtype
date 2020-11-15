@@ -7,7 +7,12 @@
 
 #include "ShootHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    ShootHandler::ShootHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void ShootHandler::response(const BPC::Package &package)
     {
     }

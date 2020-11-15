@@ -7,7 +7,12 @@
 
 #include "ChargeHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    ChargeHandler::ChargeHandler(std::vector<Player> &players) 
+        : AHandlerUDP(players)
+    {
+    }
+
     void ChargeHandler::response(const BPC::Package &package)
     {
     }

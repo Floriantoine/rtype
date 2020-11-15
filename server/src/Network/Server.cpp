@@ -79,12 +79,11 @@ namespace rtype::Network {
             BPC::Buffer buffer(str.begin(), str.end());
             std::cout << "Received: " << buffer.size() << " bytes from client" << std::endl;
             BPC_CM.Deserialize(buffer);
-            rtype::BPC::Package package = {
-                rtype::BPC::BaseType::REQUEST,
-                rtype::BPC::Method::CREATE,
-                42,
-                { "localhost", 4219 },
-            };
+            rtype::BPC::Package package;
+            package.type = rtype::BPC::BaseType::REQUEST;
+            package.method = rtype::BPC::Method::CREATE;
+            package.timestamp = 42;
+            package.endpoint = { "localhost", 4219 };
 
             buffer = BPC_CM.Serialize(package);
             this->outgoing_.push(buffer);
@@ -171,12 +170,11 @@ namespace rtype::Network {
                     BPC::Buffer buffer(str.begin(), str.end());
                     onRead(BPC_CM.Deserialize(buffer));
                     read(onRead);
-                    rtype::BPC::Package package = {
-                        rtype::BPC::BaseType::REQUEST,
-                        rtype::BPC::Method::CREATE,
-                        42,
-                        { "localhost", 4219 },
-                    };
+                    rtype::BPC::Package package;
+                    package.type = rtype::BPC::BaseType::REQUEST;
+                    package.method = rtype::BPC::Method::CREATE;
+                    package.timestamp = 42;
+                    package.endpoint = { "localhost", 4219 };
 
                     auto buf = BPC_CM.Serialize(package);
                     write(buf);

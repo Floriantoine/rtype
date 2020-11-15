@@ -7,7 +7,12 @@
 
 #include "DestroyHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    DestroyHandler::DestroyHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void DestroyHandler::response(const BPC::Package &package)
     {
     }

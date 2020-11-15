@@ -7,17 +7,20 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
-namespace rtype {
-    class LeaveHandler : public IHandler {
+#include <vector>
+
+namespace rtype::server {
+    class LeaveHandler : public AHandlerUDP {
       public:
         struct ClientRequestBody {
             player_id_t playerID;
         };
 
-        LeaveHandler() = default;
+        LeaveHandler(std::vector<Player> &players);
         ~LeaveHandler() override = default;
 
       protected:

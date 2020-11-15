@@ -7,13 +7,15 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
 #include <sys/types.h>
+#include <vector>
 
-namespace rtype {
-    class MoveHandler : public IHandler {
+namespace rtype::server {
+    class MoveHandler : public AHandlerUDP {
       public:
         struct ServerRequestBody {
             entity_id_t entityID;
@@ -26,7 +28,7 @@ namespace rtype {
             direction_t direction;
         };
 
-        MoveHandler() = default;
+        MoveHandler(std::vector<Player> &players);
         ~MoveHandler() override = default;
 
       protected:

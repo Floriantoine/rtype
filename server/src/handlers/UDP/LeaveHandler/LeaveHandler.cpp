@@ -7,7 +7,12 @@
 
 #include "LeaveHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    LeaveHandler::LeaveHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void LeaveHandler::response(const BPC::Package &package)
     {
     }

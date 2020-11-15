@@ -7,7 +7,12 @@
 
 #include "GrabHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    GrabHandler::GrabHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void GrabHandler::response(const BPC::Package &package)
     {
     }

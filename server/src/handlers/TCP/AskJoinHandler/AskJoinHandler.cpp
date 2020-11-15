@@ -7,7 +7,7 @@
 
 #include "AskJoinHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
     void AskJoinHandler::response(const BPC::Package &package)
     {
     }

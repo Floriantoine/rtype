@@ -7,7 +7,12 @@
 
 #include "HitHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    HitHandler::HitHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void HitHandler::response(const BPC::Package &package)
     {
     }

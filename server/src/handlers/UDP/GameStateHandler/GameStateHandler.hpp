@@ -7,11 +7,14 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
-namespace rtype {
-    class GameStateHandler : public IHandler {
+#include <vector>
+
+namespace rtype::server {
+    class GameStateHandler : public AHandlerUDP {
       public:
         struct ClientRequestBody {
             game_state_t state;
@@ -21,7 +24,7 @@ namespace rtype {
             game_state_t state;
         };
 
-        GameStateHandler() = default;
+        GameStateHandler(std::vector<Player> &players);
         ~GameStateHandler() override = default;
 
       protected:

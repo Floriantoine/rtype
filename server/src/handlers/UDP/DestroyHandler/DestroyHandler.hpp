@@ -7,17 +7,20 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
-namespace rtype {
-    class DestroyHandler : public IHandler {
+#include <vector>
+
+namespace rtype::server {
+    class DestroyHandler : public AHandlerUDP {
       public:
         struct ServerRequestBody {
             entity_id_t entityID;
         };
 
-        DestroyHandler() = default;
+        DestroyHandler(std::vector<Player> &players);
         ~DestroyHandler() override = default;
 
       protected:

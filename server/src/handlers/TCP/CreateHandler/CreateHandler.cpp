@@ -7,7 +7,7 @@
 
 #include "CreateHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
     CreateHandler::ClientRequestBody::ClientRequestBody(std::vector<unsigned char> buffer)
         : mapName(buffer.size() + 1, '\0')
     {

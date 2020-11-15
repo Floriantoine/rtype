@@ -7,7 +7,12 @@
 
 #include "SpawnHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    SpawnHandler::SpawnHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void SpawnHandler::response(const BPC::Package &package)
     {
     }

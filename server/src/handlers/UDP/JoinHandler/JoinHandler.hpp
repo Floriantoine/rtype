@@ -7,20 +7,21 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
 #include <vector>
 
-namespace rtype {
-    class JoinHandler : public IHandler {
+namespace rtype::server {
+    class JoinHandler : public AHandlerUDP {
       public:
         struct ServerRequestBody {
             player_id_t playerID;
             std::vector<unsigned char> mapName;
         };
 
-        JoinHandler() = default;
+        JoinHandler(std::vector<Player> &players);
         ~JoinHandler() override = default;
 
       protected:

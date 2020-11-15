@@ -7,11 +7,14 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
-namespace rtype {
-    class DropHandler : public IHandler {
+#include <vector>
+
+namespace rtype::server {
+    class DropHandler : public AHandlerUDP {
       public:
         struct ServerRequestBody {
             player_id_t playerID;
@@ -21,7 +24,7 @@ namespace rtype {
             player_id_t playerID;
         };
 
-        DropHandler() = default;
+        DropHandler(std::vector<Player> &players);
         ~DropHandler() override = default;
 
       protected:

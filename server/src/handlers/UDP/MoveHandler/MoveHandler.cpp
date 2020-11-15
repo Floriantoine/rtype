@@ -7,7 +7,12 @@
 
 #include "MoveHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    MoveHandler::MoveHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void MoveHandler::response(const BPC::Package &package)
     {
     }

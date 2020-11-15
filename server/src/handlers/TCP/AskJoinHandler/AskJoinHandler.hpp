@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "handlers/AHandler.hpp"
 #include "types.hpp"
 
-namespace rtype {
-    class AskJoinHandler : public IHandler {
+namespace rtype::server {
+    class AskJoinHandler : public AHandler {
       public:
         struct ClientRequestBody {
             lobby_id_t lobbyID;

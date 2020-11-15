@@ -8,11 +8,13 @@
 #pragma once
 
 #include "Server.hpp"
-#include "handlers/IHandler.hpp"
+#include "handlers/AHandlerUDP.hpp"
 
+#include <chrono>
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace rtype::server {
     /**
@@ -20,10 +22,14 @@ namespace rtype::server {
     */
     class Lobby {
       private:
+        static constexpr long PLAYER_TIMEOUT = std::chrono::seconds(5).count();
+        static constexpr long LOBBY_TIMEOUT = std::chrono::seconds(30).count();
+
         boost::asio::io_context io_context_;
         bool isRunning_ { true };
         rtype::Network::UdpServer udp_server_;
-        std::unordered_map<BPC::Method, std::shared_ptr<IHandler>> handlers_;
+        std::vector<Player> players_;
+        std::unordered_map<BPC::Method, std::shared_ptr<AHandlerUDP>> handlers_;
 
       public:
         std::string id;

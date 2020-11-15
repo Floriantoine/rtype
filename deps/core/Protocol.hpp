@@ -45,6 +45,11 @@ namespace rtype::BinaryProtocolCommunication {
     struct Endpoint {
         std::string ip;
         std::uint16_t port;
+
+        bool operator==(const Endpoint &other) const
+        {
+            return this->ip == other.ip && this->port && other.port;
+        }
     };
 
     struct Package {
@@ -54,7 +59,28 @@ namespace rtype::BinaryProtocolCommunication {
         Endpoint endpoint;
         Buffer body;
 
-        template<typename T>
+        Package() = default;
+        ~Package() = default;
+
+        Package(const Package &other)
+            : type { other.type }
+            , method { other.method }
+            , timestamp { other.timestamp }
+            , endpoint { other.endpoint }
+            , body { other.body }
+        { }
+
+        Package &operator=(const Package &other)
+        {
+            this->type = other.type;
+            this->method = other.method;
+            this->timestamp = other.timestamp;
+            this->endpoint = other.endpoint;
+            this->body = other.body;
+            return *this;
+        }
+
+        template <typename T>
         const T *getBodyTo() const
         {
             assert(sizeof(T) == this->body.size());
@@ -117,10 +143,9 @@ namespace rtype::BinaryProtocolCommunication {
 
         static Package Deserialize(const Buffer &buffer)
         {
-            const Package obj = {
-                .type = static_cast<BaseType>(buffer[DEFINITON_BYTE] & 0xF),
-                .method = static_cast<Method>(buffer[DEFINITON_BYTE] >> 4)
-            };
+            Package obj;
+            obj.type = static_cast<BaseType>(buffer[DEFINITON_BYTE] & 0xF);
+            obj.method = static_cast<Method>(buffer[DEFINITON_BYTE] >> 4);
             DecodePeerInfos(buffer);
             return obj;
         };

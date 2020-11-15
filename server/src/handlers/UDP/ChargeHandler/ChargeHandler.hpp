@@ -7,17 +7,20 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "handlers/UDP/DropHandler/DropHandler.hpp"
 
-namespace rtype {
-    class ChargeHandler : public IHandler {
+#include <vector>
+
+namespace rtype::server {
+    class ChargeHandler : public AHandlerUDP {
       public:
         struct ClientRequestBody {
             player_id_t playerID;
         };
 
-        ChargeHandler() = default;
+        ChargeHandler(std::vector<Player> &players);
         ~ChargeHandler() override = default;
 
       protected:

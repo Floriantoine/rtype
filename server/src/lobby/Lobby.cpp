@@ -30,28 +30,32 @@ namespace rtype::server {
     Lobby::Lobby()
         : udp_server_(io_context_)
         , handlers_ {
-            { BPC::GAME_STATE, std::make_shared<GameStateHandler>() },
-            { BPC::MOVE, std::make_shared<MoveHandler>() },
-            { BPC::SPAWN, std::make_shared<SpawnHandler>() },
-            { BPC::DESTROY, std::make_shared<DestroyHandler>() },
-            { BPC::GRAB, std::make_shared<GrabHandler>() },
-            { BPC::DROP, std::make_shared<DropHandler>() },
-            { BPC::CHARGE, std::make_shared<ChargeHandler>() },
-            { BPC::SHOOT, std::make_shared<ShootHandler>() },
-            { BPC::HIT, std::make_shared<HitHandler>() },
-            { BPC::JOIN, std::make_shared<JoinHandler>() },
-            { BPC::LEAVE, std::make_shared<LeaveHandler>() }
+            { BPC::GAME_STATE, std::make_shared<GameStateHandler>(this->players_) },
+            { BPC::MOVE, std::make_shared<MoveHandler>(this->players_) },
+            { BPC::SPAWN, std::make_shared<SpawnHandler>(this->players_) },
+            { BPC::DESTROY, std::make_shared<DestroyHandler>(this->players_) },
+            { BPC::GRAB, std::make_shared<GrabHandler>(this->players_) },
+            { BPC::DROP, std::make_shared<DropHandler>(this->players_) },
+            { BPC::CHARGE, std::make_shared<ChargeHandler>(this->players_) },
+            { BPC::SHOOT, std::make_shared<ShootHandler>(this->players_) },
+            { BPC::HIT, std::make_shared<HitHandler>(this->players_) },
+            { BPC::JOIN, std::make_shared<JoinHandler>(this->players_) },
+            { BPC::LEAVE, std::make_shared<LeaveHandler>(this->players_) }
         }
-    {
-    }
-
-    void Lobby::onTick()
     {
         this->udp_server_.read([&](const BPC::Package &package) {
             (*this->handlers_[package.method])[package.type](package);
         });
+    }
+
+    void Lobby::onTick()
+    {
+        this->io_context_.poll();
+        for (const auto &it : this->handlers_) {
+            it.second->update();
+        }
+        // TODO timeout players && timeout lobby
         // this->scene_->update();
-        this->io_context_.run();
     }
 
     bool Lobby::isRunning() const noexcept

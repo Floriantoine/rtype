@@ -7,17 +7,20 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
-namespace rtype {
-    class SpawnHandler : public IHandler {
+#include <vector>
+
+namespace rtype::server {
+    class SpawnHandler : public AHandlerUDP {
       public:
         struct ServerRequestBody {
             entity_id_t entityID;
         };
 
-        SpawnHandler() = default;
+        SpawnHandler(std::vector<Player> &players);
         ~SpawnHandler() override = default;
 
       protected:

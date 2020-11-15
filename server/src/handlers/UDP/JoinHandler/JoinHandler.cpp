@@ -7,7 +7,12 @@
 
 #include "JoinHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    JoinHandler::JoinHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void JoinHandler::response(const BPC::Package &package)
     {
     }

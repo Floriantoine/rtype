@@ -7,7 +7,12 @@
 
 #include "GameStateHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    GameStateHandler::GameStateHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void GameStateHandler::response(const BPC::Package &package)
     {
     }

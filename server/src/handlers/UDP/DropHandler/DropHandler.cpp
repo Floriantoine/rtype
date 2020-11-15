@@ -7,7 +7,12 @@
 
 #include "DropHandler.hpp"
 
-namespace rtype {
+namespace rtype::server {
+    DropHandler::DropHandler(std::vector<Player> &players)
+        : AHandlerUDP(players)
+    {
+    }
+
     void DropHandler::response(const BPC::Package &package)
     {
     }

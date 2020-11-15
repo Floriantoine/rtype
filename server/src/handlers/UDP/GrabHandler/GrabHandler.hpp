@@ -7,11 +7,14 @@
 
 #pragma once
 
-#include "handlers/IHandler.hpp"
+#include "Player.hpp"
+#include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
-namespace rtype {
-    class GrabHandler : public IHandler {
+#include <vector>
+
+namespace rtype::server {
+    class GrabHandler : public AHandlerUDP {
       public:
         struct ServerRequestBody {
             player_id_t playerID;
@@ -19,7 +22,7 @@ namespace rtype {
             side_t side;
         };
 
-        GrabHandler() = default;
+        GrabHandler(std::vector<Player> &players);
         ~GrabHandler() override = default;
 
       protected:
