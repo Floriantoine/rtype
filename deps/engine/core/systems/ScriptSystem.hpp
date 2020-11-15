@@ -19,8 +19,8 @@ namespace rtype {
       public:
         void update(long elapsedTime)
         {
-            this->componentManager_->apply<AScriptComponent>([](AScriptComponent *component) {
-                component->onUpdate();
+            this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
+                component->onUpdate(elapsedTime);
             });
         }
     };

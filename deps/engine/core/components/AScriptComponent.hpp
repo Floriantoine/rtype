@@ -12,8 +12,11 @@
 #include "../ecs/entity/Entity.hpp"
 #include "nlohmann/json.hpp"
 
-#include <SFML/Window/Event.hpp>
 #include <memory>
+
+namespace sf {
+    class Event;
+}
 
 namespace rtype {
 
@@ -34,7 +37,7 @@ namespace rtype {
         /**
          * Method called on every game update
          */
-        virtual void onUpdate() = 0;
+        virtual void onUpdate(long elapsedTime) = 0;
 
         /**
          * Method called when the associated entity collides with another entity
@@ -44,22 +47,22 @@ namespace rtype {
         /**
          * Method called when a keyboard key is pressed
          */
-        virtual void onKeyPressed(const sf::Event::KeyEvent &) {};
+        virtual void onKeyPressed(const sf::Event &) {};
 
         /**
          * Method called when a keyboard key is released
          */
-        virtual void onKeyReleased(const sf::Event::KeyEvent &) {};
+        virtual void onKeyReleased(const sf::Event &) {};
 
         /**
          * Method called when a mouse button is pressed
          */
-        virtual void onMouseButtonPressed(const sf::Event::MouseButtonEvent &) {};
+        virtual void onMouseButtonPressed(const sf::Event &) {};
 
         /**
          * Method called when a mouse button is released
          */
-        virtual void onMouseButtonReleased(const sf::Event::MouseButtonEvent &) {};
+        virtual void onMouseButtonReleased(const sf::Event &) {};
 
         /**
          * Creates a factory for a ScriptComponent derived class

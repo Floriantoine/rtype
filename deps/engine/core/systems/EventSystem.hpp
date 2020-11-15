@@ -43,7 +43,7 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::MouseButtonPressed) {
                 this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
-                    component->onMouseButtonPressed(evt.mouseButton);
+                    component->onMouseButtonPressed(evt);
                 });
             }
         }
@@ -52,7 +52,7 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::MouseButtonReleased) {
                 this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
-                    component->onMouseButtonReleased(evt.mouseButton);
+                    component->onMouseButtonReleased(evt);
                 });
             }
         }
@@ -61,7 +61,7 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::KeyPressed) {
                 this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
-                    component->onKeyPressed(evt.key);
+                    component->onKeyPressed(evt);
                 });
             }
         }
@@ -70,7 +70,7 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::KeyReleased) {
                 this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
-                    component->onKeyReleased(evt.key);
+                    component->onKeyReleased(evt);
                 });
             }
         }

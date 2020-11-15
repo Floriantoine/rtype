@@ -20,18 +20,18 @@ namespace rtype {
         {
         }
 
-        void onUpdate() override
+        void onUpdate(long elapsedTime) override
         {
         }
 
-        void onKeyPressed(const sf::Event::KeyEvent &event) override
+        void onKeyPressed(const sf::Event &event) override
         {
-            std::cout << "pressed key" << event.code << std::endl;
+            std::cout << "pressed key" << event.key.code << std::endl;
         }
 
-        void onMouseButtonPressed(const sf::Event::MouseButtonEvent &event) override
+        void onMouseButtonPressed(const sf::Event &event) override
         {
-            std::cout << "clicked (" << event.x << ":" << event.y << ")" << std::endl;
+            std::cout << "clicked (" << event.mouseButton.x << ":" << event.mouseButton.y << ")" << std::endl;
         }
 
         void onCollide() override
