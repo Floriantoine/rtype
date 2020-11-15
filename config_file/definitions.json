@@ -4,7 +4,20 @@
             "id": "Player",
             "components": [
                 {
+                    "type": "sprite",
+                    "texture": "player_1.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 32,
+                    "height": 15
+                },
+                {
                     "type": "position"
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 2,
+                    "totalFrame": 5
                 },
                 {
                     "type": "player_script"
@@ -20,7 +33,7 @@
                     "left": 0,
                     "top": 0,
                     "width": 21,
-                    "heigth": 24
+                    "height": 24
                 },
                 {
                     "type": "position"
@@ -29,10 +42,7 @@
                     "type": "animation",
                     "currentFrame": 0,
                     "totalFrame": 8,
-                    "rate": 500
-                },
-                {
-                    "type": "pata_script"
+                    "rate": 100
                 }
             ]
         },

@@ -7,12 +7,11 @@
 
 #pragma once
 
-#include "../core/AGame.hpp"
 #include "../../utils/Singleton.hpp"
+#include "../core/AGame.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 
 #include <chrono>
-#include <iostream>
 #include <thread>
 
 namespace rtype {

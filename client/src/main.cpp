@@ -17,6 +17,7 @@
 #include "engine/core/components/PataScriptComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/client/systems/AnimationSystem.hpp"
+#include "engine/client/systems/SpriteSystem.hpp"
 #include "engine/core/systems/ScriptSystem.hpp"
 #include "engine/core/systems/EventSystem.hpp"
 #include "engine/client/systems/SpriteSystem.hpp"
@@ -47,6 +48,7 @@ int main()
     scene->createSystem<SpriteSystem>();
     scene->createSystem<ScriptSystem>();
     scene->createSystem<AnimationSystem>();
+    scene->createSystem<SpriteSystem>();
 
     Game::getInstance().start();
     return 0;

@@ -55,7 +55,7 @@ namespace rtype {
             const auto &texture = AssetLoader::getInstance().textures_.find(file);
 
             if (texture == AssetLoader::getInstance().textures_.cend()) {
-                AssetLoader::getInstance().textures_[file] = std::shared_ptr<sf::Texture>();
+                AssetLoader::getInstance().textures_[file] = std::make_shared<sf::Texture>();
 
                 if (AssetLoader::getInstance().textures_[file]->loadFromFile(ASSETS_PATH + file))
                     return AssetLoader::getInstance().textures_[file];

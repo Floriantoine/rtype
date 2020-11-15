@@ -17,13 +17,13 @@ namespace rtype {
 
     class PataScriptComponent : public AScriptComponent {
       private:
-        std::size_t amplitude_ = 30;
+        std::size_t amplitude_ = 15;
         int accuracy_ = 100;
 
         std::size_t stepInX_ = 1;
 
         long totalElapsedTime_ = 0;
-        long rate_ = 100;
+        long rate_ = 16;
 
         int limiteMinInX_ = 0;
 
@@ -45,7 +45,7 @@ namespace rtype {
             int step = this->totalElapsedTime_ / this->rate_;
 
             this->position_->x -= step * this->stepInX_;
-            double sinValue = round(sin(this->position_->x) * this->accuracy_) / this->accuracy_;
+            double sinValue = sin(this->position_->x / this->amplitude_);
             this->position_->y = this->initInY_ + (this->amplitude_ * sinValue);
 
             if (step)

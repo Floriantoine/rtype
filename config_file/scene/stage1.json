@@ -7,18 +7,8 @@
             "components": [
                 {
                     "type": "position",
-                    "x": 400,
-                    "y": 0
-                }
-            ]
-        },
-        {
-            "base": "Pata-pata",
-            "components": [
-                {
-                    "type": "position",
-                    "x": 0,
-                    "y": 0
+                    "x": 100,
+                    "y": 30
                 }
             ]
         },
@@ -28,7 +18,7 @@
                 {
                     "type": "position",
                     "x": 140,
-                    "y": 0
+                    "y": 40
                 }
             ]
         },
@@ -37,8 +27,18 @@
             "components": [
                 {
                     "type": "position",
-                    "x": 400,
-                    "y": 0
+                    "x": 300,
+                    "y": 40
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 260,
+                    "y": 50
                 }
             ]
         },
@@ -48,19 +48,32 @@
                 {
                     "type": "position",
                     "x": 320,
-                    "y": 0
+                    "y": 30
                 }
             ]
         },
         {
-            "base": "Scant",
+            "base": "Pata-pata",
             "components": [
                 {
                     "type": "position",
-                    "x": 0,
-                    "y": 0
+                    "x": 100,
+                    "y": 30
                 }
             ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 430,
+                    "y": 100
+                }
+            ]
+        },
+        {
+            "base": "Player"
         }
     ]
 }
