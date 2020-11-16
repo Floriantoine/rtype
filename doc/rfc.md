@@ -103,7 +103,7 @@ If a confirmation is required, the response must at least contain a header even 
 +------------+
 | LOBBY_PORT |
 |  unsigned  |
-|  4 bytes   |
+|  2 bytes   |
 +------------+
 ```
 
@@ -126,7 +126,7 @@ ___
 +------------+
 | LOBBY_PORT |
 |  unsigned  |
-|  4 bytes   |
+|  2 bytes   |
 +------------+
 ```
 
