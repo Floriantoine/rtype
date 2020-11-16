@@ -1,0 +1,86 @@
+{
+    "layer": 0,
+    "state": "RUNNING",
+    "entities": [
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 100,
+                    "y": 30
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 140,
+                    "y": 40
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 300,
+                    "y": 40
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 260,
+                    "y": 50
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 320,
+                    "y": 30
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 100,
+                    "y": 30
+                }
+            ]
+        },
+        {
+            "base": "Pata-pata",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 430,
+                    "y": 100
+                }
+            ]
+        },
+        {
+            "base": "Player",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 400,
+                    "y": 300
+                }
+            ]
+        }
+    ]
+}

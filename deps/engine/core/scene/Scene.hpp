@@ -49,6 +49,21 @@ namespace rtype {
             return this->id_;
         }
 
+        EntityManager &getEntityManager()
+        {
+            return this->entityManager_;
+        }
+
+        ComponentManager &getComponentManager()
+        {
+            return this->componentManager_;
+        }
+
+        SystemManager &getSystemManager()
+        {
+            return this->systemManager_;
+        }
+
         void setState(State state)
         {
             this->state_ = state;
@@ -76,18 +91,18 @@ namespace rtype {
             this->systemManager_.removeSystem(system);
         }
 
-        void update()
+        void update(long elapsedTime)
         {
             if (this->state_ == STATE_INACTIVE)
                 return;
-            this->systemManager_.update();
+            this->systemManager_.update(elapsedTime);
         }
 
-        void update(ASystem::system_group_e group)
+        void update(ASystem::system_group_e group, long elapsedTime)
         {
             if (this->state_ == STATE_INACTIVE)
                 return;
-            this->systemManager_.update(group);
+            this->systemManager_.update(group, elapsedTime);
         }
     };
 

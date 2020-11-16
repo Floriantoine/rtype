@@ -5,28 +5,52 @@
 ** Client main file
 */
 
-#include "Client.hpp"
-#include "Protocol.hpp"
+#include "engine/client/Game.hpp"
+#include "scene_loader/SceneLoader.hpp"
+#include "engine/core/ecs/component/Component.hpp"
+#include "engine/core/components/AnimationComponent.hpp"
+#include "engine/core/components/MissileComponent.hpp"
+#include "engine/core/components/PositionComponent.hpp"
+#include "engine/core/components/RotationComponent.hpp"
+#include "engine/core/components/SpriteComponent.hpp"
+#include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
+#include "engine/client/behaviours/PlayerBehaviour.hpp"
+#include "engine/client/behaviours/PataBehaviour.hpp"
+#include "engine/core/components/PositionComponent.hpp"
+#include "engine/client/systems/AnimationSystem.hpp"
+#include "engine/client/systems/SpriteSystem.hpp"
+#include "engine/core/systems/BehaviourSystem.hpp"
+#include "engine/core/systems/EventSystem.hpp"
+#include "engine/client/systems/SpriteSystem.hpp"
 
 #include <iostream>
-#include <sstream>
 
-int main(int ac, char *av[])
+using namespace rtype;
+using namespace rtype::client;
+
+int main()
 {
-    boost::asio::io_context io_context;
+    Game::getInstance().setWindowTitle("R-Type");
+    Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
 
-    //std::uint16_t i = std::stoi(av[1]);
-    rtype::Network::IOClient<rtype::Network::TcpClient> client(io_context, "127.0.0.1", 4000);
+    JsonLoader::loadDefinitions("./config_file/definitions.json");
 
-    rtype::BPC::Package package;
-    package.type = rtype::BPC::BaseType::REQUEST;
-    package.method = rtype::BPC::Method::CREATE;
-    package.timestamp = 42;
+    JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
+    JsonLoader::registerComponentFactory("rotation", RotationComponent::factory);
+    JsonLoader::registerComponentFactory("position", PositionComponent::factory);
+    JsonLoader::registerComponentFactory("animation", AnimationComponent::factory);
+    JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
+    JsonLoader::registerComponentFactory("player_script", PlayerBehaviour::getFactory<PlayerBehaviour>());
+    JsonLoader::registerComponentFactory("missile_player_script", MissilePlayerBehaviour::getFactory<MissilePlayerBehaviour>());
+    JsonLoader::registerComponentFactory("pata_script", PataBehaviour::getFactory<PataBehaviour>());
 
-    auto buffer = rtype::BPC::Serialize(package);
-    client.write(buffer);
-    auto rec = client.read();
-    rtype::BPC::Deserialize(buffer);
+    auto scene = JsonLoader::createScene(Game::getInstance(), "./config_file/scene/stage1.json");
 
+    scene->createSystem<EventSystem>();
+    scene->createSystem<BehaviourSystem>();
+    scene->createSystem<AnimationSystem>();
+    scene->createSystem<SpriteSystem>();
+
+    Game::getInstance().start();
     return 0;
 }

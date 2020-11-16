@@ -7,11 +7,10 @@
 
 #pragma once
 
+#include "engine/core/ecs/component/ComponentManager.hpp"
 #include "../types.hpp"
 
 namespace rtype {
-
-    class ComponentManager;
 
     class ASystem {
         friend class SystemManager;
@@ -34,7 +33,7 @@ namespace rtype {
         ~ASystem() = default;
 
       public:
-        virtual void update() = 0;
+        virtual void update(long elapsedTime) = 0;
 
         system_group_e getGroup()
         {

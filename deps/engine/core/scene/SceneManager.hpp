@@ -52,21 +52,21 @@ namespace rtype {
                 if (it.second->getId() == sceneId) {
                     return it.second;
                 }
-            };
+            }
             return nullptr;
         }
 
-        void update()
+        void update(long elapsedTime)
         {
             for (auto &scene : this->orderedScenes_) {
-                scene.second->update();
+                scene.second->update(elapsedTime);
             }
         }
 
-        void update(ASystem::system_group_e group)
+        void update(ASystem::system_group_e group, long elapsedTime)
         {
             for (auto &scene : this->orderedScenes_) {
-                scene.second->update(group);
+                scene.second->update(group, elapsedTime);
             }
         }
     };

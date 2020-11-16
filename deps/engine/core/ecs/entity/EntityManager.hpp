@@ -41,6 +41,7 @@ namespace rtype {
         {
             Entity *ptr = static_cast<Entity *>(this->entityPool_.get());
             ptr->componentManager_ = &this->componentManager_;
+            ptr->entityManager_ = this;
             this->entities_.emplace(ptr->getId(), std::shared_ptr<Entity>(ptr, [this](Entity *self) {
                 this->destroyEntity(self);
             }));

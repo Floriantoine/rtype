@@ -31,19 +31,19 @@ namespace rtype {
 
         SystemManager &operator=(const SystemManager &) = delete;
 
-        void update()
+        void update(long elapsedTime)
         {
             for (const auto &system : this->systemList_) {
-                system.second->update();
+                system.second->update(elapsedTime);
             }
         }
 
-        void update(ASystem::system_group_e group)
+        void update(ASystem::system_group_e group, long elapsedTime)
         {
             auto range = this->systemList_.equal_range(group);
 
             for (auto it = range.first; it != range.second; ++it) {
-                it->second->update();
+                it->second->update(elapsedTime);
             }
         }
 
