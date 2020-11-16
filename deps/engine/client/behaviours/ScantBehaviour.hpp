@@ -2,22 +2,22 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** ScantScriptComponent
+** Scant behaviour
 */
 
 #pragma once
 
-#include "./AScriptComponent.hpp"
-#include "./AnimationComponent.hpp"
-#include "./MissileComponent.hpp"
-#include "./PositionComponent.hpp"
+#include "../../core/ABehaviour.hpp"
+#include "../../core/components/AnimationComponent.hpp"
+#include "../../core/components/MissileComponent.hpp"
+#include "../../core/components/PositionComponent.hpp"
 
 #include <cmath>
 #include <iostream>
 
 namespace rtype {
 
-    class ScantScriptComponent : public AScriptComponent {
+    class PataBehaviour : public ABehaviour {
       private:
         std::size_t amplitude_ = 400;
         int accuracy_ = 1;

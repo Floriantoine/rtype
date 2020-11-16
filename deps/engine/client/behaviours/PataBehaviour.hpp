@@ -2,20 +2,20 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** Player Script Component
+** Pata behaviour
 */
 
 #pragma once
 
-#include "./AScriptComponent.hpp"
-#include "./PositionComponent.hpp"
+#include "../../core/ABehaviour.hpp"
+#include "../../core/components/PositionComponent.hpp"
 
 #include <cmath>
 #include <iostream>
 
 namespace rtype {
 
-    class PataScriptComponent : public AScriptComponent {
+    class PataBehaviour : public ABehaviour {
       private:
         std::size_t amplitude_ = 15;
         int accuracy_ = 100;

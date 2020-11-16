@@ -2,14 +2,14 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** ScriptComponent
+** Behaviour abstract class
 */
 
 #pragma once
 
-#include "../ecs/assert.hpp"
-#include "../ecs/entity/Entity.hpp"
-#include "./ScriptHolderComponent.hpp"
+#include "./ecs/assert.hpp"
+#include "./ecs/entity/Entity.hpp"
+#include "./components/BehaviourComponent.hpp"
 #include "nlohmann/json.hpp"
 
 #include <memory>
@@ -21,13 +21,13 @@ namespace sf {
 namespace rtype {
 
     /**
-     * Script component abstract class
+     * Behaviour abstract class
      *
-     * Scripts are entity-specific behaviors
-     * Scripts must inherit from this class to be triggered by the default 
+     * Behaviours are entity-specific behaviours
+     * Behaviours must inherit from this class to be triggered by the default 
      * systems
      */
-    class AScriptComponent : public IScriptComponent {
+    class ABehaviour : public IBehaviour {
       public:
         /**
          * Method called when script component is initialized
@@ -96,20 +96,20 @@ namespace rtype {
         }
 
         /**
-         * Creates a factory for a ScriptComponent derived class
+         * Creates a factory for a ABehaviour derived class
          *
-         * @tparam T a ScriptComponent derived class
+         * @tparam T a ABehaviour derived class
          *
-         * @returns a factory for the T class, derived from ScriptComponent
+         * @returns a factory for the T class, derived from ABehaviour
          */
         template <class T>
         static auto getFactory()
         {
-            STATIC_ASSERT_IS_BASE_OF(AScriptComponent, T);
+            STATIC_ASSERT_IS_BASE_OF(ABehaviour, T);
             return [](const std::shared_ptr<Entity> &entity, nlohmann::json body) {
-                entity->addComponent<ScriptHolderComponent>(new T());
-                ScriptHolderComponent *holder = entity->getComponent<ScriptHolderComponent>();
-                AScriptComponent *script = reinterpret_cast<AScriptComponent *>(holder->getScript());
+                entity->addComponent<BehaviourComponent>(new T());
+                BehaviourComponent *holder = entity->getComponent<BehaviourComponent>();
+                ABehaviour *script = reinterpret_cast<ABehaviour *>(holder->getBehaviour());
                 script->onInit();
             };
         }

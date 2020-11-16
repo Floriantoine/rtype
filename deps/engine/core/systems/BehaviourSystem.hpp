@@ -2,13 +2,13 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** ScriptSystem
+** Behaviour system
 */
 
 #pragma once
 
-#include "../components/ScriptHolderComponent.hpp"
-#include "../components/AScriptComponent.hpp"
+#include "../components/BehaviourComponent.hpp"
+#include "../ABehaviour.hpp"
 #include "../ecs/system/ASystem.hpp"
 
 namespace rtype {
@@ -16,12 +16,12 @@ namespace rtype {
     /**
      * System responsible for updating script components
      */
-    class ScriptSystem : public ASystem {
+    class BehaviourSystem : public ASystem {
       public:
         void update(long elapsedTime)
         {
-            this->componentManager_->apply<ScriptHolderComponent>([&](ScriptHolderComponent *holder) {
-                AScriptComponent *script = reinterpret_cast<AScriptComponent *>(holder->getScript());
+            this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
+                ABehaviour *script = reinterpret_cast<ABehaviour *>(holder->getBehaviour());
                 script->onUpdate(elapsedTime);
             });
         }

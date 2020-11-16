@@ -2,22 +2,22 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** Player Script Component
+** Player behaviour
 */
 
 #pragma once
 
-#include "../components/AnimationComponent.hpp"
-#include "../components/PositionComponent.hpp"
-#include "../ecs/entity/EntityManager.hpp"
-#include "./AScriptComponent.hpp"
+#include "../../core/components/AnimationComponent.hpp"
+#include "../../core/components/PositionComponent.hpp"
+#include "../../core/ecs/entity/Entity.hpp"
+#include "../../core/ABehaviour.hpp"
 #include "SFML/Window/Event.hpp"
 
 #include <iostream>
 
 namespace rtype {
 
-    class PlayerScriptComponent : public AScriptComponent {
+    class PlayerBehaviour : public ABehaviour {
       private:
         PositionComponent *position_ = nullptr;
         AnimationComponent *animation_ = nullptr;
