@@ -12,8 +12,8 @@
 
 #include <cstddef>
 #include <mutex>
-#include <numeric>
 #include <stdexcept>
+#include <list>
 #include <vector>
 
 namespace rtype {
@@ -28,7 +28,7 @@ namespace rtype {
      * @tparam T type of the objects to hold
      * @tparam chunkSize size of a chunk (pre-allocated pool of objects)
      */
-    template <class T, std::size_t chunkSize = 1024>
+    template <class T, std::size_t chunkSize = 512>
     class ObjectPool : public IObjectPool {
       private:
         /**
@@ -52,7 +52,12 @@ namespace rtype {
                 : unusedIds_(chunkSize)
                 , objects_(chunkSize)
             {
-                std::iota(this->unusedIds_.begin(), this->unusedIds_.end(), 0);
+                id_t index = chunkSize - 1;
+
+                for (auto it = this->unusedIds_.begin(); it != this->unusedIds_.end(); ++it) {
+                    *it = index;
+                    --index;
+                }
             }
             Chunk(const Chunk &other)
                 : unusedIds_ { other.unusedIds_ }
@@ -136,7 +141,7 @@ namespace rtype {
         };
 
         // List of chunks
-        std::vector<Chunk> chunks_;
+        std::list<Chunk> chunks_;
 
       public:
         ObjectPool() = default;
