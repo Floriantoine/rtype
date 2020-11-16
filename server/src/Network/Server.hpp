@@ -8,8 +8,10 @@
 #pragma once
 
 #include "Protocol.hpp"
+#include "boost/asio/ip/tcp.hpp"
+#include "boost/asio/ip/udp.hpp"
+#include "boost/asio/streambuf.hpp"
 
-#include <boost/asio.hpp>
 #include <functional>
 #include <iostream>
 #include <queue>
@@ -90,6 +92,7 @@ namespace rtype::server::Network {
         void async_read(std::function<void(const UdpPackage &)> onRead);
         unsigned short getPort() const;
         boost::asio::io_context &io_context_;
+
       private:
         void async_write(const UdpPackage &package);
         udp::endpoint remote_endpoint_;

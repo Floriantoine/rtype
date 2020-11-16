@@ -7,11 +7,13 @@
 
 #pragma once
 
+#include "boost/algorithm/string/classification.hpp"
+#include "boost/algorithm/string/join.hpp"
+#include "boost/algorithm/string/split.hpp"
 #include "utils/Clock.hpp"
 
-#include <bits/c++config.h>
-#include <boost/algorithm/string.hpp>
 #include <cassert>
+#include <cstddef>
 #include <functional>
 #include <string>
 #include <vector>
@@ -26,13 +28,12 @@
 namespace rtype::BinaryProtocolCommunication {
     typedef std::vector<unsigned char> Buffer; // binary to send
 
-    enum BaseType {
+    enum BaseType : int {
         REQUEST,
-        RESPONSE,
-        OTHER
+        RESPONSE
     };
 
-    enum Method {
+    enum Method : int {
         ASK_JOIN,
         CREATE,
         GAME_STATE,
@@ -59,8 +60,8 @@ namespace rtype::BinaryProtocolCommunication {
     };
 
     struct Package {
-        BaseType type { REQUEST };
-        Method method { ASK_JOIN };
+        BaseType type { -1 };
+        Method method { -1 };
         unsigned long bodySize { 0 };
         long timestamp { 0 };
         Buffer body;

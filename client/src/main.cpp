@@ -8,9 +8,6 @@
 #include "Client.hpp"
 #include "Protocol.hpp"
 
-#include <boost/asio.hpp>
-#include <boost/asio/buffer.hpp>
-#include <boost/asio/write.hpp>
 #include <iostream>
 #include <sstream>
 
