@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../../client/Game.hpp"
+#include "../components/ScriptHolderComponent.hpp"
 #include "../components/AScriptComponent.hpp"
 #include "../ecs/system/ASystem.hpp"
 #include "SFML/Window/Event.hpp"
@@ -41,8 +42,8 @@ namespace rtype {
         void handleMouseButtonPressedEvents(const sf::Event &evt)
         {
             if (evt.type == sf::Event::EventType::MouseButtonPressed) {
-                this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
-                    component->onMouseButtonPressed(evt);
+                this->componentManager_->apply<ScriptHolderComponent>([&](ScriptHolderComponent *holder) {
+                    reinterpret_cast<AScriptComponent *>(holder->getScript())->onMouseButtonPressed(evt);
                 });
             }
         }
@@ -50,8 +51,8 @@ namespace rtype {
         void handleMouseButtonReleasedEvents(const sf::Event &evt)
         {
             if (evt.type == sf::Event::EventType::MouseButtonReleased) {
-                this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
-                    component->onMouseButtonReleased(evt);
+                this->componentManager_->apply<ScriptHolderComponent>([&](ScriptHolderComponent *holder) {
+                    reinterpret_cast<AScriptComponent *>(holder->getScript())->onMouseButtonReleased(evt);
                 });
             }
         }
@@ -59,8 +60,8 @@ namespace rtype {
         void handleKeyPressedEvents(const sf::Event &evt)
         {
             if (evt.type == sf::Event::EventType::KeyPressed) {
-                this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
-                    component->onKeyPressed(evt);
+                this->componentManager_->apply<ScriptHolderComponent>([&](ScriptHolderComponent *holder) {
+                    reinterpret_cast<AScriptComponent *>(holder->getScript())->onKeyPressed(evt);
                 });
             }
         }
@@ -68,8 +69,8 @@ namespace rtype {
         void handleKeyReleasedEvents(const sf::Event &evt)
         {
             if (evt.type == sf::Event::EventType::KeyReleased) {
-                this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
-                    component->onKeyReleased(evt);
+                this->componentManager_->apply<ScriptHolderComponent>([&](ScriptHolderComponent *holder) {
+                    reinterpret_cast<AScriptComponent *>(holder->getScript())->onKeyReleased(evt);
                 });
             }
         }

@@ -43,6 +43,9 @@
                     "currentFrame": 0,
                     "totalFrame": 8,
                     "rate": 100
+                },
+                {
+                    "type": "pata_script"
                 }
             ]
         },

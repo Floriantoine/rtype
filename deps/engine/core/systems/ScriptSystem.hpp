@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../components/ScriptHolderComponent.hpp"
 #include "../components/AScriptComponent.hpp"
 #include "../ecs/system/ASystem.hpp"
 
@@ -19,8 +20,9 @@ namespace rtype {
       public:
         void update(long elapsedTime)
         {
-            this->componentManager_->apply<AScriptComponent>([&](AScriptComponent *component) {
-                component->onUpdate(elapsedTime);
+            this->componentManager_->apply<ScriptHolderComponent>([&](ScriptHolderComponent *holder) {
+                AScriptComponent *script = reinterpret_cast<AScriptComponent *>(holder->getScript());
+                script->onUpdate(elapsedTime);
             });
         }
     };

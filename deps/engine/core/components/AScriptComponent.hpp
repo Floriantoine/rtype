@@ -8,8 +8,8 @@
 #pragma once
 
 #include "../ecs/assert.hpp"
-#include "../ecs/component/Component.hpp"
 #include "../ecs/entity/Entity.hpp"
+#include "./ScriptHolderComponent.hpp"
 #include "nlohmann/json.hpp"
 
 #include <memory>
@@ -27,7 +27,7 @@ namespace rtype {
      * Scripts must inherit from this class to be triggered by the default 
      * systems
      */
-    class AScriptComponent : public Component<AScriptComponent> {
+    class AScriptComponent : public IScriptComponent {
       public:
         /**
          * Method called when script component is initialized
@@ -65,6 +65,16 @@ namespace rtype {
         virtual void onMouseButtonReleased(const sf::Event &) {};
 
         /**
+         * Get the entity the script is attached to
+         * 
+         * @returns associated entity
+         */
+        Entity *getEntity() const
+        {
+            return this->holder_->getEntity();
+        }
+
+        /**
          * Get component of type T associated to the Sript's owner entity
          *
          * @tparam T component type
@@ -74,7 +84,7 @@ namespace rtype {
         template<class T>
         T *getComponent()
         {
-            return this->entity_->getComponent<T>();
+            return this->getEntity()->getComponent<T>();
         }
 
         /**
@@ -82,7 +92,7 @@ namespace rtype {
          */
         void destroyEntity()
         {
-            this->entity_->getEntityManager()->destroyEntity(this->entity_->getId());
+            this->getEntity()->getEntityManager()->destroyEntity(this->getEntity()->getId());
         }
 
         /**
@@ -97,8 +107,10 @@ namespace rtype {
         {
             STATIC_ASSERT_IS_BASE_OF(AScriptComponent, T);
             return [](const std::shared_ptr<Entity> &entity, nlohmann::json body) {
-                entity->addComponent<T>();
-                entity->getComponent<T>()->onInit();
+                entity->addComponent<ScriptHolderComponent>(new T());
+                ScriptHolderComponent *holder = entity->getComponent<ScriptHolderComponent>();
+                AScriptComponent *script = reinterpret_cast<AScriptComponent *>(holder->getScript());
+                script->onInit();
             };
         }
     };
