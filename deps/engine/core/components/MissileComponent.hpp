@@ -23,9 +23,10 @@ namespace rtype {
 
       public:
         MissileComponent() = default;
-        MissileComponent(nlohmann::json missileBody, std::size_t rate)
-            : missileBody { missileBody }
-            , rate { rate } {};
+        MissileComponent(const nlohmann::json &missileBody, std::size_t rate)
+            : missileBody ( std::move(missileBody) )
+            , rate { rate }
+        { }
 
         static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
@@ -34,7 +35,7 @@ namespace rtype {
 
             auto missileBodyJson = body.find("body");
             if (missileBodyJson != body.end()) {
-                missileBodyJson->get_to(missileBody);
+                missileBody = *missileBodyJson;
             }
             auto rateJson = body.find("rate");
             if (rateJson != body.end()) {
