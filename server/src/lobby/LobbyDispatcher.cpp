@@ -113,8 +113,7 @@ namespace rtype::server {
                 }
             }
         }
-        std::unique_ptr<Lobby> &lobby = this->lobbies_.emplace_back(std::make_unique<Lobby>(/*scene*/));
-        lobby->id = id;
+        std::unique_ptr<Lobby> &lobby = this->lobbies_.emplace_back(std::make_unique<Lobby>(id/*, scene*/));
         this->dispatch_();
         this->rwLock_->unlock();
         this->condVar_.notify_one();
@@ -126,6 +125,17 @@ namespace rtype::server {
         removeDeadLobbies_();
 
         Range range(this->ranges_.at(managerIndex));
+        range.lock(this->rwLock_);
+        return range;
+    }
+
+    LobbyDispatcher::Range LobbyDispatcher::dispatch()
+    {
+        removeDeadLobbies_();
+
+        Range range;
+        range.start = this->lobbies_.begin();
+        range.end = this->lobbies_.end();
         range.lock(this->rwLock_);
         return range;
     }

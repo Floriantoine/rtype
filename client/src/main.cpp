@@ -8,31 +8,25 @@
 #include "Client.hpp"
 #include "Protocol.hpp"
 
-#include <boost/asio.hpp>
-#include <boost/asio/buffer.hpp>
-#include <boost/asio/write.hpp>
 #include <iostream>
 #include <sstream>
 
 int main(int ac, char *av[])
 {
-    auto cm = rtype::BPC::CommunicationManager::Get();
     boost::asio::io_context io_context;
 
     //std::uint16_t i = std::stoi(av[1]);
-    rtype::Network::IOClient<rtype::Network::TcpClient> client(io_context, "127.0.0.1", 4219);
+    rtype::Network::IOClient<rtype::Network::TcpClient> client(io_context, "127.0.0.1", 4000);
 
-    rtype::BPC::Package package = {
-        rtype::BPC::BaseType::REQUEST,
-        rtype::BPC::Method::CREATE,
-        42,
-        { "localhost", 12299 }
-    };
+    rtype::BPC::Package package;
+    package.type = rtype::BPC::BaseType::REQUEST;
+    package.method = rtype::BPC::Method::CREATE;
+    package.timestamp = 42;
 
-    auto buffer = cm.Serialize(package);
+    auto buffer = rtype::BPC::Serialize(package);
     client.write(buffer);
     auto rec = client.read();
-    cm.Deserialize(buffer);
+    rtype::BPC::Deserialize(buffer);
 
     return 0;
 }

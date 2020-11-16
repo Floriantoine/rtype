@@ -30,6 +30,21 @@ set(SRCS
         lobby/LobbyDispatcher.cpp
         lobby/Lobby.cpp
         Network/Server.cpp
+        handlers/AHandlerTCP.cpp
+        handlers/AHandlerUDP.cpp
+        handlers/TCP/AskJoinHandler/AskJoinHandler.cpp
+        handlers/TCP/CreateHandler/CreateHandler.cpp
+        handlers/UDP/ChargeHandler/ChargeHandler.cpp
+        handlers/UDP/DestroyHandler/DestroyHandler.cpp
+        handlers/UDP/DropHandler/DropHandler.cpp
+        handlers/UDP/GameStateHandler/GameStateHandler.cpp
+        handlers/UDP/GrabHandler/GrabHandler.cpp
+        handlers/UDP/HitHandler/HitHandler.cpp
+        handlers/UDP/JoinHandler/JoinHandler.cpp
+        handlers/UDP/LeaveHandler/LeaveHandler.cpp
+        handlers/UDP/MoveHandler/MoveHandler.cpp
+        handlers/UDP/ShootHandler/ShootHandler.cpp
+        handlers/UDP/SpawnHandler/SpawnHandler.cpp
 )
 
 list(TRANSFORM SRCS PREPEND ${SRC_DIR})

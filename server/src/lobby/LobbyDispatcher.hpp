@@ -90,6 +90,14 @@ namespace rtype::server {
         */
         Range dispatch(unsigned managerIndex);
 
+        /**
+        * @brief get all the lobbies to read their data
+        */
+        Range dispatch();
+
+        /**
+        * @brief blocks the calling thread until a lobby is created
+        */
         void waitForNewLobby();
     };
 }
