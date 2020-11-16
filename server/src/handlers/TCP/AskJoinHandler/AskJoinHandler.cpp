@@ -10,7 +10,9 @@
 #include "Protocol.hpp"
 #include "Server.hpp"
 #include "handlers/AHandlerTCP.hpp"
+
 #include <functional>
+#include <memory>
 
 namespace rtype::server {
     AskJoinHandler::AskJoinHandler(LobbyDispatcher &dispatcher)
@@ -25,6 +27,8 @@ namespace rtype::server {
     {
         const ClientRequestBody *request = requestPackage.getBodyTo<ClientRequestBody>();
         LobbyDispatcher::Range range = this->dispatcher_.dispatch();
+        ServerResponseBody response = { .port = 0 };
+        std::shared_ptr<std::function<void()>> onSent = nullptr;
         bool good = false;
 
         for (; range.start != range.end; ++range.start) {
@@ -33,17 +37,15 @@ namespace rtype::server {
                 break;
             }
         }
-        ServerResponseBody response = { .port = 0 };
-        std::function<void()> onSent = []{};
         if (good) {
             response.port = range.start->get()->getPort();
-            onSent = [&client] {
+            onSent = std::make_shared<std::function<void()>>([&client] {
                 client.getSocket().close();
-            };
+            });
         }
         range.unlock();
         BPC::Package responsePackage(requestPackage, BPC::RESPONSE);
         responsePackage.setBodyFrom(&response);
-        client.async_write(responsePackage, onSent);
+        client.async_write(responsePackage, std::move(onSent));
     }
 }

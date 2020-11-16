@@ -10,6 +10,7 @@
 #include "handlers/AHandlerTCP.hpp"
 
 #include <iostream>
+#include <memory>
 #include <new>
 
 namespace rtype::server {
@@ -35,7 +36,7 @@ namespace rtype::server {
     {
         const ClientRequestBody request(requestPackage.body);
         ServerResponseBody responseBody = { 0 };
-        std::function<void()> onSent = [] {};
+        std::shared_ptr<std::function<void()>> onSent = nullptr;
         BPC::Package responsePackage(requestPackage, BPC::RESPONSE);
 
         try {
@@ -43,9 +44,9 @@ namespace rtype::server {
             const Lobby &lobby = this->dispatcher_.createLobby(/*scene*/);
             responseBody.port = lobby.getPort();
             responsePackage.setBodyFrom(&responseBody);
-            onSent = [&client] {
+            onSent = std::make_shared<std::function<void()>>([&client] {
                 client.getSocket().close();
-            };
+            });
         } catch (const std::bad_alloc &_) {
         }
         client.async_write(responsePackage, onSent);

@@ -13,6 +13,7 @@
 #include <boost/asio/write.hpp>
 #include <functional>
 #include <iostream>
+#include <memory>
 #include <pstl/glue_algorithm_defs.h>
 
 namespace rtype::server::Network {
@@ -36,29 +37,31 @@ namespace rtype::server::Network {
 
         this->socket_.async_read_some(boost::asio::buffer(self->streambuf_),
             [self](err_code err, std::size_t nbytes) {
-                if (!self->isErrorAndHandle(err)) {
+                if (!self->isErrorAndHandle(err) && nbytes == HEADER_SIZE) {
                     BPC::Package pkg = BPC::Deserialize(self->streambuf_);
                     pkg.body.reserve(pkg.bodySize);
-                    int toto = self->socket_.read_some(boost::asio::buffer(pkg.body), err);
-                    if (!self->isErrorAndHandle(err)) {
+                    int read = self->socket_.read_some(boost::asio::buffer(pkg.body), err);
+                    if (!self->isErrorAndHandle(err) && read == pkg.bodySize) {
                         self->on_message_(pkg, *self);
+                        self->streambuf_.resize(HEADER_SIZE, 0);
                         self->async_read();
                     }
                 }
             });
     }
 
-    void TcpSession::async_write(const BPC::Package &package, std::function<void()> onSent)
+    void TcpSession::async_write(const BPC::Package &package, std::shared_ptr<std::function<void()>> onSent)
     {
         auto self = shared_from_this();
 
         auto buffer = BPC::Serialize(package);
         boost::asio::async_write(this->socket_, boost::asio::buffer(buffer),
-            [&self, &onSent](err_code err, std::size_t nbytes) {
+            [&self, onSent](err_code err, std::size_t nbytes) {
                 if (err)
                     self->on_error_();
-                else
-                    onSent();
+                else if (onSent.get() != nullptr) {
+                    (*onSent)();
+                }
             });
     }
 
