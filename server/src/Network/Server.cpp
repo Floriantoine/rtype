@@ -18,10 +18,10 @@
 
 namespace rtype::server::Network {
     TcpSession::TcpSession(tcp::socket &&socket, const msg_handler &on_message, const err_handler &on_error)
-        : socket_{ std::move(socket) }
+        : socket_ { std::move(socket) }
         , streambuf_(HEADER_SIZE)
-        , on_message_{ on_message }
-        , on_error_{ on_error }
+        , on_message_ { on_message }
+        , on_error_ { on_error }
     {
         std::cout << "Session begin..." << std::endl;
     }
@@ -37,11 +37,11 @@ namespace rtype::server::Network {
 
         this->socket_.async_read_some(boost::asio::buffer(self->streambuf_),
             [self](err_code err, std::size_t nbytes) {
-                if (!self->isErrorAndHandle(err) && nbytes == HEADER_SIZE) {
+                if (!self->isErrorAndHandle(err, nbytes != HEADER_SIZE)) {
                     BPC::Package pkg = BPC::Deserialize(self->streambuf_);
                     pkg.body.reserve(pkg.bodySize);
-                    int read = self->socket_.read_some(boost::asio::buffer(pkg.body), err);
-                    if (!self->isErrorAndHandle(err) && read == pkg.bodySize) {
+                    nbytes = self->socket_.read_some(boost::asio::buffer(pkg.body), err);
+                    if (!self->isErrorAndHandle(err, nbytes != pkg.bodySize)) {
                         self->on_message_(pkg, *self);
                         self->streambuf_.resize(HEADER_SIZE, 0);
                         self->async_read();
@@ -65,11 +65,14 @@ namespace rtype::server::Network {
             });
     }
 
-    bool TcpSession::isErrorAndHandle(const err_code &err) 
+    bool TcpSession::isErrorAndHandle(const err_code &err, bool isError)
     {
         if (err == boost::asio::error::eof || err == boost::asio::error::connection_refused || err == boost::asio::error::connection_aborted) {
             std::cerr << "Client: " << this->socket_.remote_endpoint() << " disconnected." << std::endl;
             this->socket_.close();
+            this->on_error_();
+            return true;
+        } else if (isError || err) {
             this->on_error_();
             return true;
         }
@@ -84,7 +87,9 @@ namespace rtype::server::Network {
     TcpServer::TcpServer(boost::asio::io_context &io_context, std::uint16_t port, const TcpSession::msg_handler &onRead)
         : io_context_(io_context)
         , acceptor_(io_context, tcp::endpoint(tcp::v4(), port))
-        , on_error_ { [&] { this->disconnect_handler(); } }
+        , on_error_ { [&] {
+            this->disconnect_handler();
+        } }
     {
         std::cout << "TCP Server" << std::endl;
         this->accept_handler(onRead);

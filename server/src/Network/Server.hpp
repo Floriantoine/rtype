@@ -44,7 +44,7 @@ namespace rtype::server::Network {
         const msg_handler &on_message_;
         const err_handler &on_error_;
 
-        bool isErrorAndHandle(const err_code &err);
+        bool isErrorAndHandle(const err_code &err, bool isError);
     };
 
     class TcpServer {
