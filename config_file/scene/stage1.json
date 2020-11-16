@@ -73,7 +73,14 @@
             ]
         },
         {
-            "base": "Player"
+            "base": "Player",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 400,
+                    "y": 300
+                }
+            ]
         }
     ]
 }

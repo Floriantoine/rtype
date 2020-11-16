@@ -17,22 +17,22 @@ namespace rtype {
 
     class AnimationComponent : public Component<AnimationComponent> {
       public:
-        std::size_t currentFrame { 0 };
-        std::size_t totalFrame { 0 };
+        int currentFrame { 0 };
+        int totalFrame { 0 };
         long totalElapsedTime { 0 };
         long rate { 0 };
 
       public:
         AnimationComponent() = default;
-        AnimationComponent(std::size_t currentFrame, std::size_t totalFrame, long rate)
+        AnimationComponent(int currentFrame, int totalFrame, long rate)
             : currentFrame { currentFrame }
             , totalFrame { totalFrame }
             , rate { rate } {};
 
         static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
-            std::size_t currentFrame { 0 };
-            std::size_t totalFrame { 0 };
+            int currentFrame { 0 };
+            int totalFrame { 0 };
             long rate { 0 };
 
             auto currentJson = body.find("currentFrame");

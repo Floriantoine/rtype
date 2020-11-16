@@ -32,7 +32,7 @@ namespace rtype {
             nlohmann::json missileBody;
             std::size_t rate { 0 };
 
-            auto missileBodyJson = body.find("missileBody");
+            auto missileBodyJson = body.find("body");
             if (missileBodyJson != body.end()) {
                 missileBodyJson->get_to(missileBody);
             }
