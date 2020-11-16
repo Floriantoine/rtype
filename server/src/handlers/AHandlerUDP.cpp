@@ -32,8 +32,15 @@ namespace rtype::server {
     {
         if (type == BPC::BaseType::REQUEST) {
             return AHandlerUDP::HandlerPtrWrapper(*this, &AHandlerUDP::request);
+        } else if (type == BPC::BaseType::RESPONSE) {
+            return AHandlerUDP::HandlerPtrWrapper(*this, &AHandlerUDP::response);
         }
-        return AHandlerUDP::HandlerPtrWrapper(*this, &AHandlerUDP::response);
+        return AHandlerUDP::HandlerPtrWrapper(*this, &AHandlerUDP::other);
+    }
+
+    void AHandlerUDP::other(const Network::UdpPackage &package)
+    {
+        AHandlerUDP::unknowPacket(package);
     }
 
     bool AHandlerUDP::resend_(Network::UdpPackage &package)
@@ -61,5 +68,9 @@ namespace rtype::server {
                 it = this->awaitingResponse_.erase(it);
             }
         }
+    }
+
+    void AHandlerUDP::unknowPacket(const Network::UdpPackage &package)
+    {
     }
 }

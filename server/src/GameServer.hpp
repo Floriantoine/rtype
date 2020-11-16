@@ -35,6 +35,7 @@ namespace rtype::server {
 
         GameServer(const Config &conf);
         void run_();
+        void onPacketReceived_(const BPC::Package &package, Network::TcpSession &client);
 
       public:
         ~GameServer() = default;

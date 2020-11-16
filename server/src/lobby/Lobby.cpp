@@ -46,7 +46,7 @@ namespace rtype::server {
         , id { id }
     {
         this->udp_server_.async_read([&](const Network::UdpPackage &package) {
-            (*this->handlers_[package.method])[package.type](package);
+            this->onPacketReceived_(package);
         });
     }
 
@@ -73,5 +73,21 @@ namespace rtype::server {
     unsigned short Lobby::getPort() const
     {
         return this->udp_server_.getPort();
+    }
+
+    void Lobby::onPacketReceived_(const Network::UdpPackage &package)
+    {
+        auto it = std::find_if(
+            this->handlers_.cbegin(),
+            this->handlers_.cend(),
+            [&package](const auto &it) {
+                return package.method == it.first;
+            });
+
+        if (it != this->handlers_.cend()) {
+            (*it->second)[package.type](package);
+        } else {
+            AHandlerUDP::unknowPacket(package);
+        }
     }
 }

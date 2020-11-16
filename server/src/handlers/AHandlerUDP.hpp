@@ -40,6 +40,7 @@ namespace rtype::server {
 
         virtual void request(const Network::UdpPackage &package) = 0;
         virtual void response(const Network::UdpPackage &package) = 0;
+        void other(const Network::UdpPackage &package);
 
         AHandlerUDP(std::vector<Player> &players);
 
@@ -47,5 +48,6 @@ namespace rtype::server {
         virtual ~AHandlerUDP() = default;
         virtual HandlerPtrWrapper operator[](BPC::BaseType type);
         void update();
+        static void unknowPacket(const Network::UdpPackage &package);
     };
 }

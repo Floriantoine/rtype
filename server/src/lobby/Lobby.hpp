@@ -32,6 +32,8 @@ namespace rtype::server {
         std::vector<Player> players_;
         std::unordered_map<BPC::Method, std::shared_ptr<AHandlerUDP>> handlers_;
 
+        void onPacketReceived_(const Network::UdpPackage &package);
+
       public:
         const std::string id;
 

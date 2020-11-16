@@ -34,9 +34,11 @@ namespace rtype::server {
 
         virtual void request(const BPC::Package &package, Network::TcpSession &client) = 0;
         virtual void response(const BPC::Package &package, Network::TcpSession &client) = 0;
+        void other(const BPC::Package &package, Network::TcpSession &client);
 
       public:
         virtual ~AHandlerTCP() = default;
         HandlerPtrWrapper operator[](BPC::BaseType type);
+        static void unknowPacket(const BPC::Package &package, Network::TcpSession &client);
     };
 }

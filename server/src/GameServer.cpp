@@ -13,6 +13,7 @@
 #include "lobby/LobbyDispatcher.hpp"
 #include "lobby/LobbyManagerThread.hpp"
 
+#include <algorithm>
 #include <chrono>
 #include <memory>
 #include <thread>
@@ -25,7 +26,7 @@ namespace rtype::server {
             { BPC::CREATE, std::make_shared<CreateHandler>(*this->dispatcher_) }
         }
         , master_(io_context_, conf.port, [&](const BPC::Package &package, Network::TcpSession &client) {
-            (*this->handlers_[package.method])[package.type](package, client);
+            this->onPacketReceived_(package, client);
         })
     {
         for (auto idx = 0u; idx < conf.maxGameThreads; ++idx) {
@@ -43,5 +44,21 @@ namespace rtype::server {
     void GameServer::run_()
     {
         this->io_context_.run();
+    }
+
+    void GameServer::onPacketReceived_(const BPC::Package &package, Network::TcpSession &client)
+    {
+        auto it = std::find_if(
+            this->handlers_.cbegin(),
+            this->handlers_.cend(),
+            [&package](const auto &it) {
+                return package.method == it.first;
+            });
+
+        if (it != this->handlers_.cend()) {
+            (*it->second)[package.type](package, client);
+        } else {
+            AHandlerTCP::unknowPacket(package, client);
+        }
     }
 }
