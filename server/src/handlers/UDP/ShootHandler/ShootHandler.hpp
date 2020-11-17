@@ -17,7 +17,7 @@ namespace rtype::server {
     class ShootHandler : public AHandlerUDP {
       public:
         struct ClientRequestBody {
-            player_id_t playerID;
+            entity_id_t playerID;
         };
 
         ShootHandler(std::vector<Player> &players);

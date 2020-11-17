@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** MoveHandler
+** PositionHandler
 */
 
 #pragma once
@@ -15,16 +15,16 @@
 #include <vector>
 
 namespace rtype::server {
-    class MoveHandler : public AHandlerUDP {
+    class PositionHandler : public AHandlerUDP {
       public:
-        struct ClientRequestBody {
-            entity_id_t playerID;
-            Direction direction;
-            bool state;
+        struct ServerRequestBody {
+            entity_id_t entityID;
+            coordinate_t x;
+            coordinate_t y;
         };
 
-        MoveHandler(std::vector<Player> &players);
-        ~MoveHandler() override = default;
+        PositionHandler(std::vector<Player> &players);
+        ~PositionHandler() override = default;
 
       protected:
         void response(const Network::UdpPackage &package) override;

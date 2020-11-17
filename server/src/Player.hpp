@@ -13,7 +13,7 @@
 
 namespace rtype::server {
     struct Player {
-        player_id_t id;
+        entity_id_t id;
         boost::asio::ip::udp::endpoint endpoint;
         long lastReception;
     };

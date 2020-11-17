@@ -37,6 +37,7 @@ namespace rtype::BinaryProtocolCommunication {
         ASK_JOIN,
         CREATE,
         GAME_STATE,
+        POSITION,
         MOVE,
         SPAWN,
         DESTROY,

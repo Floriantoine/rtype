@@ -17,11 +17,11 @@ namespace rtype::server {
     class DropHandler : public AHandlerUDP {
       public:
         struct ServerRequestBody {
-            player_id_t playerID;
+            entity_id_t playerID;
         };
 
         struct ClientRequestBody {
-            player_id_t playerID;
+            entity_id_t playerID;
         };
 
         DropHandler(std::vector<Player> &players);

@@ -17,7 +17,7 @@ namespace rtype::server {
     class GrabHandler : public AHandlerUDP {
       public:
         struct ServerRequestBody {
-            player_id_t playerID;
+            entity_id_t playerID;
             entity_id_t entityID;
             side_t side;
         };

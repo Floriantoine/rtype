@@ -17,7 +17,7 @@ namespace rtype::server {
     class JoinHandler : public AHandlerUDP {
       public:
         struct ServerRequestBody {
-            player_id_t playerID;
+            entity_id_t playerID;
             std::vector<unsigned char> mapName;
         };
 
