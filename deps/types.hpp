@@ -36,5 +36,6 @@ namespace rtype {
         PAUSE,
         WIN,
         LOSE,
+        TIMEOUT
     };
 }
