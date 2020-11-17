@@ -23,40 +23,46 @@ namespace rtype {
         virtual ~IBehaviour() = default;
 
       protected:
-        BehaviourComponent *holder_;
+        BehaviourComponent *holder_ { nullptr };
     };
 
     /**
      * The sole purpose of this component is to hold a pointer to an actual 
-     * script component
+     * behaviour
      *
-     * This allows for storing scripts of different sizes under the same object 
+     * This allows for storing behaviours of different sizes under the same object 
      * pool (because all BehaviourComponent instances will be of the same size)
      */
     class BehaviourComponent : public Component<BehaviourComponent> {
       private:
-        IBehaviour *script_;
+        std::shared_ptr<IBehaviour> behaviour_;
 
       public:
-        BehaviourComponent()
-        {}
-        BehaviourComponent(IBehaviour *script)
-            : script_ { script }
+        BehaviourComponent() = default;
+        BehaviourComponent(std::shared_ptr<IBehaviour> &&behaviour)
+            : behaviour_ ( std::move(behaviour) )
         {
-            this->script_->holder_ = this;
+            this->behaviour_->holder_ = this;
         }
         ~BehaviourComponent() = default;
 
         BehaviourComponent &operator=(const BehaviourComponent &other)
         {
-            this->script_ = other.script_;
-            this->script_->holder_ = this;
+            this->behaviour_ = other.behaviour_;
+            this->behaviour_->holder_ = this;
             return *this;
         }
 
-        IBehaviour *getBehaviour()
+        std::shared_ptr<IBehaviour> getBehaviour() const
         {
-            return this->script_;
+            return this->behaviour_;
+        }
+
+        template<class T>
+        std::shared_ptr<T> getBehaviour() const
+        {
+            STATIC_ASSERT_IS_BASE_OF(IBehaviour, T);
+            return std::dynamic_pointer_cast<T>(this->behaviour_);
         }
     };
 

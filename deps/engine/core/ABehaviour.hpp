@@ -107,9 +107,9 @@ namespace rtype {
         {
             STATIC_ASSERT_IS_BASE_OF(ABehaviour, T);
             return [](const std::shared_ptr<Entity> &entity, nlohmann::json body) {
-                entity->addComponent<BehaviourComponent>(new T());
+                entity->addComponent<BehaviourComponent>(std::make_shared<T>());
                 BehaviourComponent *holder = entity->getComponent<BehaviourComponent>();
-                ABehaviour *script = reinterpret_cast<ABehaviour *>(holder->getBehaviour());
+                std::shared_ptr<ABehaviour> script = holder->getBehaviour<ABehaviour>();
                 script->onInit();
             };
         }
