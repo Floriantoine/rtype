@@ -12,6 +12,17 @@
                     "height": 15
                 },
                 {
+                    "type": "collide_box",
+                    "left": 0,
+                    "top": 0,
+                    "width": 32,
+                    "height": 15
+                },
+                {
+                    "type": "collide_group",
+                    "group": 1
+                },
+                {
                     "type": "position"
                 },
                 {
@@ -30,6 +41,17 @@
                                 "top": 0,
                                 "width": 16,
                                 "height": 4
+                            },
+                            {
+                                "type": "collide_box",
+                                "left": 0,
+                                "top": 0,
+                                "width": 16,
+                                "height": 4
+                            },
+                            {
+                                "type": "collide_group",
+                                "group": 2
                             },
                             {
                                 "type": "position"
@@ -58,6 +80,13 @@
                     "height": 24
                 },
                 {
+                    "type": "collide_box",
+                    "left": 0,
+                    "top": 0,
+                    "width": 21,
+                    "height": 24
+                },
+                {
                     "type": "position"
                 },
                 {
@@ -77,6 +106,13 @@
                 {
                     "type": "sprite",
                     "texture": "mini_boss_1.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 56,
+                    "height": 56
+                },
+                {
+                    "type": "collide_box",
                     "left": 0,
                     "top": 0,
                     "width": 56,

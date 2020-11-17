@@ -84,7 +84,7 @@ namespace rtype {
             }
         }
 
-        void onCollide() override
+        void onCollide(const CollisionData &collision) override
         {
             // static PositionComponent *position = this->getComponent<PositionComponent>();
             // typeCollideComponent;

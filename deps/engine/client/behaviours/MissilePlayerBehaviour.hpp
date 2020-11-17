@@ -54,8 +54,9 @@ namespace rtype {
                 this->destroyEntity();
         }
 
-        void onCollide() override
+        void onCollide(const CollisionData &collision) override
         {
+            std::cout << collision.second.collideGroup << std::endl;
             // static PositionComponent *position = this->getComponent<PositionComponent>();
             // typeCollideComponent;
             // enemy

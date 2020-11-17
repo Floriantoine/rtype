@@ -159,6 +159,18 @@ namespace rtype {
         }
 
         template <class T>
+        void apply(std::function<void(T *, id_t, const std::unordered_map<id_t, ComponentBase *> &)> function)
+        {
+            if (this->isComponentTypeRegistered<T>()) {
+                const auto &list = this->getComponentList<T>();
+                for (auto it = list.begin(), next = it; it != list.end(); it = next) {
+                    next++;
+                    function(static_cast<T *>(it->second), it->first, list);
+                }
+            }
+        }
+
+        template <class T>
         void apply(id_t entityId, std::function<void(T *)> function)
         {
             function(static_cast<T *>(this->getComponent<T>(entityId)));
