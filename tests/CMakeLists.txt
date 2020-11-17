@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
 include_directories( 
-    ../utils
-    ../core
+    ../deps/utils
+    ../deps/core
 )
 
 set(SRCS
