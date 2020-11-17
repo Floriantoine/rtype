@@ -23,7 +23,6 @@
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/components/RotationComponent.hpp"
 #include "engine/core/components/SpriteComponent.hpp"
-#include "engine/core/ecs/component/Component.hpp"
 #include "engine/core/systems/BehaviourSystem.hpp"
 #include "engine/core/systems/CollisionSystem.hpp"
 #include "engine/core/systems/EventSystem.hpp"

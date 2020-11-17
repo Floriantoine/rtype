@@ -10,13 +10,14 @@
 #include "./components/BehaviourComponent.hpp"
 #include "./components/HealthComponent.hpp"
 #include "./ecs/assert.hpp"
-#include "./ecs/entity/Entity.hpp"
 #include "./ecs/entity/EntityManager.hpp"
+#include "./ecs/entity/Entity.hpp"
 #include "./physics/CollisionData.hpp"
 #include "nlohmann/json.hpp"
 
 #include <iostream>
 #include <memory>
+#include <iostream>
 
 namespace sf {
     class Event;
