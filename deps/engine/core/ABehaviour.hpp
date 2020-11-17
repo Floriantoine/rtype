@@ -11,6 +11,7 @@
 #include "./components/HealthComponent.hpp"
 #include "./ecs/assert.hpp"
 #include "./ecs/entity/Entity.hpp"
+#include "./ecs/entity/EntityManager.hpp"
 #include "./physics/CollisionData.hpp"
 #include "nlohmann/json.hpp"
 
