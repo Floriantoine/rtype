@@ -13,16 +13,18 @@
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/components/RotationComponent.hpp"
 #include "engine/core/components/SpriteComponent.hpp"
+#include "engine/core/components/BackgroundComponent.hpp"
 #include "engine/core/components/CollideBoxComponent.hpp"
 #include "engine/core/components/CollideGroupComponent.hpp"
 #include "engine/core/components/HealthComponent.hpp"
 #include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
 #include "engine/client/behaviours/PlayerBehaviour.hpp"
 #include "engine/client/behaviours/PataBehaviour.hpp"
+#include "engine/client/behaviours/BugBehaviour.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/client/systems/AnimationSystem.hpp"
 #include "engine/client/systems/SpriteSystem.hpp"
-#include "engine/client/systems/SpriteSystem.hpp"
+#include "engine/client/systems/BackgroundSystem.hpp"
 #include "engine/core/systems/BehaviourSystem.hpp"
 #include "engine/core/systems/EventSystem.hpp"
 #include "engine/core/systems/CollisionSystem.hpp"
@@ -41,6 +43,7 @@ int main()
     JsonLoader::loadDefinitions("./config_file/definitions.json");
 
     JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
+    JsonLoader::registerComponentFactory("background", BackgroundComponent::factory);
     JsonLoader::registerComponentFactory("rotation", RotationComponent::factory);
     JsonLoader::registerComponentFactory("position", PositionComponent::factory);
     JsonLoader::registerComponentFactory("collide_box", CollideBoxComponent::factory);
@@ -51,6 +54,7 @@ int main()
     JsonLoader::registerComponentFactory("player_script", PlayerBehaviour::getFactory<PlayerBehaviour>());
     JsonLoader::registerComponentFactory("missile_player_script", MissilePlayerBehaviour::getFactory<MissilePlayerBehaviour>());
     JsonLoader::registerComponentFactory("pata_script", PataBehaviour::getFactory<PataBehaviour>());
+    JsonLoader::registerComponentFactory("bug_script", BugBehaviour::getFactory<BugBehaviour>());
 
     try {
         auto scene = JsonLoader::createScene(Game::getInstance(), "./config_file/scene/stage1.json");
@@ -59,6 +63,7 @@ int main()
         scene->createSystem<BehaviourSystem>();
         scene->createSystem<AnimationSystem>();
         scene->createSystem<SpriteSystem>();
+        scene->createSystem<BackgroundSystem>();
         scene->createSystem<CollisionSystem>();
         scene->createSystem<HealthSystem>();
 

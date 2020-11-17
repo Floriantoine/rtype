@@ -1,6 +1,186 @@
 {
     "definitions": [
         {
+            "id": "SkyBackground",
+            "components": [
+                {
+                    "type": "background",
+                    "texture": "sky_background.png",
+                    "height": 480
+                },
+                {
+                    "type": "position"
+                }
+            ]
+        },
+        {
+            "id": "InternBackground",
+            "components": [
+                {
+                    "type": "background",
+                    "texture": "intern_background.png",
+                    "height": 480
+                },
+                {
+                    "type": "position",
+                    "x": 200
+                }
+            ]
+        },
+        {
+            "id": "SmallWall",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "all_wall.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 80,
+                    "height": 21
+                },
+                {
+                    "type": "collide_box",
+                    "left": 0,
+                    "top": 0,
+                    "width": 80,
+                    "height": 21
+                },
+                {
+                    "type": "collide_group",
+                    "group": 2
+                },
+                {
+                    "type": "position",
+                    "y": 459
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 0,
+                    "totalFrame": 6
+                }
+            ]
+        },
+        {
+            "id": "MiddleWall",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "all_wall.png",
+                    "left": 0,
+                    "top": 21,
+                    "width": 80,
+                    "height": 43
+                },
+                {
+                    "type": "collide_box",
+                    "left": 0,
+                    "top": 0,
+                    "width": 80,
+                    "height": 43
+                },
+                {
+                    "type": "collide_group",
+                    "group": 2
+                },
+                {
+                    "type": "position",
+                    "y": 437
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 0,
+                    "totalFrame": 2
+                }
+            ]
+        },
+        {
+            "id": "BigWall",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "all_wall.png",
+                    "left": 0,
+                    "top": 64,
+                    "width": 80,
+                    "height": 65
+                },
+                {
+                    "type": "collide_box",
+                    "left": 0,
+                    "top": 0,
+                    "width": 80,
+                    "height": 65
+                },
+                {
+                    "type": "collide_group",
+                    "group": 2
+                },
+                {
+                    "type": "position",
+                    "y": 415
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 0,
+                    "totalFrame": 2
+                }
+            ]
+        },
+        {
+            "id": "Reactor",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "reactor_wall.png",
+                    "width": 211,
+                    "height": 130
+                },
+                {
+                    "type": "position",
+                    "y": 350
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 0,
+                    "totalFrame": 4
+                }
+            ]
+        },
+        {
+            "id": "PlayerMissile",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "player_missile.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 16,
+                    "height": 4
+                },
+                {
+                    "type": "collide_box",
+                    "left": 0,
+                    "top": 0,
+                    "width": 16,
+                    "height": 4
+                },
+                {
+                    "type": "collide_group",
+                    "group": 0
+                },
+                {
+                    "type": "position"
+                },
+                {
+                    "type": "health",
+                    "health": 1
+                },
+                {
+                    "type": "missile_player_script"
+                }
+            ]
+        },
+        {
             "id": "Player",
             "components": [
                 {
@@ -33,37 +213,7 @@
                 {
                     "type": "missile",
                     "body": {
-                        "components": [
-                            {
-                                "type": "sprite",
-                                "texture": "player_missile.png",
-                                "left": 0,
-                                "top": 0,
-                                "width": 16,
-                                "height": 4
-                            },
-                            {
-                                "type": "collide_box",
-                                "left": 0,
-                                "top": 0,
-                                "width": 16,
-                                "height": 4
-                            },
-                            {
-                                "type": "collide_group",
-                                "group": 0
-                            },
-                            {
-                                "type": "position"
-                            },
-                            {
-                                "type": "missile_player_script"
-                            },
-                            {
-                                "type": "health",
-                                "health": 1
-                            }
-                        ]
+                        "base": "PlayerMissile"
                     },
                     "rate": 50
                 },
@@ -104,11 +254,48 @@
                     "rate": 100
                 },
                 {
+                    "type": "health",
+                    "health": 1
+                },
+                {
                     "type": "pata_script"
+                }
+            ]
+        },
+        {
+            "id": "Bug",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "enemy_2.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 22,
+                    "height": 22
+                },
+                {
+                    "type": "collide_box",
+                    "left": 0,
+                    "top": 0,
+                    "width": 22,
+                    "height": 22
+                },
+                {
+                    "type": "collide_group",
+                    "group": 1
+                },
+                {
+                    "type": "position"
+                },
+                {
+                    "type": "rotation"
                 },
                 {
                     "type": "health",
                     "health": 1
+                },
+                {
+                    "type": "bug_script"
                 }
             ]
         },
