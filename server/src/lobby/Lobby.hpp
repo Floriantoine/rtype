@@ -70,7 +70,6 @@ namespace rtype::server {
         static constexpr long LOBBY_TIMEOUT_MS = std::chrono::milliseconds(30000).count();
         static constexpr unsigned char MAX_PLAYERS = 4;
 
-        Clock clock_;
         State state_;
         std::vector<Player> players_;
         bool awaitingResponse_ { false };

@@ -23,28 +23,17 @@ namespace rtype::server {
         std::vector<Network::UdpPackage> awaitingResponse_;
 
         bool resend_(Network::UdpPackage &package);
-        void refreshPlayerActiveness(const Network::UdpPackage &package);
+        void refreshPlayerActiveness_(const Network::UdpPackage &package);
+        void receiveRequest_(const Network::UdpPackage &package);
+        void receiveResponse_(const Network::UdpPackage &package);
 
       protected:
-        struct HandlerPtrWrapper {
-          public:
-            typedef void (AHandlerUDP::*method_ptr_t)(const Network::UdpPackage &);
-
-          private:
-            method_ptr_t pointer_;
-            AHandlerUDP &handler_;
-
-          public:
-            HandlerPtrWrapper(AHandlerUDP &handler, method_ptr_t pointer);
-            void operator()(const Network::UdpPackage &package);
-        };
-
         Lobby &owner_;
 
         AHandlerUDP(Lobby &owner);
         virtual BPC::Method getMethod() const = 0;
-        virtual void receiveRequest(const Network::UdpPackage &package);
-        virtual void receiveResponse(const Network::UdpPackage &package);
+        virtual void receiveRequest(const Network::UdpPackage &package) = 0;
+        virtual void receiveResponse(const Network::UdpPackage &package) = 0;
         void other(const Network::UdpPackage &package);
 
         template <typename T>
@@ -66,7 +55,7 @@ namespace rtype::server {
         static void unknowPacket(const Network::UdpPackage &package);
 
         virtual ~AHandlerUDP() = default;
-        virtual HandlerPtrWrapper operator[](BPC::BaseType type);
+        void receive(const Network::UdpPackage &package);
         bool update();
 
         template <typename T>

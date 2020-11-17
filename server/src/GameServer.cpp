@@ -57,7 +57,7 @@ namespace rtype::server {
             });
 
         if (it != this->handlers_.cend()) {
-            (*it->second)[package.type](package, client);
+            it->second->receive(package, client);
         } else {
             AHandlerTCP::unknowPacket(package, client);
         }

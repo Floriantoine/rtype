@@ -9,6 +9,15 @@
 #include "Exception.hpp"
 #include "GameServer.hpp"
 #include "Server.hpp"
+#include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
+#include "engine/client/behaviours/PataBehaviour.hpp"
+#include "engine/client/behaviours/PlayerBehaviour.hpp"
+#include "engine/core/components/AnimationComponent.hpp"
+#include "engine/core/components/MissileComponent.hpp"
+#include "engine/core/components/PositionComponent.hpp"
+#include "engine/core/components/RotationComponent.hpp"
+#include "engine/core/components/SpriteComponent.hpp"
+#include "scene_loader/SceneLoader.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -32,6 +41,18 @@ static server::Config ParseConfig(const std::string &filePath)
     if (conf.maxGameThreads == 0)
         throw server::Exception("can't auto determine how many threads to use");
     return conf;
+}
+
+static void registerComponentFactories()
+{
+    JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
+    JsonLoader::registerComponentFactory("rotation", RotationComponent::factory);
+    JsonLoader::registerComponentFactory("position", PositionComponent::factory);
+    JsonLoader::registerComponentFactory("animation", AnimationComponent::factory);
+    JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
+    JsonLoader::registerComponentFactory("player_script", PlayerBehaviour::getFactory<PlayerBehaviour>());
+    JsonLoader::registerComponentFactory("missile_player_script", MissilePlayerBehaviour::getFactory<MissilePlayerBehaviour>());
+    JsonLoader::registerComponentFactory("pata_script", PataBehaviour::getFactory<PataBehaviour>());
 }
 
 int main(int argc, const char **argv)

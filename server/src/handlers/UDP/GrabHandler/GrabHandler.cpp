@@ -17,12 +17,10 @@ namespace rtype::server {
 
     void GrabHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void GrabHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
     
     BPC::Method GrabHandler::getMethod() const

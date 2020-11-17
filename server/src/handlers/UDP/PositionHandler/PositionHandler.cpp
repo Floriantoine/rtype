@@ -17,12 +17,10 @@ namespace rtype::server {
 
     void PositionHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void PositionHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
     
     BPC::Method PositionHandler::getMethod() const

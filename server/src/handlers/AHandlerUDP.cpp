@@ -15,51 +15,9 @@
 #include <algorithm>
 
 namespace rtype::server {
-    AHandlerUDP::HandlerPtrWrapper::HandlerPtrWrapper(AHandlerUDP &handler, HandlerPtrWrapper::method_ptr_t pointer)
-        : pointer_(pointer)
-        , handler_(handler)
-    { }
-
-    void AHandlerUDP::HandlerPtrWrapper::operator()(const Network::UdpPackage &package)
-    {
-        (this->handler_.*this->pointer_)(package);
-    }
-
     AHandlerUDP::AHandlerUDP(Lobby &owner)
         : owner_ { owner }
     { }
-
-    AHandlerUDP::HandlerPtrWrapper AHandlerUDP::operator[](BPC::BaseType type)
-    {
-        if (type == BPC::BaseType::REQUEST) {
-            return AHandlerUDP::HandlerPtrWrapper(*this, &AHandlerUDP::receiveRequest);
-        } else if (type == BPC::BaseType::RESPONSE) {
-            return AHandlerUDP::HandlerPtrWrapper(*this, &AHandlerUDP::receiveResponse);
-        }
-        return AHandlerUDP::HandlerPtrWrapper(*this, &AHandlerUDP::other);
-    }
-
-    void AHandlerUDP::receiveRequest(const Network::UdpPackage &package)
-    {
-        this->refreshPlayerActiveness(package);
-    }
-
-    void AHandlerUDP::receiveResponse(const Network::UdpPackage &package)
-    {
-        auto elem = std::find_if(this->awaitingResponse_.begin(), this->awaitingResponse_.end(),
-            [&package](const auto &it) {
-                return (it.endpoint == package.endpoint && it.timestamp == package.timestamp);
-            });
-        if (elem != this->awaitingResponse_.end()) {
-            this->awaitingResponse_.erase(elem);
-        }
-        this->refreshPlayerActiveness(package);
-    }
-
-    void AHandlerUDP::other(const Network::UdpPackage &package)
-    {
-        AHandlerUDP::unknowPacket(package);
-    }
 
     bool AHandlerUDP::resend_(Network::UdpPackage &package)
     {
@@ -74,7 +32,7 @@ namespace rtype::server {
         return true;
     }
 
-    void AHandlerUDP::refreshPlayerActiveness(const Network::UdpPackage &package)
+    void AHandlerUDP::refreshPlayerActiveness_(const Network::UdpPackage &package)
     {
         auto player = std::find_if(this->owner_.players_.begin(), this->owner_.players_.end(),
             [&package](const auto &it) {
@@ -85,8 +43,38 @@ namespace rtype::server {
         }
     }
 
+    void AHandlerUDP::receiveRequest_(const Network::UdpPackage &package)
+    {
+        this->refreshPlayerActiveness_(package);
+        this->receiveRequest(package);
+    }
+
+    void AHandlerUDP::receiveResponse_(const Network::UdpPackage &package)
+    {
+        auto elem = std::find_if(this->awaitingResponse_.begin(), this->awaitingResponse_.end(),
+            [&package](const auto &it) {
+                return (it.endpoint == package.endpoint && it.timestamp == package.timestamp);
+            });
+        if (elem != this->awaitingResponse_.end()) {
+            this->awaitingResponse_.erase(elem);
+        }
+        this->refreshPlayerActiveness_(package);
+        this->receiveResponse(package);
+    }
+
     void AHandlerUDP::unknowPacket(const Network::UdpPackage &package)
     {
+    }
+
+    void AHandlerUDP::receive(const Network::UdpPackage &package)
+    {
+        if (package.type == BPC::RESPONSE) {
+            this->receiveResponse_(package);
+        } else if (package.type == BPC::REQUEST) {
+            this->receiveRequest_(package);
+        } else {
+            AHandlerUDP::unknowPacket(package);
+        }
     }
 
     bool AHandlerUDP::update()

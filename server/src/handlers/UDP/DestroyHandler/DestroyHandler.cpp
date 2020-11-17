@@ -16,12 +16,10 @@ namespace rtype::server {
 
     void DestroyHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void DestroyHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
     
     BPC::Method DestroyHandler::getMethod() const

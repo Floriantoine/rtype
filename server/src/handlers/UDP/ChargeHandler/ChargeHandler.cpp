@@ -17,12 +17,10 @@ namespace rtype::server {
 
     void ChargeHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void ChargeHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
     
     BPC::Method ChargeHandler::getMethod() const

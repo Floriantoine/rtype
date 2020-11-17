@@ -17,12 +17,10 @@ namespace rtype::server {
 
     void JoinHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void JoinHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
 
     BPC::Method JoinHandler::getMethod() const

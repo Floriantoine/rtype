@@ -17,12 +17,10 @@ namespace rtype::server {
 
     void HitHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void HitHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
 
     BPC::Method HitHandler::getMethod() const

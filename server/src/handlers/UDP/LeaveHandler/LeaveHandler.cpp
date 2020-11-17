@@ -17,12 +17,10 @@ namespace rtype::server {
 
     void LeaveHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void LeaveHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
 
     BPC::Method LeaveHandler::getMethod() const

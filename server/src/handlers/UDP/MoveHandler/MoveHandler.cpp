@@ -16,12 +16,10 @@ namespace rtype::server {
 
     void MoveHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void MoveHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
     
     BPC::Method MoveHandler::getMethod() const

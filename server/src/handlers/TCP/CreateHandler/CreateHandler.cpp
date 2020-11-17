@@ -8,6 +8,7 @@
 #include "CreateHandler.hpp"
 
 #include "GameServer.hpp"
+#include "engine/core/systems/BehaviourSystem.hpp"
 #include "handlers/AHandlerTCP.hpp"
 #include "scene_loader/SceneLoader.hpp"
 #include "types.hpp"
@@ -32,6 +33,11 @@ namespace rtype::server {
         : AHandlerTCP(owner)
     { }
 
+    void CreateHandler::initScene(Scene &scene)
+    {
+        scene.createSystem<BehaviourSystem>();
+    }
+
     void CreateHandler::receiveResponse(const BPC::Package &package, Network::TcpSession &client)
     {
     }
@@ -44,10 +50,12 @@ namespace rtype::server {
         std::shared_ptr<std::function<void()>> onSent = nullptr;
 
         try {
-            std::string scenePatch = this->owner_.config_.scenesDir + requestBody.mapName + ".json";
+            std::string scenePath = this->owner_.config_.scenesDir + requestBody.mapName + ".json";
             auto sceneManager = std::make_unique<SceneManager>();
-            JsonLoader::createScene(*sceneManager, scenePatch);
+            auto scenePtr = JsonLoader::createScene(*sceneManager, scenePath);
+            CreateHandler::initScene(*scenePtr);
             const Lobby &lobby = this->owner_.dispatcher_->createLobby(std::move(sceneManager));
+
             responseBody.port = lobby.getPort();
             memcpy(responseBody.lobbyID, lobby.id.data(), sizeof(lobby_id_t));
             responsePackage.setBodyFrom(&responseBody);

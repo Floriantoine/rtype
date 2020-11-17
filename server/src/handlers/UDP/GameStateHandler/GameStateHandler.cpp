@@ -16,12 +16,10 @@ namespace rtype::server {
 
     void GameStateHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void GameStateHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
     
     BPC::Method GameStateHandler::getMethod() const

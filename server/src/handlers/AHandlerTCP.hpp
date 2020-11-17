@@ -13,20 +13,6 @@ namespace rtype::server {
     class GameServer;
 
     class AHandlerTCP {
-      private:
-        struct HandlerPtrWrapper {
-          public:
-            typedef void (AHandlerTCP::*method_ptr_t)(const BPC::Package &, Network::TcpSession &);
-
-          private:
-            method_ptr_t pointer_;
-            AHandlerTCP &handler_;
-
-          public:
-            HandlerPtrWrapper(AHandlerTCP &handler, method_ptr_t pointer);
-            void operator()(const BPC::Package &package, Network::TcpSession &client);
-        };
-
       protected:
         GameServer &owner_;
 
@@ -34,11 +20,11 @@ namespace rtype::server {
 
         virtual void receiveRequest(const BPC::Package &package, Network::TcpSession &client) = 0;
         virtual void receiveResponse(const BPC::Package &package, Network::TcpSession &client) = 0;
-        void other(const BPC::Package &package, Network::TcpSession &client);
 
       public:
-        virtual ~AHandlerTCP() = default;
-        HandlerPtrWrapper operator[](BPC::BaseType type);
         static void unknowPacket(const BPC::Package &package, Network::TcpSession &client);
+
+        virtual ~AHandlerTCP() = default;
+        void receive(const BPC::Package &package, Network::TcpSession &client);
     };
 }

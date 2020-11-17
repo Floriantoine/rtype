@@ -16,12 +16,10 @@ namespace rtype::server {
 
     void ShootHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveRequest(package);
     }
 
     void ShootHandler::receiveResponse(const Network::UdpPackage &package)
     {
-        AHandlerUDP::receiveResponse(package);
     }
     
     BPC::Method ShootHandler::getMethod() const

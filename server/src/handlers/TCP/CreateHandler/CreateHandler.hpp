@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "engine/core/scene/Scene.hpp"
 #include "handlers/AHandlerTCP.hpp"
 #include "lobby/LobbyDispatcher.hpp"
 #include "types.hpp"
@@ -32,6 +33,8 @@ namespace rtype::server {
         ~CreateHandler() override = default;
 
       protected:
+        static void initScene(Scene &scene);
+
         void receiveResponse(const BPC::Package &package, Network::TcpSession &session) override;
         void receiveRequest(const BPC::Package &package, Network::TcpSession &session) override;
     };

@@ -123,7 +123,7 @@ namespace rtype::server {
             });
 
         if (it != this->handlers_.cend()) {
-            (*it->second)[package.type](package);
+            it->second->receive(package);
         } else {
             AHandlerUDP::unknowPacket(package);
         }
