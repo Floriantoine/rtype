@@ -15,7 +15,6 @@ namespace rtype {
     typedef char lobby_id_t[6];
     typedef unsigned short port_t;
     typedef unsigned char game_state_t;
-    typedef unsigned char player_id_t;
     typedef unsigned char direction_t;
     typedef unsigned char side_t;
 
@@ -25,10 +24,10 @@ namespace rtype {
     };
 
     enum class Direction : direction_t {
-        UP = 1,
-        DOWN = UP << 1,
-        LEFT = DOWN << 1,
-        RIGHT = LEFT << 1
+        UP,
+        LEFT,
+        DOWN,
+        RIGHT,
     };
 
     enum class GameState : game_state_t {

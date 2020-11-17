@@ -9,7 +9,7 @@
 
 #include "Player.hpp"
 #include "handlers/AHandlerUDP.hpp"
-#include "handlers/UDP/DropHandler/DropHandler.hpp"
+#include "types.hpp"
 
 #include <vector>
 
@@ -17,7 +17,7 @@ namespace rtype::server {
     class ChargeHandler : public AHandlerUDP {
       public:
         struct ClientRequestBody {
-            player_id_t playerID;
+            entity_id_t playerID;
         };
 
         ChargeHandler(std::vector<Player> &players);

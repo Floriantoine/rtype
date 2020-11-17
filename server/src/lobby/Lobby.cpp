@@ -20,6 +20,7 @@
 #include "handlers/UDP/JoinHandler/JoinHandler.hpp"
 #include "handlers/UDP/LeaveHandler/LeaveHandler.hpp"
 #include "handlers/UDP/MoveHandler/MoveHandler.hpp"
+#include "handlers/UDP/PositionHandler/PositionHandler.hpp"
 #include "handlers/UDP/ShootHandler/ShootHandler.hpp"
 #include "handlers/UDP/SpawnHandler/SpawnHandler.hpp"
 
@@ -38,6 +39,7 @@ namespace rtype::server {
             { BPC::GRAB, std::make_shared<GrabHandler>(this->players_) },
             { BPC::DROP, std::make_shared<DropHandler>(this->players_) },
             { BPC::CHARGE, std::make_shared<ChargeHandler>(this->players_) },
+            { BPC::SHOOT, std::make_shared<PositionHandler>(this->players_) },
             { BPC::SHOOT, std::make_shared<ShootHandler>(this->players_) },
             { BPC::HIT, std::make_shared<HitHandler>(this->players_) },
             { BPC::JOIN, std::make_shared<JoinHandler>(this->players_) },

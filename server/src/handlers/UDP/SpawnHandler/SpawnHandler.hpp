@@ -11,6 +11,7 @@
 #include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
+#include <string>
 #include <vector>
 
 namespace rtype::server {
@@ -18,6 +19,7 @@ namespace rtype::server {
       public:
         struct ServerRequestBody {
             entity_id_t entityID;
+            std::string jsonBody;
         };
 
         SpawnHandler(std::vector<Player> &players);

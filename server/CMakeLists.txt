@@ -43,6 +43,7 @@ set(SRCS
         handlers/UDP/JoinHandler/JoinHandler.cpp
         handlers/UDP/LeaveHandler/LeaveHandler.cpp
         handlers/UDP/MoveHandler/MoveHandler.cpp
+        handlers/UDP/PositionHandler/PositionHandler.cpp
         handlers/UDP/ShootHandler/ShootHandler.cpp
         handlers/UDP/SpawnHandler/SpawnHandler.cpp
 )

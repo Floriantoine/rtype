@@ -17,7 +17,7 @@ namespace rtype::server {
     class LeaveHandler : public AHandlerUDP {
       public:
         struct ClientRequestBody {
-            player_id_t playerID;
+            entity_id_t playerID;
         };
 
         LeaveHandler(std::vector<Player> &players);
