@@ -18,6 +18,7 @@
 
 #include "../../core/ABehaviour.hpp"
 #include "../../core/components/PositionComponent.hpp"
+#include "../CollideGroups.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -56,7 +57,9 @@ namespace rtype {
 
         void onCollide(const CollisionData &collision) override
         {
-            std::cout << collision.second.collideGroup << std::endl;
+            if (collision.second.collideGroup != COLLIDE_GROUP_PLAYERS) {
+                this->takeDamage(1);
+            }
             // static PositionComponent *position = this->getComponent<PositionComponent>();
             // typeCollideComponent;
             // enemy

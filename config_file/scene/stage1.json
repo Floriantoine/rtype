@@ -47,7 +47,7 @@
             "components": [
                 {
                     "type": "position",
-                    "x": 320,
+                    "x": 340,
                     "y": 30
                 }
             ]
@@ -57,7 +57,7 @@
             "components": [
                 {
                     "type": "position",
-                    "x": 100,
+                    "x": 200,
                     "y": 30
                 }
             ]

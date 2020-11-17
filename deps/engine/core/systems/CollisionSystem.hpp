@@ -29,22 +29,20 @@ namespace rtype {
         {
             this->componentManager_->apply<CollideBoxComponent>(
                 [this](CollideBoxComponent *collideBox, id_t id, const std::unordered_map<id_t, ComponentBase *> &list) {
+                    BehaviourComponent *behaviourComponent = collideBox->getEntity()->getComponent<BehaviourComponent>();
+                    if (behaviourComponent == nullptr)
+                        return;
+                    std::shared_ptr<ABehaviour> behaviour = behaviourComponent->getBehaviour<ABehaviour>();
                     ColliderData selfData = CollisionSystem::getColliderData(collideBox);
 
                     for (auto &it : list) {
-                        if (it.first == id) {
+                        if (it.first == id)
                             continue;
-                        }
-                        BehaviourComponent *otherBehaviour = it.second->getEntity()->getComponent<BehaviourComponent>();
-                        if (otherBehaviour == nullptr) {
-                            continue;
-                        }
                         CollideBoxComponent *otherCollideBox = reinterpret_cast<CollideBoxComponent *>(it.second);
                         ColliderData otherData = CollisionSystem::getColliderData(otherCollideBox);
-                        if (CollisionChecker::collides(selfData.relativeCollideBox, otherData.relativeCollideBox) == false) {
+                        if (CollisionChecker::collides(selfData.relativeCollideBox, otherData.relativeCollideBox) == false)
                             continue;
-                        }
-                        otherBehaviour->getBehaviour<ABehaviour>()->onCollide(CollisionData(selfData, otherData));
+                        behaviour->onCollide(CollisionData(selfData, otherData));
                     }
                 });
         }
