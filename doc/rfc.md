@@ -124,11 +124,11 @@ ___
 #### *From server:*
 > If <ins>LOBBY_PORT</ins> isn't equal to 0, the server has created a lobby and must disconnect the client from the TCP socket. The client should then connect to the UDP socket of the lobby
 ```
-+------------+
-| LOBBY_PORT |
-|  unsigned  |
-|  2 bytes   |
-+------------+
++------------+----------+
+| LOBBY_PORT | LOBBY_ID |
+|  unsigned  | unsigned |
+|  2 bytes   |  6 bytes |
++------------+----------+
 ```
 
 ## UDP in-game connection
