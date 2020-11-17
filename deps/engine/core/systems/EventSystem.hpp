@@ -43,7 +43,7 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::MouseButtonPressed) {
                 this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
-                    reinterpret_cast<ABehaviour *>(holder->getBehaviour())->onMouseButtonPressed(evt);
+                    holder->getBehaviour<ABehaviour>()->onMouseButtonPressed(evt);
                 });
             }
         }
@@ -52,7 +52,7 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::MouseButtonReleased) {
                 this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
-                    reinterpret_cast<ABehaviour *>(holder->getBehaviour())->onMouseButtonReleased(evt);
+                    holder->getBehaviour<ABehaviour>()->onMouseButtonReleased(evt);
                 });
             }
         }
@@ -61,7 +61,7 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::KeyPressed) {
                 this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
-                    reinterpret_cast<ABehaviour *>(holder->getBehaviour())->onKeyPressed(evt);
+                    holder->getBehaviour<ABehaviour>()->onKeyPressed(evt);
                 });
             }
         }
@@ -70,7 +70,7 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::KeyReleased) {
                 this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
-                    reinterpret_cast<ABehaviour *>(holder->getBehaviour())->onKeyReleased(evt);
+                    holder->getBehaviour<ABehaviour>()->onKeyReleased(evt);
                 });
             }
         }
