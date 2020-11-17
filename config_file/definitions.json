@@ -259,10 +259,6 @@
                 },
                 {
                     "type": "pata_script"
-                },
-                {
-                    "type": "health",
-                    "health": 1
                 }
             ]
         },
