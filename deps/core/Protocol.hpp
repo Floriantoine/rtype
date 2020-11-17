@@ -123,10 +123,8 @@ namespace rtype::BinaryProtocolCommunication {
 
         for (const auto &str : str_vec_ip) {
             buffer[count] = static_cast<std::uint8_t>(std::atoi(str.c_str()));
-            std::cout << "package: " << str << "--" << buffer[count] << std::endl;
             count += 1;
         }
-        std::cout << "adress : " << count << std::endl;
         buffer[count++] = (endpoint.port & 0xFF);
         buffer[count] = (endpoint.port >> 8);
     };
@@ -140,10 +138,8 @@ namespace rtype::BinaryProtocolCommunication {
 
         while (i < 4) {
             tmp.emplace_back(std::to_string(buffer[index++]));
-            std::cout << "buffer: " << buffer[i] << std::endl;
             ++i;
         }
-        std::cout << "address : " << index << std::endl;
         endpoint.ip = boost::algorithm::join(tmp, ".");
         endpoint.port = buffer[index++];
         endpoint.port += buffer[index] << 8;
