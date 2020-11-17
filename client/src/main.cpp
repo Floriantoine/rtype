@@ -38,12 +38,12 @@
 
 using namespace rtype;
 
-void fun()
+int init()
 {
-    // Game::getInstance().setWindowTitle("R-Type");
-    // Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
+    client::Game::getInstance().setWindowTitle("R-Type");
+    client::Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
 
-    // JsonLoader::loadDefinitions("./config_file/definitions.json");
+    JsonLoader::loadDefinitions("./config_file/definitions.json");
 
     JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
     JsonLoader::registerComponentFactory("background", BackgroundComponent::factory);
@@ -71,8 +71,10 @@ void fun()
         scene->createSystem<HealthSystem>();
 
         client::Game::getInstance().start();
+        return 0;
     } catch (const Exception &e) {
         std::cerr << e.what() << std::endl;
+        return 1;
     }
 }
 
@@ -80,7 +82,9 @@ int main(const int argc, const char **argv)
 {
     try {
         client::GameClient::Start(argc, argv);
+        return 0;
     } catch (const std::exception &err) {
         std::cerr << err.what() << std::endl;
+        return 1;
     }
 }

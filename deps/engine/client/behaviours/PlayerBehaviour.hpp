@@ -180,6 +180,7 @@ namespace rtype {
 
         void onCollide(const CollisionData &collision) override
         {
+            std::cout << collision.other.collideGroup << std::endl;
         }
     };
 
