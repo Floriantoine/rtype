@@ -9,6 +9,8 @@
 
 #include "../../core/ABehaviour.hpp"
 #include "../../core/components/PositionComponent.hpp"
+#include "../../core/components/HealthComponent.hpp"
+#include "../CollideGroups.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -54,14 +56,11 @@ namespace rtype {
                 this->destroyEntity();
         }
 
-        void onCollide() override
+        void onCollide(const CollisionData &collision) override
         {
-            // static PositionComponent *position = this->getComponent<PositionComponent>();
-            // typeCollideComponent;
-            // enemy
-            // player
-            // wall
-            // missile
+            if (collision.second.collideGroup == COLLIDE_GROUP_PLAYERS) {
+                this->takeDamage(1);
+            }
         }
     };
 }

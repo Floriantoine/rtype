@@ -17,7 +17,7 @@ namespace rtype {
         friend class ComponentManager;
 
       protected:
-        Entity *entity_;
+        Entity *entity_ { nullptr };
 
         static id_t getNextTypeId()
         {

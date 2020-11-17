@@ -15,8 +15,6 @@
 #include "../../core/ecs/entity/Entity.hpp"
 #include "SFML/Window/Event.hpp"
 
-#include <iostream>
-
 namespace rtype {
 
     class PlayerBehaviour : public ABehaviour {
@@ -177,10 +175,9 @@ namespace rtype {
 
         void onMouseButtonPressed(const sf::Event &event) override
         {
-            std::cout << "clicked (" << event.mouseButton.x << ":" << event.mouseButton.y << ")" << std::endl;
         }
 
-        void onCollide() override
+        void onCollide(const CollisionData &collision) override
         {
         }
     };
