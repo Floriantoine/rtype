@@ -1,0 +1,98 @@
+{
+    "definitions": [
+        {
+            "id": "Player",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "player_1.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 32,
+                    "height": 15
+                },
+                {
+                    "type": "position"
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 2,
+                    "totalFrame": 5
+                },
+                {
+                    "type": "missile",
+                    "body": {
+                        "components": [
+                            {
+                                "type": "sprite",
+                                "texture": "player_missile.png",
+                                "left": 0,
+                                "top": 0,
+                                "width": 16,
+                                "height": 4
+                            },
+                            {
+                                "type": "position"
+                            },
+                            {
+                                "type": "missile_player_script"
+                            }
+                        ]
+                    },
+                    "rate": 50
+                },
+                {
+                    "type": "player_script"
+                }
+            ]
+        },
+        {
+            "id": "Pata-pata",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "enemy_1.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 21,
+                    "height": 24
+                },
+                {
+                    "type": "position"
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 0,
+                    "totalFrame": 8,
+                    "rate": 100
+                },
+                {
+                    "type": "pata_script"
+                }
+            ]
+        },
+        {
+            "id": "Scant",
+            "components": [
+                {
+                    "type": "sprite",
+                    "texture": "mini_boss_1.png",
+                    "left": 0,
+                    "top": 0,
+                    "width": 56,
+                    "height": 56
+                },
+                {
+                    "type": "position",
+                    "heigth": 0,
+                    "width": 0
+                },
+                {
+                    "type": "animation",
+                    "currentFrame": 0,
+                    "totalFrame": 3
+                }
+            ]
+        }
+    ]
+}

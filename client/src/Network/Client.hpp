@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "BinaryProtocolCommunication.hpp"
+#include "Protocol.hpp"
+#include "boost/asio.hpp"
 
-#include <boost/asio.hpp>
 #include <iostream>
 #include <vector>
 

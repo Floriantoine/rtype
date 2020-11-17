@@ -7,8 +7,8 @@
 
 #include "LobbyDispatcher.hpp"
 
-#include "Lobby.hpp"
 #include "Exception.hpp"
+#include "Lobby.hpp"
 
 #include <atomic>
 #include <memory>
@@ -63,7 +63,7 @@ namespace rtype::server {
         auto leftover = this->lobbies_.size() % this->managerCount_;
         auto it = this->lobbies_.begin();
 
-        this->lobbies_.clear();
+        this->ranges_.clear();
         for (auto i = 0u; i < this->managerCount_; ++i) {
             auto &range = this->ranges_.emplace_back();
             range.start = it;
@@ -97,7 +97,7 @@ namespace rtype::server {
         }
     }
 
-    void LobbyDispatcher::emplaceBack(LobbyDispatcher::lobbyUniquePtr_t &lobby)
+    const Lobby &LobbyDispatcher::createLobby(/*const std::unique_ptr<Scene> &scene*/)
     {
         bool restart = true;
         std::string id;
@@ -113,10 +113,11 @@ namespace rtype::server {
                 }
             }
         }
-        lobby->id = id;
-        this->lobbies_.emplace_back(std::move(lobby));
+        std::unique_ptr<Lobby> &lobby = this->lobbies_.emplace_back(std::make_unique<Lobby>(id/*, scene*/));
         this->dispatch_();
         this->rwLock_->unlock();
+        this->condVar_.notify_one();
+        return *lobby;
     }
 
     LobbyDispatcher::Range LobbyDispatcher::dispatch(unsigned managerIndex)
@@ -126,5 +127,23 @@ namespace rtype::server {
         Range range(this->ranges_.at(managerIndex));
         range.lock(this->rwLock_);
         return range;
+    }
+
+    LobbyDispatcher::Range LobbyDispatcher::dispatch()
+    {
+        removeDeadLobbies_();
+
+        Range range;
+        range.start = this->lobbies_.begin();
+        range.end = this->lobbies_.end();
+        range.lock(this->rwLock_);
+        return range;
+    }
+
+    void LobbyDispatcher::waitForNewLobby()
+    {
+        auto slock = this->rwLock_->shared_lock();
+
+        this->condVar_.wait(slock);
     }
 }

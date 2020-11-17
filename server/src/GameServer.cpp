@@ -7,26 +7,58 @@
 
 #include "GameServer.hpp"
 
+#include "Protocol.hpp"
+#include "handlers/TCP/AskJoinHandler/AskJoinHandler.hpp"
+#include "handlers/TCP/CreateHandler/CreateHandler.hpp"
 #include "lobby/LobbyDispatcher.hpp"
 #include "lobby/LobbyManagerThread.hpp"
 
+#include <algorithm>
 #include <chrono>
 #include <memory>
 #include <thread>
 
 namespace rtype::server {
-    GameServer GameServer::Instance_ = GameServer();
-
-    void GameServer::Run(const rtype::server::Config &conf)
+    GameServer::GameServer(const server::Config &conf)
+        : dispatcher_ { std::make_shared<LobbyDispatcher>(conf.maxGameThreads) }
+        , handlers_ {
+            { BPC::ASK_JOIN, std::make_shared<AskJoinHandler>(*this->dispatcher_) },
+            { BPC::CREATE, std::make_shared<CreateHandler>(*this->dispatcher_) }
+        }
+        , master_(io_context_, conf.port, [&](const BPC::Package &package, Network::TcpSession &client) {
+            this->onPacketReceived_(package, client);
+        })
     {
-        GameServer::Instance_.run_(conf);
-    }
-
-    void GameServer::run_(const rtype::server::Config &conf)
-    {
-        this->dispatcher_ = std::make_shared<LobbyDispatcher>(conf.maxGameThreads);
         for (auto idx = 0u; idx < conf.maxGameThreads; ++idx) {
             this->lobbyManagers_.emplace_back(std::make_unique<LobbyManagerThread>(this->dispatcher_, idx));
+        }
+    }
+
+    void GameServer::Run(const Config &conf)
+    {
+        static GameServer instance(conf);
+
+        instance.run_();
+    }
+
+    void GameServer::run_()
+    {
+        this->io_context_.run();
+    }
+
+    void GameServer::onPacketReceived_(const BPC::Package &package, Network::TcpSession &client)
+    {
+        auto it = std::find_if(
+            this->handlers_.cbegin(),
+            this->handlers_.cend(),
+            [&package](const auto &it) {
+                return package.method == it.first;
+            });
+
+        if (it != this->handlers_.cend()) {
+            (*it->second)[package.type](package, client);
+        } else {
+            AHandlerTCP::unknowPacket(package, client);
         }
     }
 }

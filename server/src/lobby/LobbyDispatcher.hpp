@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Lobby.hpp"
+#include "boost/thread/pthread/condition_variable.hpp"
 #include "lobby/LobbyIDGenerator.hpp"
 #include "utils/lock/SharedLock.hpp"
 
@@ -63,6 +64,7 @@ namespace rtype::server {
         std::list<lobbyUniquePtr_t> lobbies_;
         std::vector<Range> ranges_;
         LobbyIDGenerator idGenerator_;
+        boost::condition_variable_any condVar_;
 
         /**
         * @brief dispatches lobbies into this->ranges_
@@ -81,11 +83,21 @@ namespace rtype::server {
         /**
         * @brief adds a new lobby to dispatch
         */
-        void emplaceBack(lobbyUniquePtr_t &lobby);
+        const Lobby &createLobby(/*const std::unique_ptr<Scene> &scene*/);
 
         /**
         * @brief get the range of lobbies to process depending on a LobbyManagerThread's index
         */
         Range dispatch(unsigned managerIndex);
+
+        /**
+        * @brief get all the lobbies to read their data
+        */
+        Range dispatch();
+
+        /**
+        * @brief blocks the calling thread until a lobby is created
+        */
+        void waitForNewLobby();
     };
 }

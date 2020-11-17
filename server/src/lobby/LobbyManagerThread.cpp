@@ -22,6 +22,7 @@ namespace rtype::server {
         , thread_([this] {
             this->run_();
         })
+
     {
     }
 
@@ -43,8 +44,12 @@ namespace rtype::server {
 
     void LobbyManagerThread::onTick_() const
     {
-        auto range = this->dispatcher_->dispatch(this->index_);
+        if (this->shouldWait_) {
+            this->dispatcher_->waitForNewLobby();
+        }
+        LobbyDispatcher::Range range = this->dispatcher_->dispatch(this->index_);
 
+        this->shouldWait_ = range.start == range.end;
         for (; range.start != range.end; ++range.start) {
             (*range.start)->onTick();
         }
