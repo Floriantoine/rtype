@@ -20,7 +20,7 @@
                 },
                 {
                     "type": "collide_group",
-                    "group": 1
+                    "group": 0
                 },
                 {
                     "type": "position"
@@ -51,13 +51,17 @@
                             },
                             {
                                 "type": "collide_group",
-                                "group": 2
+                                "group": 0
                             },
                             {
                                 "type": "position"
                             },
                             {
                                 "type": "missile_player_script"
+                            },
+                            {
+                                "type": "health",
+                                "health": 1
                             }
                         ]
                     },
@@ -87,6 +91,10 @@
                     "height": 24
                 },
                 {
+                    "type": "collide_group",
+                    "group": 1
+                },
+                {
                     "type": "position"
                 },
                 {
@@ -97,6 +105,10 @@
                 },
                 {
                     "type": "pata_script"
+                },
+                {
+                    "type": "health",
+                    "health": 1
                 }
             ]
         },
@@ -119,6 +131,10 @@
                     "height": 56
                 },
                 {
+                    "type": "collide_group",
+                    "group": 1
+                },
+                {
                     "type": "position",
                     "heigth": 0,
                     "width": 0
@@ -127,6 +143,10 @@
                     "type": "animation",
                     "currentFrame": 0,
                     "totalFrame": 3
+                },
+                {
+                    "type": "health",
+                    "health": 30
                 }
             ]
         }

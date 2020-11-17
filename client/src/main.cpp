@@ -15,6 +15,7 @@
 #include "engine/core/components/SpriteComponent.hpp"
 #include "engine/core/components/CollideBoxComponent.hpp"
 #include "engine/core/components/CollideGroupComponent.hpp"
+#include "engine/core/components/HealthComponent.hpp"
 #include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
 #include "engine/client/behaviours/PlayerBehaviour.hpp"
 #include "engine/client/behaviours/PataBehaviour.hpp"
@@ -25,6 +26,7 @@
 #include "engine/core/systems/BehaviourSystem.hpp"
 #include "engine/core/systems/EventSystem.hpp"
 #include "engine/core/systems/CollisionSystem.hpp"
+#include "engine/core/systems/HealthSystem.hpp"
 
 #include <iostream>
 
@@ -43,6 +45,7 @@ int main()
     JsonLoader::registerComponentFactory("position", PositionComponent::factory);
     JsonLoader::registerComponentFactory("collide_box", CollideBoxComponent::factory);
     JsonLoader::registerComponentFactory("collide_group", CollideGroupComponent::factory);
+    JsonLoader::registerComponentFactory("health", HealthComponent::factory);
     JsonLoader::registerComponentFactory("animation", AnimationComponent::factory);
     JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
     JsonLoader::registerComponentFactory("player_script", PlayerBehaviour::getFactory<PlayerBehaviour>());
@@ -57,6 +60,7 @@ int main()
         scene->createSystem<AnimationSystem>();
         scene->createSystem<SpriteSystem>();
         scene->createSystem<CollisionSystem>();
+        scene->createSystem<HealthSystem>();
 
         Game::getInstance().start();
         return 0;

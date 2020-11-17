@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "engine/core/ecs/component/ComponentManager.hpp"
+#include "../component/ComponentManager.hpp"
 #include "../types.hpp"
 
 namespace rtype {
