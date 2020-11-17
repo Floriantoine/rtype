@@ -21,6 +21,8 @@ set(WARNING_FLAG
 set(SRCS
         main.cpp
         Network/Client.cpp
+        Exception.cpp
+        GameClient.cpp
 )
 
 list(TRANSFORM SRCS PREPEND ${SRC_DIR})

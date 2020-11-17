@@ -5,42 +5,45 @@
 ** Client main file
 */
 
+#include "GameClient.hpp"
 #include "engine/client/Game.hpp"
-#include "scene_loader/SceneLoader.hpp"
-#include "engine/core/ecs/component/Component.hpp"
+#include "engine/client/behaviours/BugBehaviour.hpp"
+#include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
+#include "engine/client/behaviours/PataBehaviour.hpp"
+#include "engine/client/behaviours/PlayerBehaviour.hpp"
+#include "engine/client/systems/AnimationSystem.hpp"
+#include "engine/client/systems/BackgroundSystem.hpp"
+#include "engine/client/systems/SpriteSystem.hpp"
 #include "engine/core/components/AnimationComponent.hpp"
-#include "engine/core/components/MissileComponent.hpp"
-#include "engine/core/components/PositionComponent.hpp"
-#include "engine/core/components/RotationComponent.hpp"
-#include "engine/core/components/SpriteComponent.hpp"
 #include "engine/core/components/BackgroundComponent.hpp"
 #include "engine/core/components/CollideBoxComponent.hpp"
 #include "engine/core/components/CollideGroupComponent.hpp"
 #include "engine/core/components/HealthComponent.hpp"
-#include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
-#include "engine/client/behaviours/PlayerBehaviour.hpp"
-#include "engine/client/behaviours/PataBehaviour.hpp"
-#include "engine/client/behaviours/BugBehaviour.hpp"
+#include "engine/core/components/MissileComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
-#include "engine/client/systems/AnimationSystem.hpp"
-#include "engine/client/systems/SpriteSystem.hpp"
-#include "engine/client/systems/BackgroundSystem.hpp"
+#include "engine/core/components/RotationComponent.hpp"
+#include "engine/core/components/SpriteComponent.hpp"
+#include "engine/core/ecs/component/Component.hpp"
 #include "engine/core/systems/BehaviourSystem.hpp"
-#include "engine/core/systems/EventSystem.hpp"
 #include "engine/core/systems/CollisionSystem.hpp"
+#include "engine/core/systems/EventSystem.hpp"
 #include "engine/core/systems/HealthSystem.hpp"
+#include "scene_loader/SceneLoader.hpp"
 
+#include <cstdlib>
+#include <exception>
 #include <iostream>
+#include <iterator>
+#include <string>
 
 using namespace rtype;
-using namespace rtype::client;
 
-int main()
+void fun()
 {
-    Game::getInstance().setWindowTitle("R-Type");
-    Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
+    // Game::getInstance().setWindowTitle("R-Type");
+    // Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
 
-    JsonLoader::loadDefinitions("./config_file/definitions.json");
+    // JsonLoader::loadDefinitions("./config_file/definitions.json");
 
     JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
     JsonLoader::registerComponentFactory("background", BackgroundComponent::factory);
@@ -58,7 +61,7 @@ int main()
 
     try {
         auto scene = JsonLoader::createScene(Game::getInstance(), "./config_file/scene/stage1.json");
-        
+
         scene->createSystem<EventSystem>();
         scene->createSystem<BehaviourSystem>();
         scene->createSystem<AnimationSystem>();
@@ -72,5 +75,14 @@ int main()
     } catch (const Exception &e) {
         std::cerr << e.what() << std::endl;
         return 1;
+    }
+}
+
+int main(const int argc, const char **argv)
+{
+    try {
+        client::GameClient::Start(argc, argv);
+    } catch (const std::exception &err) {
+        std::cerr << err.what() << std::endl;
     }
 }
