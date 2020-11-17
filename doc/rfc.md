@@ -136,11 +136,10 @@ ___
 ### **GAME_STATE**
 * <ins>STATE</ins>: the state of the game:
     - **0**: game awaiting start
-    - **1**: game starting/resuming
-    - **2**: game paused
-    - **3**: game won (must only be sent by the server)
-    - **4**: game lost (must only be sent by the server)
-    - **5**: game timeout: lobby/player inactive for too long (must only be sent by the server)
+    - **1**: game running
+    - **2**: game won (must only be sent by the server)
+    - **3**: game lost (must only be sent by the server)
+    - **4**: game timeout: lobby/player inactive for too long (must only be sent by the server)
 #### REQUEST:
 #### *From both:*
 > Change the state of the game

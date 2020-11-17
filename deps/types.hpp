@@ -32,8 +32,7 @@ namespace rtype {
 
     enum class GameState : game_state_t {
         AWT_START,
-        START,
-        PAUSE,
+        RUN,
         WIN,
         LOSE,
         TIMEOUT
