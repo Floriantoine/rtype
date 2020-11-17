@@ -57,15 +57,9 @@ namespace rtype {
 
         void onCollide(const CollisionData &collision) override
         {
-            if (collision.second.collideGroup != COLLIDE_GROUP_PLAYERS) {
+            if (collision.other.collideGroup != COLLIDE_GROUP_PLAYERS) {
                 this->takeDamage(1);
             }
-            // static PositionComponent *position = this->getComponent<PositionComponent>();
-            // typeCollideComponent;
-            // enemy
-            // player
-            // wall
-            // missile
         }
     };
 }

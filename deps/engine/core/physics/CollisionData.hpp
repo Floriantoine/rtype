@@ -34,12 +34,12 @@ namespace rtype {
      */
     class CollisionData {
       public:
-        const ColliderData &first;
-        const ColliderData &second;
+        const ColliderData &self;
+        const ColliderData &other;
 
-        CollisionData(const ColliderData &first, const ColliderData &second)
-            : first { first }
-            , second { second }
+        CollisionData(const ColliderData &self, const ColliderData &other)
+            : self { self }
+            , other { other }
         { }
         ~CollisionData() = default;
     };
