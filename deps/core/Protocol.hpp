@@ -16,7 +16,6 @@
 #include <functional>
 #include <string>
 #include <vector>
-#include <iostream>
 #include <cstdint>
 
 #define DEFINITON_BYTE 0
