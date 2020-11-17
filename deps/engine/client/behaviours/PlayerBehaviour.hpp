@@ -180,8 +180,9 @@ namespace rtype {
             std::cout << "clicked (" << event.mouseButton.x << ":" << event.mouseButton.y << ")" << std::endl;
         }
 
-        void onCollide() override
+        void onCollide(const CollisionData &collision) override
         {
+            std::cout << collision.second.collideGroup << std::endl;
         }
     };
 

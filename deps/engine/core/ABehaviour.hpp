@@ -10,6 +10,7 @@
 #include "./ecs/assert.hpp"
 #include "./ecs/entity/Entity.hpp"
 #include "./components/BehaviourComponent.hpp"
+#include "./physics/CollisionData.hpp"
 #include "nlohmann/json.hpp"
 
 #include <memory>
@@ -42,7 +43,7 @@ namespace rtype {
         /**
          * Method called when the associated entity collides with another entity
          */
-        virtual void onCollide() {};
+        virtual void onCollide(const CollisionData &collision) {};
 
         /**
          * Method called when a keyboard key is pressed
