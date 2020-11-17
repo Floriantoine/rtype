@@ -8,9 +8,9 @@
 #pragma once
 
 #include "Server.hpp"
-#include "lobby/LobbyDispatcher.hpp"
 
 namespace rtype::server {
+    class GameServer;
 
     class AHandlerTCP {
       private:
@@ -28,12 +28,12 @@ namespace rtype::server {
         };
 
       protected:
-        LobbyDispatcher &dispatcher_;
+        GameServer &owner_;
 
-        AHandlerTCP(LobbyDispatcher &dispatcher);
+        AHandlerTCP(GameServer &owner);
 
-        virtual void request(const BPC::Package &package, Network::TcpSession &client) = 0;
-        virtual void response(const BPC::Package &package, Network::TcpSession &client) = 0;
+        virtual void receiveRequest(const BPC::Package &package, Network::TcpSession &client) = 0;
+        virtual void receiveResponse(const BPC::Package &package, Network::TcpSession &client) = 0;
         void other(const BPC::Package &package, Network::TcpSession &client);
 
       public:

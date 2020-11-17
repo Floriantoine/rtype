@@ -15,7 +15,6 @@ namespace rtype::server {
     */
     class Exception : public rtype::Exception {
       public:
-        // TODO: change to string
         Exception(const std::string &msg);
         Exception(std::string &&msg);
         virtual ~Exception() override = default;

@@ -6,18 +6,26 @@
 */
 
 #include "DestroyHandler.hpp"
+#include "Protocol.hpp"
 
 namespace rtype::server {
-    DestroyHandler::DestroyHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    DestroyHandler::DestroyHandler(Lobby &owner)
+        : AHandlerUDP(owner)
     {
     }
 
-    void DestroyHandler::response(const Network::UdpPackage &package)
+    void DestroyHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveRequest(package);
     }
 
-    void DestroyHandler::request(const Network::UdpPackage &package)
+    void DestroyHandler::receiveResponse(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveResponse(package);
+    }
+    
+    BPC::Method DestroyHandler::getMethod() const
+    {
+        return BPC::DESTROY;
     }
 }

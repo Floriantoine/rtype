@@ -7,17 +7,26 @@
 
 #include "SpawnHandler.hpp"
 
+#include "Protocol.hpp"
+
 namespace rtype::server {
-    SpawnHandler::SpawnHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    SpawnHandler::SpawnHandler(Lobby &owner)
+        : AHandlerUDP(owner)
     {
     }
 
-    void SpawnHandler::response(const Network::UdpPackage &package)
+    void SpawnHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveRequest(package);
     }
 
-    void SpawnHandler::request(const Network::UdpPackage &package)
+    void SpawnHandler::receiveResponse(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveResponse(package);
+    }
+
+    BPC::Method SpawnHandler::getMethod() const
+    {
+        return BPC::SPAWN;
     }
 }

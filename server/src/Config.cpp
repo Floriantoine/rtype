@@ -11,6 +11,8 @@ namespace rtype::server {
     void from_json(const nlohmann::json &json, Config &conf)
     {
         json.at("port").get_to(conf.port);
+        json.at("definitionsPath").get_to(conf.definitionsPath);
+        json.at("scenesDir").get_to(conf.scenesDir);
         auto maxGameThreads = json.find("maxGameThreads");
         if (maxGameThreads == json.end()) {
             conf.maxGameThreads = 0;

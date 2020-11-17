@@ -7,17 +7,26 @@
 
 #include "JoinHandler.hpp"
 
+#include "Protocol.hpp"
+
 namespace rtype::server {
-    JoinHandler::JoinHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    JoinHandler::JoinHandler(Lobby &owner)
+        : AHandlerUDP(owner)
     {
     }
 
-    void JoinHandler::response(const Network::UdpPackage &package)
+    void JoinHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveRequest(package);
     }
 
-    void JoinHandler::request(const Network::UdpPackage &package)
+    void JoinHandler::receiveResponse(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveResponse(package);
+    }
+
+    BPC::Method JoinHandler::getMethod() const
+    {
+        return BPC::JOIN;
     }
 }

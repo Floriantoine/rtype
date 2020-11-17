@@ -6,18 +6,27 @@
 */
 
 #include "ChargeHandler.hpp"
+#include "Protocol.hpp"
+#include "lobby/Lobby.hpp"
 
 namespace rtype::server {
-    ChargeHandler::ChargeHandler(std::vector<Player> &players) 
-        : AHandlerUDP(players)
+    ChargeHandler::ChargeHandler(Lobby &owner)
+        : AHandlerUDP(owner)
     {
     }
 
-    void ChargeHandler::response(const Network::UdpPackage &package)
+    void ChargeHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveRequest(package);
     }
 
-    void ChargeHandler::request(const Network::UdpPackage &package)
+    void ChargeHandler::receiveResponse(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveResponse(package);
+    }
+    
+    BPC::Method ChargeHandler::getMethod() const
+    {
+        return BPC::CHARGE;
     }
 }

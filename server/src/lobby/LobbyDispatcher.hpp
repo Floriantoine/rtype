@@ -9,6 +9,7 @@
 
 #include "Lobby.hpp"
 #include "boost/thread/pthread/condition_variable.hpp"
+#include "engine/core/scene/SceneManager.hpp"
 #include "lobby/LobbyIDGenerator.hpp"
 #include "utils/lock/SharedLock.hpp"
 
@@ -65,6 +66,7 @@ namespace rtype::server {
         std::vector<Range> ranges_;
         LobbyIDGenerator idGenerator_;
         boost::condition_variable_any condVar_;
+        bool running_ { true };
 
         /**
         * @brief dispatches lobbies into this->ranges_
@@ -83,7 +85,7 @@ namespace rtype::server {
         /**
         * @brief adds a new lobby to dispatch
         */
-        const Lobby &createLobby(/*const std::unique_ptr<Scene> &scene*/);
+        const Lobby &createLobby(std::unique_ptr<SceneManager> &&sceneManager);
 
         /**
         * @brief get the range of lobbies to process depending on a LobbyManagerThread's index
@@ -99,5 +101,9 @@ namespace rtype::server {
         * @brief blocks the calling thread until a lobby is created
         */
         void waitForNewLobby();
+
+        void notifyAll();
+
+        void stop();
     };
 }

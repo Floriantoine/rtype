@@ -7,17 +7,26 @@
 
 #include "HitHandler.hpp"
 
+#include "Protocol.hpp"
+
 namespace rtype::server {
-    HitHandler::HitHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    HitHandler::HitHandler(Lobby &owner)
+        : AHandlerUDP(owner)
     {
     }
 
-    void HitHandler::response(const Network::UdpPackage &package)
+    void HitHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveRequest(package);
     }
 
-    void HitHandler::request(const Network::UdpPackage &package)
+    void HitHandler::receiveResponse(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveResponse(package);
+    }
+
+    BPC::Method HitHandler::getMethod() const
+    {
+        return BPC::HIT;
     }
 }

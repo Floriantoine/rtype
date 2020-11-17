@@ -16,25 +16,28 @@
 #include <utility>
 
 namespace rtype::server {
-    LobbyManagerThread::LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher, unsigned index)
+    unsigned LobbyManagerThread::Index_ = 0;
+
+    LobbyManagerThread::LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher)
         : dispatcher_ { dispatcher }
-        , index_ { index }
-        , thread_([this] {
+        , index_(Index_)
+        , thread_([&] {
             this->run_();
         })
-
     {
+        ++this->Index_;
     }
 
     LobbyManagerThread::~LobbyManagerThread()
     {
-        isRunning_ = false;
+        this->dispatcher_->stop();
+        this->isRunning_ = false;
+        this->dispatcher_->notifyAll();
         this->thread_.join();
     }
 
     void LobbyManagerThread::run_()
     {
-        this->isRunning_ = true;
         while (this->isRunning_) {
             auto expectedEnd = Clock::Now() + TICK_TIME;
             this->onTick_();

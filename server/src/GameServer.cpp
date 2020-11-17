@@ -8,10 +8,9 @@
 #include "GameServer.hpp"
 
 #include "Protocol.hpp"
-#include "handlers/TCP/AskJoinHandler/AskJoinHandler.hpp"
-#include "handlers/TCP/CreateHandler/CreateHandler.hpp"
 #include "lobby/LobbyDispatcher.hpp"
 #include "lobby/LobbyManagerThread.hpp"
+#include "scene_loader/SceneLoader.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -20,17 +19,19 @@
 
 namespace rtype::server {
     GameServer::GameServer(const server::Config &conf)
-        : dispatcher_ { std::make_shared<LobbyDispatcher>(conf.maxGameThreads) }
+        : config_(conf)
+        , dispatcher_ { std::make_shared<LobbyDispatcher>(conf.maxGameThreads) }
         , handlers_ {
-            { BPC::ASK_JOIN, std::make_shared<AskJoinHandler>(*this->dispatcher_) },
-            { BPC::CREATE, std::make_shared<CreateHandler>(*this->dispatcher_) }
+            { BPC::ASK_JOIN, std::make_shared<AskJoinHandler>(*this) },
+            { BPC::CREATE, std::make_shared<CreateHandler>(*this) }
         }
         , master_(io_context_, conf.port, [&](const BPC::Package &package, Network::TcpSession &client) {
             this->onPacketReceived_(package, client);
         })
     {
+        JsonLoader::loadDefinitions(this->config_.definitionsPath);
         for (auto idx = 0u; idx < conf.maxGameThreads; ++idx) {
-            this->lobbyManagers_.emplace_back(std::make_unique<LobbyManagerThread>(this->dispatcher_, idx));
+            this->lobbyManagers_.emplace_back(std::make_unique<LobbyManagerThread>(this->dispatcher_));
         }
     }
 

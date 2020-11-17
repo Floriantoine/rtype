@@ -17,18 +17,19 @@ namespace rtype::server {
     class GameStateHandler : public AHandlerUDP {
       public:
         struct ClientRequestBody {
-            game_state_t state;
+            GameState state;
         };
 
         struct ServerRequestBody {
-            game_state_t state;
+            GameState state;
         };
 
-        GameStateHandler(std::vector<Player> &players);
+        GameStateHandler(Lobby &owner);
         ~GameStateHandler() override = default;
 
       protected:
-        void response(const Network::UdpPackage &package) override;
-        void request(const Network::UdpPackage &package) override;
+        void receiveResponse(const Network::UdpPackage &package) override;
+        void receiveRequest(const Network::UdpPackage &package) override;
+        BPC::Method getMethod() const override;
     };
 }

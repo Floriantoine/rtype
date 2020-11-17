@@ -24,11 +24,12 @@ namespace rtype::server {
             entity_id_t playerID;
         };
 
-        DropHandler(std::vector<Player> &players);
+        DropHandler(Lobby &owner);
         ~DropHandler() override = default;
 
       protected:
-        void response(const Network::UdpPackage &package) override;
-        void request(const Network::UdpPackage &package) override;
+        void receiveResponse(const Network::UdpPackage &package) override;
+        void receiveRequest(const Network::UdpPackage &package) override;
+        BPC::Method getMethod() const override;
     };
 }

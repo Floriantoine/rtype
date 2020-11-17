@@ -6,18 +6,26 @@
 */
 
 #include "ShootHandler.hpp"
+#include "Protocol.hpp"
 
 namespace rtype::server {
-    ShootHandler::ShootHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    ShootHandler::ShootHandler(Lobby &owner)
+        : AHandlerUDP(owner)
     {
     }
 
-    void ShootHandler::response(const Network::UdpPackage &package)
+    void ShootHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveRequest(package);
     }
 
-    void ShootHandler::request(const Network::UdpPackage &package)
+    void ShootHandler::receiveResponse(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveResponse(package);
+    }
+    
+    BPC::Method ShootHandler::getMethod() const
+    {
+        return BPC::SHOOT;
     }
 }

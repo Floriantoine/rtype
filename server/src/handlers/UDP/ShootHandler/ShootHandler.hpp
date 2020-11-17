@@ -20,11 +20,12 @@ namespace rtype::server {
             entity_id_t playerID;
         };
 
-        ShootHandler(std::vector<Player> &players);
+        ShootHandler(Lobby &owner);
         ~ShootHandler() override = default;
 
       protected:
-        void response(const Network::UdpPackage &package) override;
-        void request(const Network::UdpPackage &package) override;
+        void receiveResponse(const Network::UdpPackage &package) override;
+        void receiveRequest(const Network::UdpPackage &package) override;
+        BPC::Method getMethod() const override;
     };
 }

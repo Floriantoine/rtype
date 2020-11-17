@@ -6,18 +6,26 @@
 */
 
 #include "GameStateHandler.hpp"
+#include "Protocol.hpp"
 
 namespace rtype::server {
-    GameStateHandler::GameStateHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    GameStateHandler::GameStateHandler(Lobby &owner)
+        : AHandlerUDP(owner)
     {
     }
 
-    void GameStateHandler::response(const Network::UdpPackage &package)
+    void GameStateHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveRequest(package);
     }
 
-    void GameStateHandler::request(const Network::UdpPackage &package)
+    void GameStateHandler::receiveResponse(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveResponse(package);
+    }
+    
+    BPC::Method GameStateHandler::getMethod() const
+    {
+        return BPC::GAME_STATE;
     }
 }

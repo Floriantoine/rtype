@@ -10,11 +10,12 @@
 #include "boost/asio/ip/udp.hpp"
 #include "types.hpp"
 #include "core/Protocol.hpp"
+#include "utils/Clock.hpp"
 
 namespace rtype::server {
     struct Player {
         entity_id_t id;
         boost::asio::ip::udp::endpoint endpoint;
-        long lastReception;
+        Clock activeness;
     };
 }

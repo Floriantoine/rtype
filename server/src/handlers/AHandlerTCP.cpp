@@ -6,6 +6,7 @@
 */
 
 #include "AHandlerTCP.hpp"
+#include "GameServer.hpp"
 
 #include <iostream>
 #include <string>
@@ -22,8 +23,8 @@ namespace rtype::server {
         (this->handler_.*this->pointer_)(package, client);
     }
 
-    AHandlerTCP::AHandlerTCP(LobbyDispatcher &dispatcher)
-        : dispatcher_ { dispatcher }
+    AHandlerTCP::AHandlerTCP(GameServer &owner)
+        : owner_ { owner }
     { }
 
     void AHandlerTCP::other(const BPC::Package &package, Network::TcpSession &client)
@@ -42,9 +43,9 @@ namespace rtype::server {
     AHandlerTCP::HandlerPtrWrapper AHandlerTCP::operator[](BPC::BaseType type)
     {
         if (type == BPC::BaseType::REQUEST) {
-            return AHandlerTCP::HandlerPtrWrapper(*this, &AHandlerTCP::request);
+            return AHandlerTCP::HandlerPtrWrapper(*this, &AHandlerTCP::receiveRequest);
         } else if (type == BPC::BaseType::RESPONSE) {
-            return AHandlerTCP::HandlerPtrWrapper(*this, &AHandlerTCP::response);
+            return AHandlerTCP::HandlerPtrWrapper(*this, &AHandlerTCP::receiveResponse);
         }
         return AHandlerTCP::HandlerPtrWrapper(*this, &AHandlerTCP::other);
     }

@@ -22,11 +22,12 @@ namespace rtype::server {
             side_t side;
         };
 
-        GrabHandler(std::vector<Player> &players);
+        GrabHandler(Lobby &owner);
         ~GrabHandler() override = default;
 
       protected:
-        void response(const Network::UdpPackage &package) override;
-        void request(const Network::UdpPackage &package) override;
+        void receiveResponse(const Network::UdpPackage &package) override;
+        void receiveRequest(const Network::UdpPackage &package) override;
+        BPC::Method getMethod() const override;
     };
 }

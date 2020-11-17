@@ -6,18 +6,26 @@
 */
 
 #include "MoveHandler.hpp"
+#include "Protocol.hpp"
 
 namespace rtype::server {
-    MoveHandler::MoveHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    MoveHandler::MoveHandler(Lobby &owner)
+        : AHandlerUDP(owner)
     {
     }
 
-    void MoveHandler::response(const Network::UdpPackage &package)
+    void MoveHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveRequest(package);
     }
 
-    void MoveHandler::request(const Network::UdpPackage &package)
+    void MoveHandler::receiveResponse(const Network::UdpPackage &package)
     {
+        AHandlerUDP::receiveResponse(package);
+    }
+    
+    BPC::Method MoveHandler::getMethod() const
+    {
+        return BPC::MOVE;
     }
 }
