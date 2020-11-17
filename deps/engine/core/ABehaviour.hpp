@@ -8,13 +8,14 @@
 #pragma once
 
 #include "./components/BehaviourComponent.hpp"
+#include "./components/HealthComponent.hpp"
 #include "./ecs/assert.hpp"
 #include "./ecs/entity/Entity.hpp"
 #include "./physics/CollisionData.hpp"
 #include "nlohmann/json.hpp"
 
-#include <memory>
 #include <iostream>
+#include <memory>
 
 namespace sf {
     class Event;
@@ -44,7 +45,7 @@ namespace rtype {
         /**
          * Method called when the behaviour's entity is destroyed
          */
-        virtual void onDestroy() { };
+        virtual void onDestroy() {};
 
         /**
          * Method called when the associated entity collides with another entity
@@ -137,5 +138,4 @@ namespace rtype {
             };
         }
     };
-
 }
