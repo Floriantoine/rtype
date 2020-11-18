@@ -30,8 +30,6 @@ namespace rtype::server {
         friend AskJoinHandler;
 
       private:
-        static GameServer Instance_;
-
         boost::asio::io_context io_context_;
         std::vector<std::unique_ptr<LobbyManagerThread>> lobbyManagers_;
         const Config &config_;
