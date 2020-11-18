@@ -72,12 +72,10 @@ namespace rtype::server {
         static constexpr long LOBBY_TIMEOUT_MS = std::chrono::milliseconds(30000).count();
         static constexpr unsigned char MAX_PLAYERS = 4;
 
+
         State state_;
-        std::vector<Player> players_;
         bool awaitingResponse_ { false };
-        std::shared_ptr<Scene> scene_;
         Network::UdpServer udpServer_;
-        std::unordered_map<BPC::Method, std::shared_ptr<AHandlerUDP>> handlers_;
 
         void onPacketReceived_(const Network::UdpPackage &package);
         void updateState_();
@@ -98,6 +96,10 @@ namespace rtype::server {
       public:
         const std::string id;
         const std::string map;
+
+        std::vector<Player> players;
+        std::shared_ptr<Scene> scene;
+        std::unordered_map<BPC::Method, std::shared_ptr<AHandlerUDP>> handlers;
 
         Lobby(const std::string &id, std::shared_ptr<Scene> &&scene, const std::string &mapName);
         ~Lobby() = default;

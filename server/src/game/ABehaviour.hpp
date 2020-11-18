@@ -8,6 +8,9 @@
 #pragma once
 
 #include "engine/core/ABehaviourBase.hpp"
+#include "lobby/Lobby.hpp"
+
+#include <memory>
 
 namespace rtype::server {
 
@@ -19,6 +22,10 @@ namespace rtype::server {
      * systems
      */
     class ABehaviour : public ABehaviourBase {
-    };
+      protected:
+        std::shared_ptr<Lobby> lobby_;
 
+        public:
+          void setLobby(const std::shared_ptr<Lobby> &lobby);
+    };
 }

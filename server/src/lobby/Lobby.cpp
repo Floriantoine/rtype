@@ -58,11 +58,11 @@ namespace rtype::server {
     }
 
     Lobby::Lobby(const std::string &id, std::shared_ptr<Scene> &&scene, const std::string &mapName)
-        : scene_ { std::move(scene) }
+        : scene { std::move(scene) }
         , udpServer_([&](const Network::UdpPackage &package) {
             this->onPacketReceived_(package);
         })
-        , handlers_ {
+        , handlers {
             { BPC::GAME_STATE, std::make_shared<GameStateHandler>(*this) },
             { BPC::MOVE, std::make_shared<MoveHandler>(*this) },
             { BPC::SPAWN, std::make_shared<SpawnHandler>(*this) },
@@ -87,13 +87,13 @@ namespace rtype::server {
     {
         this->udpServer_.poll();
         this->awaitingResponse_ = false;
-        for (const auto &it : this->handlers_) {
+        for (const auto &it : this->handlers) {
             this->awaitingResponse_ = it.second->update() || this->awaitingResponse_;
         }
         if (*this->state_ == GameState::RUN) {
             auto elapsed = this->state_.elapsed();
             this->state_.resetClock();
-            this->scene_->update(elapsed);
+            this->scene->update(elapsed);
         }
         this->updateState_();
     }
@@ -107,7 +107,7 @@ namespace rtype::server {
 
     bool Lobby::isFull() const noexcept
     {
-        return this->players_.size() >= MAX_PLAYERS;
+        return this->players.size() >= MAX_PLAYERS;
     }
 
     unsigned short Lobby::getPort() const
@@ -118,13 +118,13 @@ namespace rtype::server {
     void Lobby::onPacketReceived_(const Network::UdpPackage &package)
     {
         auto it = std::find_if(
-            this->handlers_.cbegin(),
-            this->handlers_.cend(),
+            this->handlers.cbegin(),
+            this->handlers.cend(),
             [&package](const auto &it) {
                 return package.method == it.first;
             });
 
-        if (it != this->handlers_.cend()) {
+        if (it != this->handlers.cend()) {
             it->second->receive(package);
         } else {
             AHandlerUDP::unknowPacket(package);
@@ -139,17 +139,17 @@ namespace rtype::server {
 
     void Lobby::updatePlayersState_()
     {
-        auto player = this->players_.begin();
+        auto player = this->players.begin();
         DestroyHandler::ServerRequestBody body {};
-        auto &handler = this->handlers_[BPC::LEAVE];
+        auto &handler = this->handlers[BPC::LEAVE];
 
-        for (; player != this->players_.end(); ++player) {
+        for (; player != this->players.end(); ++player) {
             if (player->activeness.getElapsedMillisecond() < PLAYER_TIMEOUT_MS) {
                 continue;
             }
             body.entityID = player->id;
-            player = this->players_.erase(player);
-            for (const auto &it : this->players_) {
+            player = this->players.erase(player);
+            for (const auto &it : this->players) {
                 handler->sendRequest(it.endpoint, &body);
             }
         }
@@ -163,31 +163,31 @@ namespace rtype::server {
             if (this->state_.elapsed() >= LOBBY_TIMEOUT_MS) {
                 this->state_ = GameState::TIMEOUT;
                 body.state = GameState::TIMEOUT;
-                auto handler = this->handlers_[BPC::GAME_STATE];
-                for (const auto &it : this->players_) {
+                auto handler = this->handlers[BPC::GAME_STATE];
+                for (const auto &it : this->players) {
                     handler->sendRequest(it.endpoint, &body);
                 }
             }
-        } else if (*this->state_ != GameState::AWT_START && this->players_.empty()) {
+        } else if (*this->state_ != GameState::AWT_START && this->players.empty()) {
             this->state_ = GameState::TIMEOUT;
         }
     }
 
     void Lobby::removePlayer_(const udp::endpoint &endpoint)
     {
-        auto it = std::find_if(this->players_.begin(), this->players_.end(),
+        auto it = std::find_if(this->players.begin(), this->players.end(),
             [&endpoint](const auto &it) {
                 return it.endpoint == endpoint;
             });
         auto *health = this->getEntityComponent_<HealthComponent>(it->id);
         health->health = 0;
-        if (it != this->players_.end()) {
-            this->players_.erase(it);
+        if (it != this->players.end()) {
+            this->players.erase(it);
         }
     }
 
     std::shared_ptr<Entity> Lobby::getEntity_(id_t id)
     {
-        return this->scene_->getEntityManager().getEntity(id);
+        return this->scene->getEntityManager().getEntity(id);
     }
 }

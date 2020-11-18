@@ -39,7 +39,7 @@ namespace rtype::server {
                 break;
         }
         this->sendResponse(package);
-        for (const auto &it : this->owner_.players_) {
+        for (const auto &it : this->owner_.players) {
             if (it.endpoint == package.endpoint)
                 continue;
             this->sendRequest(it.endpoint, &requestBody);

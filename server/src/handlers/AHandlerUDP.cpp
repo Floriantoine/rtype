@@ -21,11 +21,11 @@ namespace rtype::server {
 
     bool AHandlerUDP::resend_(Network::UdpPackage &package)
     {
-        const auto &player = std::find_if(this->owner_.players_.begin(), this->owner_.players_.end(),
+        const auto &player = std::find_if(this->owner_.players.begin(), this->owner_.players.end(),
             [&package](const auto &it) {
                 return it.endpoint == package.endpoint;
             });
-        if (player == this->owner_.players_.end())
+        if (player == this->owner_.players.end())
             return false;
         package.timestamp = Clock::Now().time_since_epoch().count();
         this->owner_.udpServer_.write(package);
@@ -34,11 +34,11 @@ namespace rtype::server {
 
     void AHandlerUDP::refreshPlayerActiveness_(const Network::UdpPackage &package)
     {
-        auto player = std::find_if(this->owner_.players_.begin(), this->owner_.players_.end(),
+        auto player = std::find_if(this->owner_.players.begin(), this->owner_.players.end(),
             [&package](const auto &it) {
                 return it.endpoint == package.endpoint;
             });
-        if (player != this->owner_.players_.end()) {
+        if (player != this->owner_.players.end()) {
             player->activeness.reset();
         }
     }

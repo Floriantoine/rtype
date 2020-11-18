@@ -59,8 +59,8 @@ namespace rtype::server {
             responseBody[idx] = it;
             ++idx;
         }
-        auto &handler = this->owner_.handlers_[BPC::SPAWN];
-        for (const auto &it : this->owner_.players_) {
+        auto &handler = this->owner_.handlers[BPC::SPAWN];
+        for (const auto &it : this->owner_.players) {
             if (it.endpoint == package.endpoint)
                 continue;
             handler->sendRequest(it.endpoint, &responseBody);
