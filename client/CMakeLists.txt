@@ -23,6 +23,17 @@ set(SRCS
         Network/Client.cpp
         Exception.cpp
         GameClient.cpp
+        game/behaviours/BugBehaviour.cpp
+        game/behaviours/CameraBehaviour.cpp
+        game/behaviours/MissilePlayerBehaviour.cpp
+        game/behaviours/PataBehaviour.cpp
+        game/behaviours/PlayerBehaviour.cpp
+        game/behaviours/ScantBehaviour.cpp
+        game/Game.cpp
+        game/systems/EventSystem.cpp
+        game/systems/AnimationSystem.cpp
+        game/systems/BackgroundSystem.cpp
+        game/systems/SpriteSystem.cpp
 )
 
 list(TRANSFORM SRCS PREPEND ${SRC_DIR})

@@ -8,14 +8,15 @@
 #pragma once
 
 #include "../ecs/component/Component.hpp"
+#include "core/ecs/assert.hpp"
+
 #include <memory>
 
 namespace rtype {
 
     class BehaviourComponent;
 
-    class IBehaviour
-    {
+    class IBehaviour {
         friend class BehaviourComponent;
 
       protected:
@@ -40,7 +41,7 @@ namespace rtype {
       public:
         BehaviourComponent() = default;
         BehaviourComponent(std::shared_ptr<IBehaviour> &&behaviour)
-            : behaviour_ ( std::move(behaviour) )
+            : behaviour_(std::move(behaviour))
         {
             this->behaviour_->holder_ = this;
         }
@@ -58,12 +59,11 @@ namespace rtype {
             return this->behaviour_;
         }
 
-        template<class T>
+        template <class T>
         std::shared_ptr<T> getBehaviour() const
         {
             STATIC_ASSERT_IS_BASE_OF(IBehaviour, T);
             return std::dynamic_pointer_cast<T>(this->behaviour_);
         }
     };
-
 }

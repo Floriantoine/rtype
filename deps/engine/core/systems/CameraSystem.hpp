@@ -12,6 +12,8 @@
 #include "../components/SpriteComponent.hpp"
 #include "../ecs/system/ASystem.hpp"
 #include "../physics/CollisionChecker.hpp"
+#include "core/ABehaviour.hpp"
+#include "core/components/BehaviourComponent.hpp"
 
 namespace rtype {
 

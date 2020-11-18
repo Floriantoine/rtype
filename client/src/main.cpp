@@ -6,15 +6,8 @@
 */
 
 #include "GameClient.hpp"
-#include "engine/client/Game.hpp"
-#include "engine/client/behaviours/BugBehaviour.hpp"
-#include "engine/client/behaviours/CameraBehaviour.hpp"
-#include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
-#include "engine/client/behaviours/PataBehaviour.hpp"
-#include "engine/client/behaviours/PlayerBehaviour.hpp"
-#include "engine/client/systems/AnimationSystem.hpp"
-#include "engine/client/systems/BackgroundSystem.hpp"
-#include "engine/client/systems/SpriteSystem.hpp"
+#include "core/components/MissileComponent.hpp"
+#include "core/components/SpriteComponent.hpp"
 #include "engine/core/components/AnimationComponent.hpp"
 #include "engine/core/components/BackgroundComponent.hpp"
 #include "engine/core/components/CameraComponent.hpp"
@@ -28,8 +21,17 @@
 #include "engine/core/systems/BehaviourSystem.hpp"
 #include "engine/core/systems/CameraSystem.hpp"
 #include "engine/core/systems/CollisionSystem.hpp"
-#include "engine/core/systems/EventSystem.hpp"
 #include "engine/core/systems/HealthSystem.hpp"
+#include "game/Game.hpp"
+#include "game/behaviours/BugBehaviour.hpp"
+#include "game/behaviours/CameraBehaviour.hpp"
+#include "game/behaviours/MissilePlayerBehaviour.hpp"
+#include "game/behaviours/PataBehaviour.hpp"
+#include "game/behaviours/PlayerBehaviour.hpp"
+#include "game/systems/AnimationSystem.hpp"
+#include "game/systems/EventSystem.hpp"
+#include "game/systems/SpriteSystem.hpp"
+#include "game/systems/BackgroundSystem.hpp"
 #include "scene_loader/SceneLoader.hpp"
 
 #include <cstdlib>
@@ -39,11 +41,12 @@
 #include <string>
 
 using namespace rtype;
+using namespace rtype::client;
 
 int init()
 {
-    client::Game::getInstance().setWindowTitle("R-Type");
-    client::Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
+    Game::getInstance().setWindowTitle("R-Type");
+    Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
 
     JsonLoader::loadDefinitions("./config_file/definitions.json");
 
@@ -64,18 +67,18 @@ int init()
     JsonLoader::registerComponentFactory("camera_behaviour", CameraBehaviour::getFactory<CameraBehaviour>());
 
     try {
-        auto scene = JsonLoader::createScene(client::Game::getInstance(), "./config_file/scene/stage1.json");
+        auto scene = JsonLoader::createScene(Game::getInstance(), "./config_file/scene/stage1.json");
 
-        scene->createSystem<CameraSystem>();
+        scene->createSystem<rtype::CameraSystem>();
         scene->createSystem<EventSystem>();
-        scene->createSystem<BehaviourSystem>();
-        scene->createSystem<client::AnimationSystem>();
-        scene->createSystem<client::SpriteSystem>();
-        scene->createSystem<client::BackgroundSystem>();
+        scene->createSystem<rtype::BehaviourSystem>();
+        scene->createSystem<AnimationSystem>();
+        scene->createSystem<SpriteSystem>();
+        scene->createSystem<BackgroundSystem>();
         scene->createSystem<CollisionSystem>();
         scene->createSystem<HealthSystem>();
 
-        client::Game::getInstance().start();
+        Game::getInstance().start();
         return 0;
     } catch (const Exception &e) {
         std::cerr << e.what() << std::endl;
@@ -85,8 +88,10 @@ int init()
 
 int main(const int argc, const char **argv)
 {
+    return init();
+
     try {
-        client::GameClient::Start(argc, argv);
+        GameClient::Start(argc, argv);
         return 0;
     } catch (const std::exception &err) {
         std::cerr << err.what() << std::endl;
