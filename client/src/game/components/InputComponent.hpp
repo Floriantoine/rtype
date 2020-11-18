@@ -23,10 +23,11 @@ namespace rtype::client {
         int size { 30 };
         Vector2<float> offset;
         sf::Text text;
+        int max;
 
       public:
         InputComponent() = default;
-        InputComponent(std::string string, std::shared_ptr<sf::Font> font, int size, Vector2<float> offset);
+        InputComponent(std::string string, std::shared_ptr<sf::Font> font, int size, Vector2<float> offset, int max);
 
         static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body);
     };

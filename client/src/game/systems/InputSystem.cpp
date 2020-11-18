@@ -20,6 +20,7 @@ namespace rtype::client {
             float realX = 0;
             float realY = 0;
 
+            text->text.setString(text->string);
             if (position != nullptr) {
                 realX = position->x + text->offset.x;
                 realY = position->y + text->offset.y;

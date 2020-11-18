@@ -29,6 +29,7 @@
 #include "game/behaviours/PataBehaviour.hpp"
 #include "game/behaviours/PlayerBehaviour.hpp"
 #include "game/behaviours/ButtonBehaviour.hpp"
+#include "game/behaviours/TextInputBehaviour.hpp"
 
 #include "game/components/AnimationComponent.hpp"
 #include "game/components/ScaleComponent.hpp"
@@ -72,6 +73,7 @@ int init(int argc, const char **argv)
     JsonLoader::registerComponentFactory("bug_behaviour", ABehaviourBase::getFactory<client::BugBehaviour>());
     JsonLoader::registerComponentFactory("camera_behaviour", ABehaviourBase::getFactory<client::CameraBehaviour>());
     JsonLoader::registerComponentFactory("button_behaviour", ABehaviourBase::getFactory<client::ButtonBehaviour>());
+    JsonLoader::registerComponentFactory("text_input_behaviour", ABehaviourBase::getFactory<client::TextInputBehaviour>());
 
     JsonLoader::registerComponentFactory("camera", CameraComponent::factory);
     JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);

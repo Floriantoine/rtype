@@ -3,6 +3,9 @@
     "state": "RUNNING",
     "entities": [
         {
+            "base": "Camera"
+        },
+        {
             "base": "Logo"
         },
         {
