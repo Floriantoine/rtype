@@ -52,7 +52,7 @@ namespace rtype::client::Network {
 
     class UdpClient : public std::enable_shared_from_this<UdpClient> {
       public:
-        using msg_handler = std::function<void(const BPC::Package &, const UdpClient &)>;
+        using msg_handler = std::function<void(const BPC::Package &)>;
 
         UdpClient(const msg_handler &onMessage);
         ~UdpClient() noexcept = default;

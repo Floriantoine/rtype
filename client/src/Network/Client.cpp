@@ -82,7 +82,7 @@ namespace rtype::client::Network {
                     pkg.body.reserve(pkg.bodySize);
                     nbytes = self->socket_->receive_from(boost::asio::buffer(pkg.body), self->serv_endpoints_, asio::socket_base::message_flags(), err);
                     if (nbytes == pkg.bodySize && !err) {
-                        self->on_message_(pkg, *self);
+                        self->on_message_(pkg);
                         self->streambuf_.resize(HEADER_SIZE, 0);
                         self->start();
                     }

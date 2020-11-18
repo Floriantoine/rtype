@@ -27,6 +27,7 @@ namespace rtype::client {
         GameClient(const int argc, const char **argv);
         port_t connectToLobby_(const char *ip, port_t port, const BPC::Package &package);
         BPC::Package getInitialPackage_(const int argc, const char **argv);
+        void onPacketReceived_(const BPC::Package &pkg);
 
       public:
         Clock activeness;

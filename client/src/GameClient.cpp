@@ -31,8 +31,8 @@
 
 namespace rtype::client {
     GameClient::GameClient(const int argc, const char **argv)
-        : conn_(std::make_shared<Network::UdpClient>([](const BPC::Package &pkg, const Network::UdpClient &client) {
-
+        : conn_(std::make_shared<Network::UdpClient>([this](const BPC::Package &pkg) {
+            this->onPacketReceived_(pkg);
         }))
         , handlers_ {
             { BPC::GAME_STATE, std::make_shared<GameStateHandler>(*this) },
@@ -93,6 +93,22 @@ namespace rtype::client {
             package.method = BPC::ASK_JOIN;
         }
         return package;
+    }
+
+    void GameClient::onPacketReceived_(const BPC::Package &pkg) 
+    {
+        auto it = std::find_if(
+            this->handlers_.cbegin(),
+            this->handlers_.cend(),
+            [&pkg](const auto &it) {
+                return pkg.method == it.first;
+            });
+
+        if (it != this->handlers_.cend()) {
+            it->second->receive(pkg);
+        } else {
+            AHandlerUDP::unknowPacket(pkg);
+        }
     }
 
     void GameClient::Start(const int argc, const char **argv)
