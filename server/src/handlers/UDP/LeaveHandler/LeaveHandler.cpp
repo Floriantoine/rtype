@@ -12,16 +12,17 @@
 namespace rtype::server {
     LeaveHandler::LeaveHandler(Lobby &owner)
         : AHandlerUDP(owner)
-    {
-    }
+    { }
 
     void LeaveHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        auto *body = package.getBodyTo<ClientRequestBody>();
+        this->sendResponse(package);
+        this->owner_.removePlayer_(package.endpoint);
     }
 
     void LeaveHandler::receiveResponse(const Network::UdpPackage &package)
-    {
-    }
+    { }
 
     BPC::Method LeaveHandler::getMethod() const
     {

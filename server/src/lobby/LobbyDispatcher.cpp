@@ -13,6 +13,7 @@
 #include <atomic>
 #include <memory>
 #include <optional>
+#include <string>
 #include <vector>
 
 namespace rtype::server {
@@ -97,7 +98,7 @@ namespace rtype::server {
         }
     }
 
-    const Lobby &LobbyDispatcher::createLobby(std::unique_ptr<SceneManager> &&sceneManager)
+    const Lobby &LobbyDispatcher::createLobby(std::shared_ptr<Scene> &&scene, const std::string &mapName)
     {
         bool restart = true;
         std::string id;
@@ -113,7 +114,7 @@ namespace rtype::server {
                 }
             }
         }
-        std::unique_ptr<Lobby> &lobby = this->lobbies_.emplace_back(std::make_unique<Lobby>(id, std::move(sceneManager)));
+        std::unique_ptr<Lobby> &lobby = this->lobbies_.emplace_back(std::make_unique<Lobby>(id, std::move(scene), mapName));
         this->dispatch_();
         this->rwLock_->unlock();
         this->condVar_.notify_one();

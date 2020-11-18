@@ -34,19 +34,20 @@ namespace rtype::server {
         virtual BPC::Method getMethod() const = 0;
         virtual void receiveRequest(const Network::UdpPackage &package) = 0;
         virtual void receiveResponse(const Network::UdpPackage &package) = 0;
-        void other(const Network::UdpPackage &package);
+
+        void sendResponse(const Network::UdpPackage &package) const;
 
         template <typename T>
-        void sendResponse(const Network::UdpPackage &package, const T &body, bool needResponse = true)
+        void sendResponse(const Network::UdpPackage &package, const T *body) const
         {
             Network::UdpPackage pkg = package;
             pkg.type = BPC::RESPONSE;
-            pkg.setBodyFrom(&body);
-
-            if (!this->owner_.udpServer_.write(package)) {
-                if (needResponse)
-                    this->awaitingResponse_.push_back(package);
+            if (body != nullptr) {
+                pkg.setBodyFrom(body);
             } else {
+                pkg.body.resize(0);
+            }
+            if (this->owner_.udpServer_.write(package)) {
                 this->owner_.removePlayer_(pkg.endpoint);
             }
         }
@@ -59,13 +60,13 @@ namespace rtype::server {
         bool update();
 
         template <typename T>
-        void sendRequest(const udp::endpoint &endpoint, const T &body, bool needResponse = true)
+        void sendRequest(const udp::endpoint &endpoint, const T *body, bool needResponse = true)
         {
             Network::UdpPackage pkg;
             pkg.method = this->getMethod();
             pkg.type = BPC::REQUEST;
             pkg.timestamp = Clock::Now().time_since_epoch().count();
-            pkg.setBodyFrom(&body);
+            pkg.setBodyFrom(body);
             pkg.endpoint = endpoint;
 
             if (!this->owner_.udpServer_.write(pkg)) {
@@ -75,5 +76,7 @@ namespace rtype::server {
                 this->owner_.removePlayer_(endpoint);
             }
         }
+
+        void sendRequest(const udp::endpoint &endpoint, const BPC::Buffer *buffer, bool needResponse);
     };
 }

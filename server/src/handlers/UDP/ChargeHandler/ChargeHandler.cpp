@@ -12,17 +12,16 @@
 namespace rtype::server {
     ChargeHandler::ChargeHandler(Lobby &owner)
         : AHandlerUDP(owner)
-    {
-    }
+    { }
 
     void ChargeHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        // TODO
     }
 
     void ChargeHandler::receiveResponse(const Network::UdpPackage &package)
-    {
-    }
-    
+    { }
+
     BPC::Method ChargeHandler::getMethod() const
     {
         return BPC::CHARGE;

@@ -104,6 +104,11 @@ namespace rtype::BinaryProtocolCommunication {
         template <typename T>
         void setBodyFrom(const T *src)
         {
+            if (!src) {
+                this->bodySize = 0;
+                this->body.resize(0);
+                return;
+            }
             const unsigned char *buffer = reinterpret_cast<const unsigned char *>(src);
 
             this->bodySize = sizeof(T);

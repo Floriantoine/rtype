@@ -20,6 +20,11 @@ namespace rtype::server {
             entity_id_t playerID;
         };
 
+        struct ServerResponseBody {
+            bool confirmation;
+            entity_id_t missileID;
+        };
+
         ShootHandler(Lobby &owner);
         ~ShootHandler() override = default;
 

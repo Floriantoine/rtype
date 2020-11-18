@@ -11,17 +11,16 @@
 namespace rtype::server {
     DropHandler::DropHandler(Lobby &owner)
         : AHandlerUDP(owner)
-    {
-    }
+    { }
 
     void DropHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        // TODO
     }
 
     void DropHandler::receiveResponse(const Network::UdpPackage &package)
-    {
-    }
-    
+    { }
+
     BPC::Method DropHandler::getMethod() const
     {
         return BPC::DROP;

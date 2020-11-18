@@ -51,10 +51,10 @@ namespace rtype::server {
 
         try {
             std::string scenePath = this->owner_.config_.scenesDir + requestBody.mapName + ".json";
-            auto sceneManager = std::make_unique<SceneManager>();
-            auto scenePtr = JsonLoader::createScene(*sceneManager, scenePath);
+            SceneManager sceneManager;
+            auto scenePtr = JsonLoader::createScene(sceneManager, scenePath);
             CreateHandler::initScene(*scenePtr);
-            const Lobby &lobby = this->owner_.dispatcher_->createLobby(std::move(sceneManager));
+            const Lobby &lobby = this->owner_.dispatcher_->createLobby(std::move(scenePtr), requestBody.mapName);
 
             responseBody.port = lobby.getPort();
             memcpy(responseBody.lobbyID, lobby.id.data(), sizeof(lobby_id_t));

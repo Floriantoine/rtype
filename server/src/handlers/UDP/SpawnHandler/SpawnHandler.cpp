@@ -12,16 +12,13 @@
 namespace rtype::server {
     SpawnHandler::SpawnHandler(Lobby &owner)
         : AHandlerUDP(owner)
-    {
-    }
+    { }
 
     void SpawnHandler::receiveRequest(const Network::UdpPackage &package)
-    {
-    }
+    { }
 
     void SpawnHandler::receiveResponse(const Network::UdpPackage &package)
-    {
-    }
+    { }
 
     BPC::Method SpawnHandler::getMethod() const
     {

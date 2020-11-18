@@ -9,6 +9,8 @@
 
 #include "Protocol.hpp"
 #include "Server.hpp"
+#include "engine/core/components/HealthComponent.hpp"
+#include "engine/core/scene/Scene.hpp"
 #include "handlers/TCP/AskJoinHandler/AskJoinHandler.hpp"
 #include "handlers/TCP/CreateHandler/CreateHandler.hpp"
 #include "handlers/UDP/ChargeHandler/ChargeHandler.hpp"
@@ -55,8 +57,8 @@ namespace rtype::server {
         this->clock_.reset();
     }
 
-    Lobby::Lobby(const std::string &id, std::unique_ptr<SceneManager> &&sceneManager)
-        : sceneManager_ { std::move(sceneManager) }
+    Lobby::Lobby(const std::string &id, std::shared_ptr<Scene> &&scene, const std::string &mapName)
+        : scene_ { std::move(scene) }
         , udpServer_([&](const Network::UdpPackage &package) {
             this->onPacketReceived_(package);
         })
@@ -75,6 +77,7 @@ namespace rtype::server {
             { BPC::LEAVE, std::make_shared<LeaveHandler>(*this) }
         }
         , id { id }
+        , map { mapName }
     {
         this->state_ = GameState::AWT_START;
         this->udpServer_.start();
@@ -90,7 +93,7 @@ namespace rtype::server {
         if (*this->state_ == GameState::RUN) {
             auto elapsed = this->state_.elapsed();
             this->state_.resetClock();
-            this->sceneManager_->update(elapsed);
+            this->scene_->update(elapsed);
         }
         this->updateState_();
     }
@@ -147,7 +150,7 @@ namespace rtype::server {
             body.entityID = player->id;
             player = this->players_.erase(player);
             for (const auto &it : this->players_) {
-                handler->sendRequest(it.endpoint, body);
+                handler->sendRequest(it.endpoint, &body);
             }
         }
     }
@@ -162,7 +165,7 @@ namespace rtype::server {
                 body.state = GameState::TIMEOUT;
                 auto handler = this->handlers_[BPC::GAME_STATE];
                 for (const auto &it : this->players_) {
-                    handler->sendRequest(it.endpoint, body);
+                    handler->sendRequest(it.endpoint, &body);
                 }
             }
         } else if (*this->state_ != GameState::AWT_START && this->players_.size() == 0) {
@@ -176,8 +179,15 @@ namespace rtype::server {
             [&endpoint](const auto &it) {
                 return it.endpoint == endpoint;
             });
+        auto health = this->getEntityComponent_<HealthComponent>(it->id);
+        health->health = 0;
         if (it != this->players_.end()) {
             this->players_.erase(it);
         }
+    }
+
+    std::shared_ptr<Entity> Lobby::getEntity_(id_t id) 
+    {
+        return this->scene_->getEntityManager().getEntity(id);
     }
 }

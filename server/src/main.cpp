@@ -9,14 +9,11 @@
 #include "Exception.hpp"
 #include "GameServer.hpp"
 #include "Server.hpp"
-#include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
-#include "engine/client/behaviours/PataBehaviour.hpp"
-#include "engine/client/behaviours/PlayerBehaviour.hpp"
-#include "engine/core/components/AnimationComponent.hpp"
+#include "engine/server/behaviours/MissilePlayerBehaviour.hpp"
+#include "engine/server/behaviours/PataBehaviour.hpp"
+#include "engine/server/behaviours/PlayerBehaviour.hpp"
 #include "engine/core/components/MissileComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
-#include "engine/core/components/RotationComponent.hpp"
-#include "engine/core/components/SpriteComponent.hpp"
 #include "scene_loader/SceneLoader.hpp"
 
 #include <fstream>
@@ -45,14 +42,11 @@ static server::Config ParseConfig(const std::string &filePath)
 
 static void registerComponentFactories()
 {
-    JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
-    JsonLoader::registerComponentFactory("rotation", RotationComponent::factory);
     JsonLoader::registerComponentFactory("position", PositionComponent::factory);
-    JsonLoader::registerComponentFactory("animation", AnimationComponent::factory);
     JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
-    JsonLoader::registerComponentFactory("player_script", PlayerBehaviour::getFactory<PlayerBehaviour>());
-    JsonLoader::registerComponentFactory("missile_player_script", MissilePlayerBehaviour::getFactory<MissilePlayerBehaviour>());
-    JsonLoader::registerComponentFactory("pata_script", PataBehaviour::getFactory<PataBehaviour>());
+    JsonLoader::registerComponentFactory("player_script", server::PlayerBehaviour::getFactory<server::PlayerBehaviour>());
+    JsonLoader::registerComponentFactory("missile_player_script", server::MissilePlayerBehaviour::getFactory<server::MissilePlayerBehaviour>());
+    JsonLoader::registerComponentFactory("pata_script", server::PataBehaviour::getFactory<server::PataBehaviour>());
 }
 
 int main(int argc, const char **argv)

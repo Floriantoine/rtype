@@ -9,6 +9,7 @@
 
 #include "Lobby.hpp"
 #include "boost/thread/pthread/condition_variable.hpp"
+#include "engine/core/scene/Scene.hpp"
 #include "engine/core/scene/SceneManager.hpp"
 #include "lobby/LobbyIDGenerator.hpp"
 #include "utils/lock/SharedLock.hpp"
@@ -17,6 +18,7 @@
 #include <memory>
 #include <queue>
 #include <shared_mutex>
+#include <string>
 #include <vector>
 
 namespace rtype::server {
@@ -85,7 +87,7 @@ namespace rtype::server {
         /**
         * @brief adds a new lobby to dispatch
         */
-        const Lobby &createLobby(std::unique_ptr<SceneManager> &&sceneManager);
+        const Lobby &createLobby(std::shared_ptr<Scene> &&scene, const std::string &mapName);
 
         /**
         * @brief get the range of lobbies to process depending on a LobbyManagerThread's index

@@ -9,7 +9,9 @@
 
 #include "Player.hpp"
 #include "Server.hpp"
-#include "engine/core/scene/SceneManager.hpp"
+#include "engine/core/ecs/entity/Entity.hpp"
+#include "engine/core/ecs/types.hpp"
+#include "engine/core/scene/Scene.hpp"
 #include "types.hpp"
 #include "utils/Clock.hpp"
 
@@ -73,7 +75,7 @@ namespace rtype::server {
         State state_;
         std::vector<Player> players_;
         bool awaitingResponse_ { false };
-        std::unique_ptr<SceneManager> sceneManager_;
+        std::shared_ptr<Scene> scene_;
         Network::UdpServer udpServer_;
         std::unordered_map<BPC::Method, std::shared_ptr<AHandlerUDP>> handlers_;
 
@@ -82,11 +84,22 @@ namespace rtype::server {
         void updatePlayersState_();
         void updateGameState_();
         void removePlayer_(const udp::endpoint &endpoint);
+        std::shared_ptr<Entity> getEntity_(id_t id);
+
+        template <typename T>
+        T *getEntityComponent_(id_t id)
+        {
+            auto entity = this->getEntity_(id);
+            if (!entity)
+                return nullptr;
+            return entity->getComponent<T>();
+        }
 
       public:
         const std::string id;
+        const std::string map;
 
-        Lobby(const std::string &id, std::unique_ptr<SceneManager> &&sceneManager);
+        Lobby(const std::string &id, std::shared_ptr<Scene> &&scene, const std::string &mapName);
         ~Lobby() = default;
 
         /**

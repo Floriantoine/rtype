@@ -62,6 +62,11 @@ namespace rtype::server {
         this->receiveResponse(package);
     }
 
+    void AHandlerUDP::sendResponse(const Network::UdpPackage &package) const
+    {
+        this->sendResponse(package, (char *)nullptr);
+    }
+
     void AHandlerUDP::unknowPacket(const Network::UdpPackage &package)
     {
     }
@@ -90,5 +95,24 @@ namespace rtype::server {
             }
         }
         return this->awaitingResponse_.size() != 0;
+    }
+
+    template<>
+    void AHandlerUDP::sendRequest(const udp::endpoint &endpoint, const BPC::Buffer *buffer, bool needResponse)
+    {
+        Network::UdpPackage pkg;
+        pkg.method = this->getMethod();
+        pkg.type = BPC::REQUEST;
+        pkg.timestamp = Clock::Now().time_since_epoch().count();
+        if (buffer)
+            pkg.body = *buffer;
+        pkg.endpoint = endpoint;
+
+        if (!this->owner_.udpServer_.write(pkg)) {
+            if (needResponse)
+                this->awaitingResponse_.push_back(pkg);
+        } else {
+            this->owner_.removePlayer_(endpoint);
+        }
     }
 }

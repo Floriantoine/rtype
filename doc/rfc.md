@@ -259,13 +259,14 @@ ___
 +-----------+
 | ENTITY_ID |
 | unsigned  |
-|  8 byte   |
+|  8 bytes  |
 +-----------+
 ```
 
 ___
 ### **SHOOT**
 * <ins>ENTITY_ID</ins>: entity unique identifier
+* <ins>IS_VALID</ins>: a boolean telling if the shot was validated
 #### REQUEST:
 #### *From client:*
 > Must notify the server a client shot
@@ -280,11 +281,11 @@ ___
 #### *From server:*
 > Must give the entity id to assign to the shot
 ```
-+-----------+
-| ENTITY_ID |
-| unsigned  |
-|  8 bytes  |
-+-----------+
++----------+-----------+
+| IS_VALID | ENTITY_ID |
+| unsigned | unsigned  |
+|  1 byte  |  8 bytes  |
++----------+-----------+
 ```
 
 ___
@@ -312,11 +313,11 @@ ___
 #### *From server:*
 > If <ins>ENTITY_ID</ins> is greater than 3 the client's connection has been refused
 ```
-+-----------+-----------------------+
-| ENTITY_ID |        MAP_NAME       |
-| unsigned  |        unsigned       |
-|  8 bytes  | (BODY_SIZE - 1) bytes |
-+-----------+-----------------------+
++-----------+--------------+--------------+------------------------+
+| ENTITY_ID | X_COORDINATE | Y_COORDINATE |        MAP_NAME        |
+| unsigned  |    signed    |    signed    |        unsigned        |
+|  8 bytes  |   8 bytes    |    8 bytes   | (BODY_SIZE - 24) bytes |
++-----------+--------------+--------------+------------------------+
 ```
 
 ___

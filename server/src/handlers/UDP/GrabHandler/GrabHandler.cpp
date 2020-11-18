@@ -12,16 +12,13 @@
 namespace rtype::server {
     GrabHandler::GrabHandler(Lobby &owner)
         : AHandlerUDP(owner)
-    {
-    }
+    { }
 
     void GrabHandler::receiveRequest(const Network::UdpPackage &package)
-    {
-    }
+    { }
 
     void GrabHandler::receiveResponse(const Network::UdpPackage &package)
-    {
-    }
+    { }
     
     BPC::Method GrabHandler::getMethod() const
     {

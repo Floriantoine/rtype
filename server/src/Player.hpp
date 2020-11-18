@@ -8,8 +8,8 @@
 #pragma once
 
 #include "boost/asio/ip/udp.hpp"
-#include "types.hpp"
 #include "core/Protocol.hpp"
+#include "types.hpp"
 #include "utils/Clock.hpp"
 
 namespace rtype::server {
