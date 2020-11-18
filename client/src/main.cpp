@@ -60,21 +60,19 @@ void fun()
     JsonLoader::registerComponentFactory("bug_script", BugBehaviour::getFactory<BugBehaviour>());
 
     try {
-        auto scene = JsonLoader::createScene(Game::getInstance(), "./config_file/scene/stage1.json");
+        auto scene = JsonLoader::createScene(client::Game::getInstance(), "./config_file/scene/stage1.json");
 
         scene->createSystem<EventSystem>();
         scene->createSystem<BehaviourSystem>();
-        scene->createSystem<AnimationSystem>();
-        scene->createSystem<SpriteSystem>();
-        scene->createSystem<BackgroundSystem>();
+        scene->createSystem<client::AnimationSystem>();
+        scene->createSystem<client::SpriteSystem>();
+        scene->createSystem<client::BackgroundSystem>();
         scene->createSystem<CollisionSystem>();
         scene->createSystem<HealthSystem>();
 
-        Game::getInstance().start();
-        return 0;
+        client::Game::getInstance().start();
     } catch (const Exception &e) {
         std::cerr << e.what() << std::endl;
-        return 1;
     }
 }
 
