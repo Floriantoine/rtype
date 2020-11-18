@@ -10,11 +10,16 @@
 #include "Client.hpp"
 #include "Protocol.hpp"
 #include "types.hpp"
+#include "utils/Clock.hpp"
 
 #include <memory>
 
 namespace rtype::client {
+    class AHandlerUDP;
+
     class GameClient {
+        friend AHandlerUDP;
+
       private:
         boost::asio::io_context io_context_;
         std::shared_ptr<Network::UdpClient> conn_;
@@ -24,6 +29,10 @@ namespace rtype::client {
         BPC::Package getInitialPackage_(const int argc, const char **argv);
 
       public:
+        Clock activeness;
+        GameState state;
+        std::unordered_map<BPC::Method, std::shared_ptr<AHandlerUDP>> handlers_;
+
         ~GameClient() = default;
         static void Start(const int argc, const char **argv);
     };

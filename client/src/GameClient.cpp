@@ -6,12 +6,21 @@
 */
 
 #include "GameClient.hpp"
-
-#include "Client.hpp"
 #include "Exception.hpp"
 #include "Protocol.hpp"
 #include "types.hpp"
 #include "utils/Clock.hpp"
+#include "handlers/GameStateHandler/GameStateHandler.hpp"
+#include "handlers/MoveHandler/MoveHandler.hpp"
+#include "handlers/SpawnHandler/SpawnHandler.hpp"
+#include "handlers/GrabHandler/GrabHandler.hpp"
+#include "handlers/DropHandler/DropHandler.hpp"
+#include "handlers/ChargeHandler/ChargeHandler.hpp"
+#include "handlers/PositionHandler/PositionHandler.hpp"
+#include "handlers/ShootHandler/ShootHandler.hpp"
+#include "handlers/HitHandler/HitHandler.hpp"
+#include "handlers/JoinHandler/JoinHandler.hpp"
+#include "handlers/LeaveHandler/LeaveHandler.hpp"
 
 #include <cstring>
 #include <memory>
@@ -25,6 +34,19 @@ namespace rtype::client {
         : conn_(std::make_shared<Network::UdpClient>([](const BPC::Package &pkg, const Network::UdpClient &client) {
 
         }))
+        , handlers_ {
+            { BPC::GAME_STATE, std::make_shared<GameStateHandler>(*this) },
+            { BPC::MOVE, std::make_shared<MoveHandler>(*this) },
+            { BPC::SPAWN, std::make_shared<SpawnHandler>(*this) },
+            { BPC::GRAB, std::make_shared<GrabHandler>(*this) },
+            { BPC::DROP, std::make_shared<DropHandler>(*this) },
+            { BPC::CHARGE, std::make_shared<ChargeHandler>(*this) },
+            { BPC::SHOOT, std::make_shared<PositionHandler>(*this) },
+            { BPC::SHOOT, std::make_shared<ShootHandler>(*this) },
+            { BPC::HIT, std::make_shared<HitHandler>(*this) },
+            { BPC::JOIN, std::make_shared<JoinHandler>(*this) },
+            { BPC::LEAVE, std::make_shared<LeaveHandler>(*this) }
+        }
     {
         if (argc != 3 && argc != 4) {
             throw Exception(std::string(argv[0]) + " <IP> <PORT> [LOBBY_ID]");
