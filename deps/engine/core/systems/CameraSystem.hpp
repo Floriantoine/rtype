@@ -10,10 +10,11 @@
 #include "../Rect.hpp"
 #include "../components/CameraComponent.hpp"
 #include "../components/SpriteComponent.hpp"
+#include "../components/PositionComponent.hpp"
 #include "../ecs/system/ASystem.hpp"
 #include "../physics/CollisionChecker.hpp"
-#include "core/ABehaviour.hpp"
-#include "core/components/BehaviourComponent.hpp"
+#include "../ABehaviourBase.hpp"
+#include "../components/BehaviourComponent.hpp"
 
 namespace rtype {
 
@@ -35,9 +36,9 @@ namespace rtype {
                 Rect<float> spriteRect = this->getRelativeBounds(sprite);
 
                 BehaviourComponent *behaviourComponent = sprite->getEntity()->getComponent<BehaviourComponent>();
-                std::shared_ptr<ABehaviour> behaviour;
+                std::shared_ptr<ABehaviourBase> behaviour;
                 if (behaviourComponent != nullptr)
-                    behaviour = behaviourComponent->getBehaviour<ABehaviour>();
+                    behaviour = behaviourComponent->getBehaviour<ABehaviourBase>();
 
                 bool collides = CollisionChecker::collides<float>(cameraRect, spriteRect);
                 if (collides && sprite->getEntity()->getVisibility() == false) {

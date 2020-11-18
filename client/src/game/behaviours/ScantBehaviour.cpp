@@ -7,8 +7,8 @@
 
 #include "ScantBehaviour.hpp"
 
-#include "core/components/AnimationComponent.hpp"
-#include "core/components/MissileComponent.hpp"
+#include "engine/core/components/AnimationComponent.hpp"
+#include "engine/core/components/MissileComponent.hpp"
 #include "game/behaviours/ScantBehaviour.hpp"
 
 namespace rtype::client {

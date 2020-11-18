@@ -8,7 +8,7 @@
 #pragma once
 
 #include "../components/BehaviourComponent.hpp"
-#include "../ABehaviour.hpp"
+#include "../ABehaviourBase.hpp"
 #include "../ecs/system/ASystem.hpp"
 
 namespace rtype {
@@ -23,7 +23,7 @@ namespace rtype {
             this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
                 if (!holder->getEntity()->getVisibility())
                     return;
-                std::shared_ptr<ABehaviour> script = holder->getBehaviour<ABehaviour>();
+                std::shared_ptr<ABehaviourBase> script = holder->getBehaviour<ABehaviourBase>();
                 script->onUpdate(elapsedTime);
             });
         }

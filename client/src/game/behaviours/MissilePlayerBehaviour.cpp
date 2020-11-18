@@ -7,7 +7,7 @@
 
 #include "MissilePlayerBehaviour.hpp"
 
-#include "core/components/PositionComponent.hpp"
+#include "engine/core/components/PositionComponent.hpp"
 #include "game/CollideGroups.hpp"
 
 namespace rtype::client {

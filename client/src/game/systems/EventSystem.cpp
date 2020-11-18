@@ -8,8 +8,8 @@
 #include "EventSystem.hpp"
 
 #include "SFML/Window/Event.hpp"
-#include "core/ABehaviour.hpp"
-#include "core/components/BehaviourComponent.hpp"
+#include "game/ABehaviour.hpp"
+#include "engine/core/components/BehaviourComponent.hpp"
 #include "game/Game.hpp"
 
 namespace rtype::client {
@@ -41,7 +41,9 @@ namespace rtype::client {
             this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
                 if (!holder->getEntity()->getVisibility())
                     return;
-                holder->getBehaviour<ABehaviour>()->onMouseButtonPressed(evt);
+                const std::shared_ptr<ABehaviour> &behaviour = holder->getBehaviour<ABehaviour>();
+                if (behaviour != nullptr)
+                    behaviour->onMouseButtonPressed(evt);
             });
         }
     }
@@ -52,7 +54,9 @@ namespace rtype::client {
             this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
                 if (!holder->getEntity()->getVisibility())
                     return;
-                holder->getBehaviour<ABehaviour>()->onMouseButtonReleased(evt);
+                const std::shared_ptr<ABehaviour> &behaviour = holder->getBehaviour<ABehaviour>();
+                if (behaviour != nullptr)
+                    holder->getBehaviour<ABehaviour>()->onMouseButtonReleased(evt);
             });
         }
     }
@@ -63,7 +67,9 @@ namespace rtype::client {
             this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
                 if (!holder->getEntity()->getVisibility())
                     return;
-                holder->getBehaviour<ABehaviour>()->onKeyPressed(evt);
+                const std::shared_ptr<ABehaviour> &behaviour = holder->getBehaviour<ABehaviour>();
+                if (behaviour != nullptr)
+                    holder->getBehaviour<ABehaviour>()->onKeyPressed(evt);
             });
         }
     }
@@ -74,7 +80,9 @@ namespace rtype::client {
             this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
                 if (!holder->getEntity()->getVisibility())
                     return;
-                holder->getBehaviour<ABehaviour>()->onKeyReleased(evt);
+                const auto &behaviour = holder->getBehaviour<ABehaviour>();
+                if (behaviour != nullptr)
+                    behaviour->onKeyReleased(evt);
             });
         }
     }

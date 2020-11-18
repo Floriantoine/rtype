@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "../ABehaviour.hpp"
+#include "../ABehaviourBase.hpp"
 #include "../components/BehaviourComponent.hpp"
 #include "../components/CollideBoxComponent.hpp"
 #include "../components/CollideGroupComponent.hpp"
@@ -34,7 +34,7 @@ namespace rtype {
                     BehaviourComponent *behaviourComponent = collideBox->getEntity()->getComponent<BehaviourComponent>();
                     if (behaviourComponent == nullptr)
                         return;
-                    std::shared_ptr<ABehaviour> behaviour = behaviourComponent->getBehaviour<ABehaviour>();
+                    std::shared_ptr<ABehaviourBase> behaviour = behaviourComponent->getBehaviour<ABehaviourBase>();
                     ColliderData selfData = CollisionSystem::getColliderData(collideBox);
 
                     for (auto &it : list) {

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "engine/core/ABehaviour.hpp"
+#include "game/ABehaviour.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 
 #include <cmath>

@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "core/ABehaviour.hpp"
-#include "core/components/PositionComponent.hpp"
+#include "game/ABehaviour.hpp"
+#include "engine/core/components/PositionComponent.hpp"
 
 namespace rtype::client {
     class MissilePlayerBehaviour : public ABehaviour {

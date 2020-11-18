@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "engine/core/ABehaviour.hpp"
+#include "engine/core/ABehaviourBase.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 
 namespace rtype::server {
 
-    class CameraBehaviour : public ABehaviour {
+    class CameraBehaviour : public ABehaviourBase {
       private:
         PositionComponent *position_ = nullptr;
 

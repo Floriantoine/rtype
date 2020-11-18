@@ -10,7 +10,7 @@
 #include "SFML/Config.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Window/VideoMode.hpp"
-#include "core/AGame.hpp"
+#include "engine/core/AGame.hpp"
 #include "utils/Singleton.hpp"
 #include <thread>
 

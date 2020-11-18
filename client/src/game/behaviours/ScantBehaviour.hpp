@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include "core/ABehaviour.hpp"
-#include "core/components/AnimationComponent.hpp"
-#include "core/components/MissileComponent.hpp"
-#include "core/components/PositionComponent.hpp"
+#include "game/ABehaviour.hpp"
+#include "engine/core/components/AnimationComponent.hpp"
+#include "engine/core/components/MissileComponent.hpp"
+#include "engine/core/components/PositionComponent.hpp"
 
 namespace rtype::client {
     class ScantBehaviour : public ABehaviour {

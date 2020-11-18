@@ -7,7 +7,7 @@
 
 #include "AnimationSystem.hpp"
 
-#include "core/components/AnimationComponent.hpp"
+#include "engine/core/components/AnimationComponent.hpp"
 
 namespace rtype::client {
     void AnimationSystem::update(long elapsedTime)

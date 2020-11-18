@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "core/ABehaviour.hpp"
-#include "core/components/PositionComponent.hpp"
-#include "core/components/RotationComponent.hpp"
+#include "engine/core/components/PositionComponent.hpp"
+#include "engine/core/components/RotationComponent.hpp"
+#include "game/ABehaviour.hpp"
 
 namespace rtype::client {
     class BugBehaviour : public ABehaviour {
