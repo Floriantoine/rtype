@@ -179,5 +179,4 @@ namespace rtype {
          */
         virtual void onStop() { }
     };
-
 }

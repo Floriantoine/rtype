@@ -9,11 +9,11 @@
 #include "Exception.hpp"
 #include "GameServer.hpp"
 #include "Server.hpp"
-#include "engine/server/behaviours/MissilePlayerBehaviour.hpp"
-#include "engine/server/behaviours/PataBehaviour.hpp"
-#include "engine/server/behaviours/PlayerBehaviour.hpp"
 #include "engine/core/components/MissileComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
+#include "game/behaviours/MissilePlayerBehaviour.hpp"
+#include "game/behaviours/PataBehaviour.hpp"
+#include "game/behaviours/PlayerBehaviour.hpp"
 #include "scene_loader/SceneLoader.hpp"
 
 #include <fstream>

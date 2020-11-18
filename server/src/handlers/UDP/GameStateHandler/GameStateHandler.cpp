@@ -7,6 +7,7 @@
 
 #include "GameStateHandler.hpp"
 #include "Protocol.hpp"
+#include "engine/core/components/BehaviourComponent.hpp"
 #include "types.hpp"
 
 namespace rtype::server {
@@ -18,8 +19,17 @@ namespace rtype::server {
     {
         auto *body = package.getBodyTo<GameStateHandler::ClientRequestBody>();
 
-        if (body->state != GameState::RUN)
+        if (*this->owner_.state_ == GameState::RUN || body->state != GameState::RUN)
             return;
+
+        this->owner_.scene_->getComponentManager().apply<BehaviourComponent>([](BehaviourComponent *holder) {
+            // TODO
+            // auto behaviour = holder->getBehaviour<ABehaviour>();
+            // if (behaviour) {
+            //     behaviour->setLobby(this->owner_.shared_from_this());
+            // }
+        });
+
         this->owner_.state_ = GameState::RUN;
         this->sendResponse(package);
 

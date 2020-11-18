@@ -28,8 +28,8 @@ namespace rtype::server {
     */
     class LobbyDispatcher {
       public:
-        typedef std::unique_ptr<Lobby> lobbyUniquePtr_t;
-        typedef std::list<lobbyUniquePtr_t>::iterator lobbyIterator_t;
+        typedef std::shared_ptr<Lobby> lobbySharedPtr_t;
+        typedef std::list<lobbySharedPtr_t>::iterator lobbyIterator_t;
 
         /**
         * @brief data structure telling what lobbies a LobbyManagerThread should process
@@ -64,7 +64,7 @@ namespace rtype::server {
       private:
         const unsigned managerCount_;
         std::shared_ptr<SharedLock> rwLock_;
-        std::list<lobbyUniquePtr_t> lobbies_;
+        std::list<lobbySharedPtr_t> lobbies_;
         std::vector<Range> ranges_;
         LobbyIDGenerator idGenerator_;
         boost::condition_variable_any condVar_;

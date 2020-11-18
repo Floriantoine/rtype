@@ -8,7 +8,7 @@
 #pragma once
 
 #include "../ecs/component/Component.hpp"
-#include "core/ecs/assert.hpp"
+#include "../ecs/assert.hpp"
 
 #include <memory>
 

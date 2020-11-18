@@ -8,7 +8,8 @@
 #include "MoveHandler.hpp"
 
 #include "Protocol.hpp"
-#include "engine/server/behaviours/PlayerBehaviour.hpp"
+#include "engine/core/components/BehaviourComponent.hpp"
+#include "game/behaviours/PlayerBehaviour.hpp"
 
 namespace rtype::server {
     MoveHandler::MoveHandler(Lobby &owner)
@@ -17,7 +18,7 @@ namespace rtype::server {
 
     void MoveHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        auto *requestBody = package.getBodyTo<MoveHandler::ClientRequestBody>();
+        auto *requestBody = package.getBodyTo<ClientRequestBody>();
         auto *behaviourComponent = this->owner_.getEntityComponent_<BehaviourComponent>(requestBody->playerID);
 
         if (behaviourComponent == nullptr)

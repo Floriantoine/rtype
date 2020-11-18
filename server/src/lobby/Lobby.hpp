@@ -40,7 +40,7 @@ namespace rtype::server {
     /**
     * @brief representation of a lobby, where the game logic is processed
     */
-    class Lobby {
+    class Lobby : std::enable_shared_from_this<Lobby> {
         friend AHandlerUDP;
         friend ChargeHandler;
         friend DestroyHandler;

@@ -114,7 +114,7 @@ namespace rtype::server {
                 }
             }
         }
-        std::unique_ptr<Lobby> &lobby = this->lobbies_.emplace_back(std::make_unique<Lobby>(id, std::move(scene), mapName));
+        std::shared_ptr<Lobby> &lobby = this->lobbies_.emplace_back(std::make_shared<Lobby>(id, std::move(scene), mapName));
         this->dispatch_();
         this->rwLock_->unlock();
         this->condVar_.notify_one();

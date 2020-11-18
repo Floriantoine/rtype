@@ -8,11 +8,10 @@
 #include "ShootHandler.hpp"
 
 #include "Protocol.hpp"
-#include "engine/client/behaviours/PlayerBehaviour.hpp"
 #include "engine/core/components/BehaviourComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/ecs/entity/Entity.hpp"
-#include "engine/server/behaviours/PlayerBehaviour.hpp"
+#include "game/behaviours/PlayerBehaviour.hpp"
 
 #include <memory>
 
@@ -29,7 +28,7 @@ namespace rtype::server {
         std::shared_ptr<Entity> missile = nullptr;
 
         if (playerBehaviour) {
-            missile = playerBehaviour->shoot();
+            // missile = PlayerBehaviour->shoot();
         }
         ServerResponseBody response;
         response.missileID = 0;
