@@ -2,20 +2,17 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** Pata behaviour
+** ButtonBehaviour
 */
 
 #pragma once
 
 #include "game/ABehaviour.hpp"
-#include "engine/core/components/PositionComponent.hpp"
 
 namespace rtype::client {
-    class CameraBehaviour : public ABehaviour {
+    class ButtonBehaviour : public ABehaviour {
       private:
-        PositionComponent *position_ = nullptr;
-
-        float speed_ = 50.0;
+        float blinkRate_ = 50.0;
 
         void init_();
 

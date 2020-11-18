@@ -14,9 +14,6 @@
                     "top": 0,
                     "width": 800,
                     "height": 600
-                },
-                {
-                    "type": "camera_behaviour"
                 }
             ]
         },

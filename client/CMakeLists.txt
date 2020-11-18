@@ -30,6 +30,7 @@ set(SRCS
         game/behaviours/PataBehaviour.cpp
         game/behaviours/PlayerBehaviour.cpp
         game/behaviours/ScantBehaviour.cpp
+        game/behaviours/ButtonBehaviour.cpp
         game/components/AnimationComponent.cpp
         game/components/ColorComponent.cpp
         game/components/InputComponent.cpp

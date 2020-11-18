@@ -3,7 +3,12 @@
     "state": "RUNNING",
     "entities": [
         {
-            "base": "Camera"
+            "base": "Camera",
+            "components": [
+                {
+                    "type": "camera_behaviour"
+                }
+            ]
         },
         {
             "base": "SkyBackground",

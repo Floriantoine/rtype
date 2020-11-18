@@ -82,21 +82,18 @@ int init()
     JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
 
     try {
-        auto scene = JsonLoader::createScene(client::Game::getInstance(), "./config_file/scene/stage1.json");
+        auto scene = JsonLoader::createScene(client::Game::getInstance(), "./config_file/scene/menu.json");
 
         scene->createSystem<rtype::CameraSystem>();
-        scene->createSystem<client::EventSystem>();
+        // scene->createSystem<CollisionSystem>();
+        // scene->createSystem<HealthSystem>();
         scene->createSystem<rtype::BehaviourSystem>();
-        scene->createSystem<client::AnimationSystem>();
-        scene->createSystem<client::SpriteSystem>();
-        scene->createSystem<client::BackgroundSystem>();
-        scene->createSystem<CollisionSystem>();
-        scene->createSystem<HealthSystem>();
+        scene->createSystem<client::EventSystem>();
         scene->createSystem<client::TextSystem>();
         scene->createSystem<client::InputSystem>();
         scene->createSystem<client::AnimationSystem>();
         scene->createSystem<client::SpriteSystem>();
-        scene->createSystem<client::BackgroundSystem>();
+        // scene->createSystem<client::BackgroundSystem>();
 
         client::Game::getInstance().start();
         return 0;
