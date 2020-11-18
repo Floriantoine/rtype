@@ -7,7 +7,32 @@
 
 #include "ButtonBehaviour.hpp"
 
+#include <iostream>
+
+namespace rtype::client {
+
 void ButtonBehaviour::onUpdate(long elapsedTime)
 {
-    bool blink = this->blink
+}
+
+void ButtonBehaviour::onMouseMove(const sf::Event &evt)
+{
+    this->isHovered_ = false;
+}
+
+void ButtonBehaviour::onMouseHover(const sf::Event &evt)
+{
+    this->isHovered_ = true;
+}
+
+void ButtonBehaviour::onMouseClick(const sf::Event &evt)
+{
+    this->isClicked_ = true;
+}
+
+void ButtonBehaviour::onMouseButtonReleased(const sf::Event &evt)
+{
+    this->isClicked_ = false;
+}
+
 }

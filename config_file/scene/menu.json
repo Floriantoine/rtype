@@ -33,6 +33,16 @@
                     "type": "position",
                     "x": 400,
                     "y": 200
+                },
+                {
+                    "type": "button_behaviour"
+                },
+                {
+                    "type": "collide_box",
+                    "left": 400,
+                    "top": 200,
+                    "width": 350,
+                    "height": 50
                 }
             ]
         },
@@ -47,6 +57,13 @@
                     "type": "position",
                     "x": 450.5,
                     "y": 260
+                },
+                {
+                    "type": "collide_box",
+                    "left": 450.5,
+                    "top": 260,
+                    "width": 300,
+                    "height": 50
                 }
             ]
         },

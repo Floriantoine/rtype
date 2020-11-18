@@ -28,6 +28,7 @@
 #include "game/behaviours/MissilePlayerBehaviour.hpp"
 #include "game/behaviours/PataBehaviour.hpp"
 #include "game/behaviours/PlayerBehaviour.hpp"
+#include "game/behaviours/ButtonBehaviour.hpp"
 
 #include "game/components/AnimationComponent.hpp"
 #include "game/components/ScaleComponent.hpp"
@@ -52,7 +53,7 @@
 
 using namespace rtype;
 
-int init()
+int init(int argc, const char **argv)
 {
     client::Game::getInstance().setWindowTitle("R-Type");
     client::Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
@@ -70,6 +71,7 @@ int init()
     JsonLoader::registerComponentFactory("pata_behaviour", ABehaviourBase::getFactory<client::PataBehaviour>());
     JsonLoader::registerComponentFactory("bug_behaviour", ABehaviourBase::getFactory<client::BugBehaviour>());
     JsonLoader::registerComponentFactory("camera_behaviour", ABehaviourBase::getFactory<client::CameraBehaviour>());
+    JsonLoader::registerComponentFactory("button_behaviour", ABehaviourBase::getFactory<client::ButtonBehaviour>());
 
     JsonLoader::registerComponentFactory("camera", CameraComponent::factory);
     JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
@@ -82,7 +84,7 @@ int init()
     JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
 
     try {
-        auto scene = JsonLoader::createScene(client::Game::getInstance(), "./config_file/scene/menu.json");
+        auto scene = JsonLoader::createScene(client::Game::getInstance(), argv[1]);
 
         scene->createSystem<rtype::CameraSystem>();
         // scene->createSystem<CollisionSystem>();
@@ -105,7 +107,9 @@ int init()
 
 int main(const int argc, const char **argv)
 {
-    return init();
+    if (argc < 2)
+        return 1;
+    return init(argc, argv);
 
     try {
         client::GameClient::Start(argc, argv);
