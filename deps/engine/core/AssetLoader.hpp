@@ -15,6 +15,8 @@
 
 #include <memory>
 #include <unordered_map>
+
+#include <iostream>
     
 #define ASSETS_PATH "./client/assets/"
 
@@ -78,7 +80,7 @@ namespace rtype {
             const auto &font = AssetLoader::getInstance().fonts_.find(file);
 
             if (font == AssetLoader::getInstance().fonts_.cend()) {
-                AssetLoader::getInstance().fonts_[file] = std::shared_ptr<sf::Font>();
+                AssetLoader::getInstance().fonts_[file] = std::make_shared<sf::Font>();
 
                 if (AssetLoader::getInstance().fonts_[file]->loadFromFile(ASSETS_PATH + file))
                     return AssetLoader::getInstance().fonts_[file];
@@ -101,7 +103,7 @@ namespace rtype {
             const auto &music = AssetLoader::getInstance().audios_.find(file);
 
             if (music == AssetLoader::getInstance().audios_.cend()) {
-                AssetLoader::getInstance().audios_[file] = std::shared_ptr<sf::Music>();
+                AssetLoader::getInstance().audios_[file] = std::make_shared<sf::Music>();
 
                 if (AssetLoader::getInstance().audios_[file]->openFromFile(ASSETS_PATH + file))
                     return AssetLoader::getInstance().audios_[file];

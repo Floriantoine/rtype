@@ -8,7 +8,6 @@
 #include "GameClient.hpp"
 #include "engine/core/components/SpriteComponent.hpp"
 #include "engine/core/components/MissileComponent.hpp"
-#include "engine/core/components/AnimationComponent.hpp"
 #include "engine/core/components/BackgroundComponent.hpp"
 #include "engine/core/components/CameraComponent.hpp"
 #include "engine/core/components/CollideBoxComponent.hpp"
@@ -22,16 +21,29 @@
 #include "engine/core/systems/CameraSystem.hpp"
 #include "engine/core/systems/CollisionSystem.hpp"
 #include "engine/core/systems/HealthSystem.hpp"
+
 #include "game/Game.hpp"
 #include "game/behaviours/BugBehaviour.hpp"
 #include "game/behaviours/CameraBehaviour.hpp"
 #include "game/behaviours/MissilePlayerBehaviour.hpp"
 #include "game/behaviours/PataBehaviour.hpp"
 #include "game/behaviours/PlayerBehaviour.hpp"
+#include "game/behaviours/ButtonBehaviour.hpp"
+#include "game/behaviours/TextInputBehaviour.hpp"
+
+#include "game/components/AnimationComponent.hpp"
+#include "game/components/ScaleComponent.hpp"
+#include "game/components/ColorComponent.hpp"
+#include "game/components/TextComponent.hpp"
+#include "game/components/InputComponent.hpp"
+
 #include "game/systems/AnimationSystem.hpp"
 #include "game/systems/EventSystem.hpp"
 #include "game/systems/SpriteSystem.hpp"
+#include "game/systems/TextSystem.hpp"
+#include "game/systems/InputSystem.hpp"
 #include "game/systems/BackgroundSystem.hpp"
+
 #include "scene_loader/SceneLoader.hpp"
 
 #include <cstdlib>
@@ -41,14 +53,27 @@
 #include <string>
 
 using namespace rtype;
-using namespace rtype::client;
 
-int init()
+int init(int argc, const char **argv)
 {
-    Game::getInstance().setWindowTitle("R-Type");
-    Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
+    client::Game::getInstance().setWindowTitle("R-Type");
+    client::Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
 
     JsonLoader::loadDefinitions("./config_file/definitions.json");
+
+    JsonLoader::registerComponentFactory("text", client::TextComponent::factory);
+    JsonLoader::registerComponentFactory("input", client::InputComponent::factory);
+    JsonLoader::registerComponentFactory("color", client::ColorComponent::factory);
+    JsonLoader::registerComponentFactory("animation", client::AnimationComponent::factory);
+    JsonLoader::registerComponentFactory("scale", client::ScaleComponent::factory);
+
+    JsonLoader::registerComponentFactory("player_behaviour", ABehaviourBase::getFactory<client::PlayerBehaviour>());
+    JsonLoader::registerComponentFactory("missile_player_behaviour", ABehaviourBase::getFactory<client::MissilePlayerBehaviour>());
+    JsonLoader::registerComponentFactory("pata_behaviour", ABehaviourBase::getFactory<client::PataBehaviour>());
+    JsonLoader::registerComponentFactory("bug_behaviour", ABehaviourBase::getFactory<client::BugBehaviour>());
+    JsonLoader::registerComponentFactory("camera_behaviour", ABehaviourBase::getFactory<client::CameraBehaviour>());
+    JsonLoader::registerComponentFactory("button_behaviour", ABehaviourBase::getFactory<client::ButtonBehaviour>());
+    JsonLoader::registerComponentFactory("text_input_behaviour", ABehaviourBase::getFactory<client::TextInputBehaviour>());
 
     JsonLoader::registerComponentFactory("camera", CameraComponent::factory);
     JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
@@ -58,27 +83,23 @@ int init()
     JsonLoader::registerComponentFactory("collide_box", CollideBoxComponent::factory);
     JsonLoader::registerComponentFactory("collide_group", CollideGroupComponent::factory);
     JsonLoader::registerComponentFactory("health", HealthComponent::factory);
-    JsonLoader::registerComponentFactory("animation", AnimationComponent::factory);
     JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
-    JsonLoader::registerComponentFactory("player_behaviour", ABehaviour::getFactory<PlayerBehaviour>());
-    JsonLoader::registerComponentFactory("missile_player_behaviour", ABehaviour::getFactory<MissilePlayerBehaviour>());
-    JsonLoader::registerComponentFactory("pata_behaviour", ABehaviour::getFactory<PataBehaviour>());
-    JsonLoader::registerComponentFactory("bug_behaviour", ABehaviour::getFactory<BugBehaviour>());
-    JsonLoader::registerComponentFactory("camera_behaviour", ABehaviourBase::getFactory<CameraBehaviour>());
 
     try {
-        auto scene = JsonLoader::createScene(Game::getInstance(), "./config_file/scene/stage1.json");
+        auto scene = JsonLoader::createScene(client::Game::getInstance(), argv[1]);
 
         scene->createSystem<rtype::CameraSystem>();
-        scene->createSystem<EventSystem>();
+        // scene->createSystem<CollisionSystem>();
+        // scene->createSystem<HealthSystem>();
         scene->createSystem<rtype::BehaviourSystem>();
-        scene->createSystem<AnimationSystem>();
-        scene->createSystem<SpriteSystem>();
-        scene->createSystem<BackgroundSystem>();
-        scene->createSystem<CollisionSystem>();
-        scene->createSystem<HealthSystem>();
+        scene->createSystem<client::EventSystem>();
+        scene->createSystem<client::TextSystem>();
+        scene->createSystem<client::InputSystem>();
+        scene->createSystem<client::AnimationSystem>();
+        scene->createSystem<client::SpriteSystem>();
+        // scene->createSystem<client::BackgroundSystem>();
 
-        Game::getInstance().start();
+        client::Game::getInstance().start();
         return 0;
     } catch (const Exception &e) {
         std::cerr << e.what() << std::endl;
@@ -88,10 +109,12 @@ int init()
 
 int main(const int argc, const char **argv)
 {
-    return init();
+    if (argc < 2)
+        return 1;
+    return init(argc, argv);
 
     try {
-        GameClient::Start(argc, argv);
+        client::GameClient::Start(argc, argv);
         return 0;
     } catch (const std::exception &err) {
         std::cerr << err.what() << std::endl;

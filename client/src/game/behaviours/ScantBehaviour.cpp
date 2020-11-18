@@ -7,10 +7,6 @@
 
 #include "ScantBehaviour.hpp"
 
-#include "engine/core/components/AnimationComponent.hpp"
-#include "engine/core/components/MissileComponent.hpp"
-#include "game/behaviours/ScantBehaviour.hpp"
-
 namespace rtype::client {
     void ScantBehaviour::initComponents_()
     {

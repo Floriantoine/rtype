@@ -7,21 +7,18 @@
 
 #pragma once
 
-#include "../components/AnimationComponent.hpp"
-#include "../components/ScaleComponent.hpp"
+#include "../Game.hpp"
+#include "../components/ColorComponent.hpp"
+#include "../components/InputComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
-#include "engine/core/components/RotationComponent.hpp"
-#include "engine/core/components/SpriteComponent.hpp"
 #include "engine/core/systems/ARenderSystem.hpp"
 
 namespace rtype::client {
-
-    class SpriteSystem : public ARenderSystem {
+    class InputSystem : public ARenderSystem {
       public:
-        SpriteSystem();
-        ~SpriteSystem() = default;
+        InputSystem();
+        ~InputSystem() = default;
 
         void update(long elapsedTime) override;
     };
-
-}
+};

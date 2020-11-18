@@ -25,6 +25,21 @@ namespace rtype::client {
     class ABehaviour : public ABehaviourBase {
       public:
         /**
+         * Method called when the mouse cursor moves on screen
+         */
+        virtual void onMouseMove(const sf::Event &) {};
+
+        /**
+         * Method called when the mouse cursor hovers the entity's collide box
+         */
+        virtual void onMouseHover(const sf::Event &) {};
+
+        /**
+         * Method called when the mouse button is pressed over the entity's collide box
+         */
+        virtual void onMouseClick(const sf::Event &) {};
+        
+        /**
          * Method called when a keyboard key is pressed
          */
         virtual void onKeyPressed(const sf::Event &) {};
