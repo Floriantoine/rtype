@@ -11,7 +11,6 @@
 #include "./IObjectPool.hpp"
 
 #include <cstddef>
-#include <mutex>
 #include <stdexcept>
 #include <list>
 #include <vector>

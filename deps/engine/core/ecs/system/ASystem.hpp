@@ -7,8 +7,11 @@
 
 #pragma once
 
-#include "engine/core/ecs/component/ComponentManager.hpp"
+#include "../component/ComponentManager.hpp"
 #include "../types.hpp"
+#include "../../components/CameraComponent.hpp"
+
+#include <iostream>
 
 namespace rtype {
 
@@ -31,6 +34,27 @@ namespace rtype {
             : group_ { group }
         { }
         ~ASystem() = default;
+
+        Entity *getCamera() const
+        {
+            static Entity *camera = nullptr;
+
+            if (camera == nullptr) {
+                int cameraCount = 0;
+                this->componentManager_->apply<CameraComponent>([&](CameraComponent *cameraComponent) {
+                    ++cameraCount;
+                    if (cameraCount > 1)
+                        return;
+                    camera = cameraComponent->getEntity();
+                });
+                if (cameraCount == 0) {
+                    std::cerr << "warn: no scene camera defined" << std::endl;
+                } else if (cameraCount > 1) {
+                    std::cerr << "warn: more than 1 scene camera defined. Only 1 will be used" << std::endl;
+                }
+            }
+            return camera;
+        }
 
       public:
         virtual void update(long elapsedTime) = 0;

@@ -9,6 +9,12 @@
 #include "Exception.hpp"
 #include "GameServer.hpp"
 #include "Server.hpp"
+#include "engine/core/components/MissileComponent.hpp"
+#include "engine/core/components/PositionComponent.hpp"
+#include "game/behaviours/MissilePlayerBehaviour.hpp"
+#include "game/behaviours/PataBehaviour.hpp"
+#include "game/behaviours/PlayerBehaviour.hpp"
+#include "scene_loader/SceneLoader.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -25,12 +31,22 @@ static server::Config ParseConfig(const std::string &filePath)
     if (!configFile.good())
         throw server::Exception("can't open config file: " + filePath);
     nlohmann::json::parse(configFile).get_to(conf);
-    if (conf.maxGameThreads <= 0)
+    if (conf.maxGameThreads <= 0) {
         conf.maxGameThreads = std::thread::hardware_concurrency();
+        conf.maxGameThreads -= conf.maxGameThreads != 0;
+    }
     if (conf.maxGameThreads == 0)
         throw server::Exception("can't auto determine how many threads to use");
-    conf.maxGameThreads -= conf.maxGameThreads != 0;
     return conf;
+}
+
+static void registerComponentFactories()
+{
+    JsonLoader::registerComponentFactory("position", PositionComponent::factory);
+    JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
+    JsonLoader::registerComponentFactory("player_script", server::PlayerBehaviour::getFactory<server::PlayerBehaviour>());
+    JsonLoader::registerComponentFactory("missile_player_script", server::MissilePlayerBehaviour::getFactory<server::MissilePlayerBehaviour>());
+    JsonLoader::registerComponentFactory("pata_script", server::PataBehaviour::getFactory<server::PataBehaviour>());
 }
 
 int main(int argc, const char **argv)

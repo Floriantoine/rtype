@@ -6,76 +6,93 @@
 */
 
 #include "Client.hpp"
+#include "Exception.hpp"
+#include "Protocol.hpp"
 
-namespace rtype::Network {
-    TcpClient::TcpClient(asio::io_context &io_context, const std::string_view &adress, std::uint16_t port)
+#include <cstdint>
+
+namespace rtype::client::Network {
+    TcpClient::TcpClient(asio::io_context &io_context, const std::string_view &address, std::uint16_t port)
         : io_context_(io_context)
         , serv_socket_(io_context)
-        , endpoint_(asio::ip::make_address(adress), port)
+        , endpoint_(asio::ip::make_address(address), port)
     {
         std::cout << "Start Tcp Client" << std::endl;
-        try {
-            this->start();
-        } catch (std::exception &e) {
-            std::cerr << e.what() << std::endl;
-        }
+        this->on_error_ = [&] {
+            throw rtype::client::Exception("TCP client: " + this->error_code_.message());
+        };
+        this->start();
     }
 
     void TcpClient::start()
     {
-        this->serv_socket_.connect(this->endpoint_);
+        this->serv_socket_.connect(this->endpoint_, this->error_code_);
+        if (this->error_code_)
+            this->on_error_();
     }
 
-    void TcpClient::send(const rtype::BPC::Buffer &buffer)
+    void TcpClient::send(const BPC::Package &package)
     {
-        this->serv_socket_.write_some(asio::buffer(buffer));
+        this->serv_socket_.write_some(asio::buffer(BPC::Serialize(package)), this->error_code_);
+        if (this->error_code_)
+            this->on_error_();
     }
 
-    // TODO: change the corpse... see With Albert
-    std::size_t parse_header(const asio::streambuf &)
-    {
-        return 42;
-    }
-
-    rtype::BPC::Buffer &TcpClient::recv(std::vector<unsigned char> &recbuf)
+    rtype::BPC::Package TcpClient::recv()
     {
         // Read the header
-        int header_size = 42; // TODO: This should be a macro
-        recbuf.resize(header_size);
+        this->recbuf_.resize(HEADER_SIZE);
+        auto nbytes = this->serv_socket_.read_some(asio::buffer(this->recbuf_), this->error_code_);
+        auto package = BPC::Deserialize(this->recbuf_);
 
-        auto bytes = this->serv_socket_.read_some(asio::buffer(recbuf));
-        std::cout << "READ: " << bytes << " bytes from socket" << std::endl;
-
-        // Extract the size of the body
-        //auto body_size = parse_header(recbuf);
-        //recbuf.resize(body_size);
-        //asio::read(this->serv_socket_, asio::buffer(recbuf));
-        return recbuf;
+        if (HEADER_SIZE != nbytes || this->error_code_)
+            this->on_error_();
+        package.body.resize(package.bodySize);
+        nbytes = this->serv_socket_.read_some(asio::buffer(package.body), this->error_code_);
+        if (package.bodySize != nbytes || this->error_code_)
+            this->on_error_();
+        return package;
     };
 
-    UdpClient::UdpClient(asio::io_context &io_context, const std::string_view &adress, std::uint16_t port)
-        : io_context_(io_context)
-        , resolver_(io_context)
-        , socket_(io_context, udp::endpoint(udp::v4(), 0))
+    UdpClient::UdpClient(const msg_handler &onMessage)
+        : resolver_(this->io_context_)
+        , on_message_ { onMessage }
     {
-        std::cout << "Start Udp Client" << std::endl;
-        this->serv_endpoints = *this->resolver_.resolve(udp::v4(), adress, std::to_string(port));
     }
 
-    void UdpClient::send(const rtype::BPC::Buffer &buffer)
+    void UdpClient::connect(const std::string_view &address, std::uint16_t port)
     {
-        socket_.send_to(asio::buffer(buffer), this->serv_endpoints);
+        this->socket_.emplace(this->io_context_, udp::endpoint(udp::v4(), 0));
+        this->serv_endpoints_ = *this->resolver_.resolve(udp::v4(), address, std::to_string(port));
     }
 
-    rtype::BPC::Buffer &UdpClient::recv(std::vector<unsigned char> &recbuf)
+    void UdpClient::poll()
     {
-        // Read the header
-        int header_size = 8;
-        recbuf.resize(header_size);
+        this->io_context_.poll();
+    }
 
-        this->socket_.receive_from(asio::buffer(recbuf), this->serv_endpoints);
+    void UdpClient::start()
+    {
+        auto self = this->shared_from_this();
 
-        // Extract the size of the body
-        return recbuf;
-    };
+        this->socket_->async_receive_from(
+            boost::asio::buffer(this->streambuf_), this->serv_endpoints_,
+            [self](err_code err, std::size_t nbytes) {
+                if (nbytes == HEADER_SIZE  && !err) {
+                    BPC::Package pkg = BPC::Deserialize(self->streambuf_);
+                    pkg.body.reserve(pkg.bodySize);
+                    nbytes = self->socket_->receive_from(boost::asio::buffer(pkg.body), self->serv_endpoints_, asio::socket_base::message_flags(), err);
+                    if (nbytes == pkg.bodySize && !err) {
+                        self->on_message_(pkg, *self);
+                        self->streambuf_.resize(HEADER_SIZE, 0);
+                        self->start();
+                    }
+                }
+            });
+    }
+
+    void UdpClient::send(const BPC::Package &package)
+    {
+        socket_->send_to(asio::buffer(BPC::Serialize(package)), this->serv_endpoints_);
+    }
 }

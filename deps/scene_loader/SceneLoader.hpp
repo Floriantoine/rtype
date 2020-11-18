@@ -7,15 +7,16 @@
 
 #pragma once
 
-#include "../utils/Singleton.hpp"
 #include "../engine/core/AGame.hpp"
 #include "../engine/core/ecs/component/ComponentBase.hpp"
 #include "../engine/core/ecs/entity/Entity.hpp"
 #include "../engine/core/ecs/entity/EntityManager.hpp"
 #include "../engine/core/scene/Scene.hpp"
+#include "../engine/core/scene/SceneManager.hpp"
+#include "../utils/Singleton.hpp"
 #include "nlohmann/json.hpp"
-#include "utils/Singleton.hpp"
 #include "utils/Exception.hpp"
+#include "utils/Singleton.hpp"
 
 #include <cstdint>
 #include <fstream>
@@ -142,7 +143,7 @@ namespace rtype {
         {
             nlohmann::json json = JsonUtil::loadFile(file);
 
-            if (json == nlohmann::json::value_t::discarded) {
+            if (json.is_discarded()) {
                 throw Exception("parsing error");
             }
 
@@ -204,7 +205,7 @@ namespace rtype {
         /**
          * Create a new scene and load its entities from file
          * 
-         * @param sceneManager scene manager to use to create a new scene
+         * @param game game to create the scene into
          * @param file path to the file to load the scene's entities from
          * 
          * @throw
@@ -221,6 +222,36 @@ namespace rtype {
 
             std::size_t layer = JsonUtil::JsonAt(json, "layer")->get<std::size_t>();
             std::shared_ptr scene = game.createScene(layer);
+
+            JsonLoader::getInstance().loadState_(*scene, json);
+
+            const auto &entities = JsonUtil::JsonAt(json, "entities");
+            for (const auto &it : *entities) {
+                JsonLoader::createEntity(scene->getEntityManager(), it);
+            }
+            return scene;
+        }
+
+        /**
+         * Create a new scene and load its entities from file
+         * 
+         * @param sceneManager scene manager to use to create a new scene
+         * @param file path to the file to load the scene's entities from
+         * 
+         * @throw
+         * 
+         * @returns the newly created and loaded scene
+         */
+        static std::shared_ptr<Scene> createScene(SceneManager &sceneManager, const std::string &file)
+        {
+            nlohmann::json json = JsonUtil::loadFile(file);
+
+            if (json == nlohmann::json::value_t::discarded) {
+                throw Exception("parsing error");
+            }
+
+            std::size_t layer = JsonUtil::JsonAt(json, "layer")->get<std::size_t>();
+            std::shared_ptr scene = sceneManager.createScene(layer);
 
             JsonLoader::getInstance().loadState_(*scene, json);
 

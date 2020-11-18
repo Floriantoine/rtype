@@ -22,11 +22,11 @@ namespace rtype::server {
             port_t port;
         };
 
-        AskJoinHandler(LobbyDispatcher &dispatcher);
+        AskJoinHandler(GameServer &owner);
         ~AskJoinHandler() override = default;
 
       protected:
-        void response(const BPC::Package &package, Network::TcpSession &session) override;
-        void request(const BPC::Package &package, Network::TcpSession &session) override;
+        void receiveResponse(const BPC::Package &package, Network::TcpSession &session) override;
+        void receiveRequest(const BPC::Package &package, Network::TcpSession &session) override;
     };
 }

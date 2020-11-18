@@ -8,6 +8,8 @@
 #include "Server.hpp"
 
 #include "Protocol.hpp"
+#include "boost/asio/buffer.hpp"
+#include "boost/asio/socket_base.hpp"
 #include "boost/asio/write.hpp"
 
 #include <functional>
@@ -18,7 +20,6 @@
 namespace rtype::server::Network {
     TcpSession::TcpSession(tcp::socket &&socket, const msg_handler &on_message, const err_handler &on_error)
         : socket_ { std::move(socket) }
-        , streambuf_(HEADER_SIZE)
         , on_message_ { on_message }
         , on_error_ { on_error }
     {
@@ -34,6 +35,7 @@ namespace rtype::server::Network {
     {
         auto self = shared_from_this();
 
+        this->streambuf_.resize(HEADER_SIZE, 0);
         this->socket_.async_read_some(boost::asio::buffer(self->streambuf_),
             [self](err_code err, std::size_t nbytes) {
                 if (!self->isErrorAndHandle(err, nbytes != HEADER_SIZE)) {
@@ -42,7 +44,6 @@ namespace rtype::server::Network {
                     nbytes = self->socket_.read_some(boost::asio::buffer(pkg.body), err);
                     if (!self->isErrorAndHandle(err, nbytes != pkg.bodySize)) {
                         self->on_message_(pkg, *self);
-                        self->streambuf_.resize(HEADER_SIZE, 0);
                         self->async_read();
                     }
                 }
@@ -139,47 +140,44 @@ namespace rtype::server::Network {
         return *this;
     }
 
-    UdpServer::UdpServer(boost::asio::io_context &io_context)
-        : io_context_(io_context)
+    UdpServer::UdpServer(const msg_handler &onRead)
+        : on_message_(onRead)
     {
         std::cout << "UDP Server" << std::endl;
         this->socket_.emplace(io_context_, udp::endpoint(udp::v4(), 0));
         std::cout << "endpoint: " << this->socket_->local_endpoint() << std::endl;
     }
 
-    void UdpServer::async_read(std::function<void(const UdpPackage &)> onRead)
+    void UdpServer::start()
     {
-        std::stringstream msg;
-        auto mutableBuffer = this->streambuf_.prepare(4096);
-        this->socket_->async_receive_from(mutableBuffer, this->remote_endpoint_,
+        this->streambuf_.resize(HEADER_SIZE, 0);
+        this->socket_->async_receive_from(boost::asio::buffer(this->streambuf_), this->remote_endpoint_,
             [&](err_code err, std::size_t nbytes) {
-                if (!err) {
-                    std::cout << "Received " << nbytes << " bytes" << std::endl;
-                    this->streambuf_.commit(nbytes);
-                    std::istream is(&this->streambuf_);
-                    std::string str;
-                    is >> str;
-                    std::cout << str << std::endl;
-                    BPC::Buffer buffer(str.begin(), str.end());
+                if (!err && nbytes == HEADER_SIZE) {
                     UdpPackage package;
-                    BPC::Deserialize(package, buffer);
+                    BPC::Deserialize(package, this->streambuf_);
                     package.endpoint = this->remote_endpoint_;
-                    onRead(package);
-                    this->async_read(onRead);
-                } else {
-                    std::cerr << "Error Somewhere" << err.message() << std::endl;
+                    package.body.resize(package.bodySize);
+                    nbytes = this->socket_->receive_from(boost::asio::buffer(package.body), this->remote_endpoint_, boost::asio::socket_base::message_flags(), err);
+                    if (!err && nbytes == HEADER_SIZE) {
+                        this->on_message_(package);
+                        this->start();
+                    }
                 }
             });
     }
 
-    void UdpServer::async_write(const UdpPackage &package)
+    void UdpServer::poll()
+    {
+        this->io_context_.poll();
+    }
+
+    err_code UdpServer::write(const UdpPackage &package)
     {
         BPC::Buffer buffer = BPC::Serialize(package);
-        this->socket_->async_send_to(boost::asio::buffer(buffer), this->remote_endpoint_,
-            [&](err_code err, std::size_t nsize) {
-                if (err)
-                    std::cerr << "Write: " + err.message() << std::endl;
-            });
+        err_code err;
+        this->socket_->send_to(boost::asio::buffer(buffer), package.endpoint, boost::asio::socket_base::message_flags(), err);
+        return err;
     }
 
     unsigned short UdpServer::getPort() const

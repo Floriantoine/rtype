@@ -28,6 +28,12 @@ namespace rtype {
 
         id_t id_;
 
+        /**
+         * Stores the entity visibility: whether the entity's sprite is 
+         * contained in viewport
+         */
+        bool visibility_ { false };
+
       public:
         Entity()
             : id_ { this->getNextId() }
@@ -76,6 +82,16 @@ namespace rtype {
         {
             STATIC_ASSERT_IS_COMPONENT(T);
             this->componentManager_->removeComponent<T>(this->getId());
+        }
+
+        void setVisibility(bool visibility)
+        {
+            this->visibility_ = visibility;
+        }
+
+        bool getVisibility() const
+        {
+            return this->visibility_;
         }
     };
 

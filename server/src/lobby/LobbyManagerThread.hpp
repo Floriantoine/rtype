@@ -9,6 +9,7 @@
 
 #include "Lobby.hpp"
 #include "LobbyDispatcher.hpp"
+#include "utils/lock/data/ExclusiveDataLock.hpp"
 
 #include <list>
 #include <memory>
@@ -21,9 +22,11 @@ namespace rtype::server {
     */
     class LobbyManagerThread {
       private:
+        static unsigned Index_;
+
         static constexpr unsigned TICKS_PER_SEC = 60;
         static constexpr auto TICK_TIME = std::chrono::seconds(1) / TICKS_PER_SEC;
-        bool isRunning_ { false };
+        bool isRunning_ { true };
         std::shared_ptr<LobbyDispatcher> dispatcher_;
         unsigned index_;
         std::thread thread_;
@@ -33,7 +36,7 @@ namespace rtype::server {
         void run_();
 
       public:
-        LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher, unsigned index);
+        LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher);
         ~LobbyManagerThread();
     };
 }

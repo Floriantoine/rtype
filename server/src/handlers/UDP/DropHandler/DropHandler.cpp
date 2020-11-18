@@ -6,18 +6,23 @@
 */
 
 #include "DropHandler.hpp"
+#include "Protocol.hpp"
 
 namespace rtype::server {
-    DropHandler::DropHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    DropHandler::DropHandler(Lobby &owner)
+        : AHandlerUDP(owner)
+    { }
+
+    void DropHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        // TODO
     }
 
-    void DropHandler::response(const Network::UdpPackage &package)
-    {
-    }
+    void DropHandler::receiveResponse(const Network::UdpPackage &package)
+    { }
 
-    void DropHandler::request(const Network::UdpPackage &package)
+    BPC::Method DropHandler::getMethod() const
     {
+        return BPC::DROP;
     }
 }

@@ -50,7 +50,7 @@ namespace rtype {
 
         std::shared_ptr<Entity> getEntity(id_t id)
         {
-            auto it = this->entities_.find(id);
+            const auto &it = this->entities_.find(id);
 
             if (it != this->entities_.end()) {
                 return it->second;

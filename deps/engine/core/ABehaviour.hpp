@@ -7,11 +7,15 @@
 
 #pragma once
 
-#include "./ecs/assert.hpp"
-#include "./ecs/entity/Entity.hpp"
 #include "./components/BehaviourComponent.hpp"
+#include "./components/HealthComponent.hpp"
+#include "./ecs/assert.hpp"
+#include "./ecs/entity/EntityManager.hpp"
+#include "./ecs/entity/Entity.hpp"
+#include "./physics/CollisionData.hpp"
 #include "nlohmann/json.hpp"
 
+#include <iostream>
 #include <memory>
 
 namespace sf {
@@ -30,7 +34,7 @@ namespace rtype {
     class ABehaviour : public IBehaviour {
       public:
         /**
-         * Method called when script component is initialized
+         * Method called when behaviour component is initialized
          */
         virtual void onInit() {};
 
@@ -40,9 +44,14 @@ namespace rtype {
         virtual void onUpdate(long elapsedTime) = 0;
 
         /**
+         * Method called when the behaviour's entity is destroyed
+         */
+        virtual void onDestroy() {};
+
+        /**
          * Method called when the associated entity collides with another entity
          */
-        virtual void onCollide() {};
+        virtual void onCollide(const CollisionData &collision) {};
 
         /**
          * Method called when a keyboard key is pressed
@@ -65,7 +74,17 @@ namespace rtype {
         virtual void onMouseButtonReleased(const sf::Event &) {};
 
         /**
-         * Get the entity the script is attached to
+         * Method called when the entity enters camera view
+         */
+        virtual void onViewEnter() {};
+
+        /**
+         * Method called when the entity leaves camera view
+         */
+        virtual void onViewLeave() {};
+
+        /**
+         * Get the behaviour's entity
          * 
          * @returns associated entity
          */
@@ -81,7 +100,7 @@ namespace rtype {
          *
          * @return a component of type T associated to the Sript's owner entity
          */
-        template<class T>
+        template <class T>
         T *getComponent()
         {
             return this->getEntity()->getComponent<T>();
@@ -92,7 +111,37 @@ namespace rtype {
          */
         void destroyEntity()
         {
+            this->onDestroy();
             this->getEntity()->getEntityManager()->destroyEntity(this->getEntity()->getId());
+        }
+
+        /**
+         * Get the entity's health points
+         * 
+         * @returns the entity's health points
+         */
+        int getHealth()
+        {
+            HealthComponent *health = this->getComponent<HealthComponent>();
+            if (health == nullptr) {
+                return 0;
+            }
+            return health->health;
+        }
+
+        /**
+         * Make the entity's health component value decrease by [damage]
+         * 
+         * @param damage damage value to be withdrawn to health value
+         */
+        void takeDamage(int damage)
+        {
+            HealthComponent *health = this->getComponent<HealthComponent>();
+            if (health == nullptr) {
+                std::cerr << "warn: attempting to provide damage, but entity has no HealthComponent" << std::endl;
+                return;
+            }
+            health->health -= damage;
         }
 
         /**
@@ -107,12 +156,11 @@ namespace rtype {
         {
             STATIC_ASSERT_IS_BASE_OF(ABehaviour, T);
             return [](const std::shared_ptr<Entity> &entity, nlohmann::json body) {
-                entity->addComponent<BehaviourComponent>(new T());
+                entity->addComponent<BehaviourComponent>(std::make_shared<T>());
                 BehaviourComponent *holder = entity->getComponent<BehaviourComponent>();
-                ABehaviour *script = reinterpret_cast<ABehaviour *>(holder->getBehaviour());
+                std::shared_ptr<ABehaviour> script = holder->getBehaviour<ABehaviour>();
                 script->onInit();
             };
         }
     };
-
 }

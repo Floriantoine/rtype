@@ -82,21 +82,25 @@ namespace rtype::server::Network {
 
     class UdpServer {
       public:
-        UdpServer(boost::asio::io_context &io_context);
+        using msg_handler = std::function<void(const UdpPackage &)>;
+
+        UdpServer(const msg_handler &onRead);
         ~UdpServer() = default;
         UdpServer(const UdpServer &) = delete;
         UdpServer(UdpServer &&) = delete;
         UdpServer &operator=(const UdpServer &);
         UdpServer &operator=(UdpServer &&) = delete;
 
-        void async_read(std::function<void(const UdpPackage &)> onRead);
+        void start();
+        void poll();
         unsigned short getPort() const;
-        boost::asio::io_context &io_context_;
+        err_code write(const UdpPackage &package);
 
       private:
-        void async_write(const UdpPackage &package);
+        boost::asio::io_context io_context_;
         udp::endpoint remote_endpoint_;
         std::optional<udp::socket> socket_;
-        boost::asio::streambuf streambuf_;
+        BPC::Buffer streambuf_;
+        const msg_handler &on_message_;
     };
 }

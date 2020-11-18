@@ -7,17 +7,25 @@
 
 #include "LeaveHandler.hpp"
 
+#include "Protocol.hpp"
+
 namespace rtype::server {
-    LeaveHandler::LeaveHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    LeaveHandler::LeaveHandler(Lobby &owner)
+        : AHandlerUDP(owner)
+    { }
+
+    void LeaveHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        auto *body = package.getBodyTo<ClientRequestBody>();
+        this->sendResponse(package);
+        this->owner_.removePlayer_(package.endpoint);
     }
 
-    void LeaveHandler::response(const Network::UdpPackage &package)
-    {
-    }
+    void LeaveHandler::receiveResponse(const Network::UdpPackage &package)
+    { }
 
-    void LeaveHandler::request(const Network::UdpPackage &package)
+    BPC::Method LeaveHandler::getMethod() const
     {
+        return BPC::LEAVE;
     }
 }

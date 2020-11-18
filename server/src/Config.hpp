@@ -10,6 +10,7 @@
 #include "nlohmann/json.hpp"
 
 #include <cstdint>
+#include <string>
 
 namespace rtype::server {
     /**
@@ -18,6 +19,8 @@ namespace rtype::server {
     struct Config {
         unsigned maxGameThreads;
         uint16_t port;
+        std::string definitionsPath;
+        std::string scenesDir;
     };
 
     /**

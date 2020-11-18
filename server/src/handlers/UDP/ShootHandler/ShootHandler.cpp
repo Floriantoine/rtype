@@ -7,17 +7,71 @@
 
 #include "ShootHandler.hpp"
 
+#include "Protocol.hpp"
+#include "engine/core/components/BehaviourComponent.hpp"
+#include "engine/core/components/PositionComponent.hpp"
+#include "engine/core/ecs/entity/Entity.hpp"
+#include "game/behaviours/PlayerBehaviour.hpp"
+
+#include <memory>
+
 namespace rtype::server {
-    ShootHandler::ShootHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    ShootHandler::ShootHandler(Lobby &owner)
+        : AHandlerUDP(owner)
+    { }
+
+    void ShootHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        auto *body = package.getBodyTo<ClientRequestBody>();
+        auto behaviour = this->owner_.getEntityComponent_<BehaviourComponent>(body->playerID);
+        auto playerBehaviour = behaviour->getBehaviour<PlayerBehaviour>();
+        std::shared_ptr<Entity> missile = nullptr;
+
+        if (playerBehaviour) {
+            // missile = PlayerBehaviour->shoot();
+        }
+        ServerResponseBody response;
+        response.missileID = 0;
+        response.confirmation = false;
+
+        if (!missile) {
+            this->sendResponse(package, &response);
+            return;
+        }
+        response.missileID = missile->getId();
+        response.confirmation = true;
+        this->sendResponse(package, &response);
+
+        auto pos = missile->getComponent<PositionComponent>();
+        std::string json = R"({"base":"PlayerMissile","components":[{"type":"position","x":)";
+        json += pos->x;
+        json += ",\"y\":";
+        json += pos->y;
+        json += "}]}";
+
+        BPC::Buffer responseBody(json.size() + 8);
+        char *idPtr = (char *)response.missileID;
+        unsigned idx = 0;
+        for (; idx < sizeof(response.missileID); ++idx) {
+            responseBody[idx] = idPtr[idx];
+        }
+        for (const auto &it : json) {
+            responseBody[idx] = it;
+            ++idx;
+        }
+        auto &handler = this->owner_.handlers_[BPC::SPAWN];
+        for (const auto &it : this->owner_.players_) {
+            if (it.endpoint == package.endpoint)
+                continue;
+            handler->sendRequest(it.endpoint, &responseBody);
+        }
     }
 
-    void ShootHandler::response(const Network::UdpPackage &package)
-    {
-    }
+    void ShootHandler::receiveResponse(const Network::UdpPackage &package)
+    { }
 
-    void ShootHandler::request(const Network::UdpPackage &package)
+    BPC::Method ShootHandler::getMethod() const
     {
+        return BPC::SHOOT;
     }
 }

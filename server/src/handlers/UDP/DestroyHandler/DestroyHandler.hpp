@@ -20,11 +20,12 @@ namespace rtype::server {
             entity_id_t entityID;
         };
 
-        DestroyHandler(std::vector<Player> &players);
+        DestroyHandler(Lobby &owner);
         ~DestroyHandler() override = default;
 
       protected:
-        void response(const Network::UdpPackage &package) override;
-        void request(const Network::UdpPackage &package) override;
+        void receiveResponse(const Network::UdpPackage &package) override;
+        void receiveRequest(const Network::UdpPackage &package) override;
+        BPC::Method getMethod() const override;
     };
 }

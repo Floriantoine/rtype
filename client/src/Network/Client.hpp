@@ -9,80 +9,70 @@
 
 #include "Protocol.hpp"
 #include "boost/asio.hpp"
+#include "boost/asio/io_context.hpp"
+#include "boost/system/error_code.hpp"
 
 #include <iostream>
+#include <memory>
+#include <optional>
+#include <system_error>
 #include <vector>
 
-namespace rtype::Network {
+using err_handler = std::function<void()>;
+using err_code = boost::system::error_code;
+
+namespace rtype::client::Network {
     namespace asio = boost::asio;
 
     typedef asio::ip::tcp tcp;
     typedef asio::ip::udp udp;
 
-    template <class T>
-    class IOClient {
-      public:
-        IOClient(asio::io_context &io_context, const std::string_view &adress, std::uint16_t port)
-            : client_(io_context, adress, port)
-            , io_context_(io_context) {};
-
-        ~IOClient() = default;
-        IOClient(const IOClient &) = delete;
-        IOClient(IOClient &&) = delete;
-        IOClient &operator=(const IOClient &) = delete;
-        IOClient &operator=(IOClient &&) = delete;
-
-        rtype::BPC::Buffer &read()
-        {
-            return this->client_.recv(buffer_);
-        };
-        void write(rtype::BPC::Buffer buffer)
-        {
-            this->client_.send(buffer);
-        };
-
-      private:
-        T client_;
-        asio::io_context &io_context_;
-        std::vector<unsigned char> buffer_;
-    };
-
     class TcpClient {
       public:
-        TcpClient(asio::io_context &io_context, const std::string_view &adress, std::uint16_t port);
+        TcpClient(asio::io_context &io_context, const std::string_view &address, std::uint16_t port);
         ~TcpClient() noexcept = default;
         TcpClient(const TcpClient &) = delete;
         TcpClient(TcpClient &&) = delete;
         TcpClient &operator=(const TcpClient &) = delete;
         TcpClient &operator=(TcpClient &&) = delete;
 
-        void start();
-        void send(const rtype::BPC::Buffer &buffer);
-        rtype::BPC::Buffer &recv(std::vector<unsigned char> &);
+        void send(const BPC::Package &package);
+        rtype::BPC::Package recv();
 
       private:
+        rtype::BPC::Buffer recbuf_;
+        boost::system::error_code error_code_;
         asio::io_context &io_context_;
         tcp::socket serv_socket_;
         tcp::endpoint endpoint_;
+        err_handler on_error_;
+
+        void start();
     };
 
-    class UdpClient {
+    class UdpClient : public std::enable_shared_from_this<UdpClient> {
       public:
-        UdpClient(asio::io_context &io_context, const std::string_view &adress, std::uint16_t port);
+        using msg_handler = std::function<void(const BPC::Package &, const UdpClient &)>;
+
+        UdpClient(const msg_handler &onMessage);
         ~UdpClient() noexcept = default;
         UdpClient(const UdpClient &) = delete;
         UdpClient(UdpClient &&) = delete;
         UdpClient &operator=(const UdpClient &) = delete;
         UdpClient &operator=(UdpClient &&) = delete;
 
+        void connect(const std::string_view &address, std::uint16_t port);
+        void poll();
         void start();
-        void send(const rtype::BPC::Buffer &buffer);
-        rtype::BPC::Buffer &recv(std::vector<unsigned char> &);
+        void send(const BPC::Package &package);
 
       private:
-        asio::io_context &io_context_;
-        udp::socket socket_;
-        udp::endpoint serv_endpoints;
+        BPC::Buffer streambuf_;
+        boost::asio::io_context io_context_;
+        std::optional<udp::socket> socket_ { std::nullopt };
+        udp::endpoint serv_endpoints_;
         udp::resolver resolver_;
+        const msg_handler &on_message_;
+
     };
 };
