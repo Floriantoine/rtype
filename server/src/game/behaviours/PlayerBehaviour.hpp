@@ -7,8 +7,7 @@
 
 #pragma once
 
-#include "engine/core/ABehaviour.hpp"
-#include "engine/core/components/AnimationComponent.hpp"
+#include "game/ABehaviour.hpp"
 #include "engine/core/components/MissileComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/components/SpriteComponent.hpp"

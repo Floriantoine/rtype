@@ -36,7 +36,7 @@ namespace rtype::client::Network {
         TcpClient &operator=(const TcpClient &) = delete;
         TcpClient &operator=(TcpClient &&) = delete;
 
-        void send(const BPC::Package &package);
+        err_code send(const BPC::Package &package);
         rtype::BPC::Package recv();
 
       private:
@@ -52,7 +52,7 @@ namespace rtype::client::Network {
 
     class UdpClient : public std::enable_shared_from_this<UdpClient> {
       public:
-        using msg_handler = std::function<void(const BPC::Package &, const UdpClient &)>;
+        using msg_handler = std::function<void(const BPC::Package &)>;
 
         UdpClient(const msg_handler &onMessage);
         ~UdpClient() noexcept = default;
@@ -64,7 +64,7 @@ namespace rtype::client::Network {
         void connect(const std::string_view &address, std::uint16_t port);
         void poll();
         void start();
-        void send(const BPC::Package &package);
+        err_code send(const BPC::Package &package);
 
       private:
         BPC::Buffer streambuf_;
@@ -73,6 +73,5 @@ namespace rtype::client::Network {
         udp::endpoint serv_endpoints_;
         udp::resolver resolver_;
         const msg_handler &on_message_;
-
     };
 };

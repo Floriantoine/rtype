@@ -49,7 +49,7 @@ namespace rtype {
         template<typename T = int>
         static bool collides(const Rect<T> &rect, const Vector2<T> &point)
         {
-            return rect.contains(rect, point);
+            return rect.contains(point);
         }
 
         /**
@@ -66,7 +66,7 @@ namespace rtype {
         template<typename T = int>
         static bool collides(const Rect<T> &rect, T x, T y)
         {
-            return rect.contains(rect, x, y);
+            return rect.contains(x, y);
         }
     };
 

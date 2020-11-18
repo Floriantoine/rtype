@@ -5,7 +5,8 @@
 ** RenderSystem
 */
 
-#include "game/systems/SpriteSystem.hpp"
+#include "SpriteSystem.hpp"
+
 #include "game/Game.hpp"
 
 namespace rtype::client {
@@ -27,6 +28,7 @@ namespace rtype::client {
             PositionComponent *position = sprite->getEntity()->getComponent<PositionComponent>();
             AnimationComponent *animation = sprite->getEntity()->getComponent<AnimationComponent>();
             RotationComponent *rotation = sprite->getEntity()->getComponent<RotationComponent>();
+            ScaleComponent *scale = sprite->getEntity()->getComponent<ScaleComponent>();
 
             if (position != nullptr) {
                 sprite->sprite.setPosition(position->x - cameraPosition->x, position->y - cameraPosition->y);
@@ -38,6 +40,9 @@ namespace rtype::client {
             if (rotation != nullptr) {
                 sprite->sprite.setOrigin(sprite->rect.width / 2, sprite->rect.height / 2);
                 sprite->sprite.setRotation(rotation->degree);
+            }
+            if (scale != nullptr) {
+                sprite->sprite.setScale(scale->x, scale->y);
             }
             Game::getInstance().getWindow()->draw(sprite->sprite);
             sprite->sprite.setOrigin(0, 0);

@@ -10,10 +10,12 @@
 #include "../Rect.hpp"
 #include "../components/CameraComponent.hpp"
 #include "../components/SpriteComponent.hpp"
+#include "../components/PositionComponent.hpp"
+#include "../components/CollideBoxComponent.hpp"
 #include "../ecs/system/ASystem.hpp"
 #include "../physics/CollisionChecker.hpp"
-#include "core/ABehaviour.hpp"
-#include "core/components/BehaviourComponent.hpp"
+#include "../ABehaviourBase.hpp"
+#include "../components/BehaviourComponent.hpp"
 
 namespace rtype {
 
@@ -32,27 +34,35 @@ namespace rtype {
             Rect<float> cameraRect = this->getRelativeBounds(camera);
 
             this->componentManager_->apply<SpriteComponent>([&](SpriteComponent *sprite) {
-                Rect<float> spriteRect = this->getRelativeBounds(sprite);
-
-                BehaviourComponent *behaviourComponent = sprite->getEntity()->getComponent<BehaviourComponent>();
-                std::shared_ptr<ABehaviour> behaviour;
-                if (behaviourComponent != nullptr)
-                    behaviour = behaviourComponent->getBehaviour<ABehaviour>();
-
-                bool collides = CollisionChecker::collides<float>(cameraRect, spriteRect);
-                if (collides && sprite->getEntity()->getVisibility() == false) {
-                    sprite->getEntity()->setVisibility(true);
-                    if (behaviour)
-                        behaviour->onViewEnter();
-                } else if (collides == false && sprite->getEntity()->getVisibility()) {
-                    sprite->getEntity()->setVisibility(false);
-                    if (behaviour)
-                        behaviour->onViewLeave();
-                }
+                Rect<float> bounds = this->getRelativeBounds(sprite);
+                this->updateVisibility(sprite->getEntity(), bounds, cameraRect);
+            });
+            this->componentManager_->apply<CollideBoxComponent>([&](CollideBoxComponent *collideBox) {
+                Rect<float> bounds = this->getRelativeBounds(collideBox);
+                this->updateVisibility(collideBox->getEntity(), bounds, cameraRect);
             });
         }
 
       private:
+        void updateVisibility(Entity *entity, const Rect<float> &objectBounds, const Rect<float> &cameraBounds)
+        {
+            BehaviourComponent *behaviourComponent = entity->getComponent<BehaviourComponent>();
+            std::shared_ptr<ABehaviourBase> behaviour;
+            if (behaviourComponent != nullptr)
+                behaviour = behaviourComponent->getBehaviour<ABehaviourBase>();
+
+            bool collides = CollisionChecker::collides<float>(cameraBounds, objectBounds);
+            if (collides && entity->getVisibility() == false) {
+                entity->setVisibility(true);
+                if (behaviour)
+                    behaviour->onViewEnter();
+            } else if (collides == false && entity->getVisibility()) {
+                entity->setVisibility(false);
+                if (behaviour)
+                    behaviour->onViewLeave();
+            }
+        }
+
         static Rect<float> getRelativeBounds(CameraComponent *camera)
         {
             Vector2<float> position;
@@ -69,6 +79,17 @@ namespace rtype {
             Rect<float> bounds(0, 0, sprite->rect.width, sprite->rect.height);
 
             if (PositionComponent *positionComponent = sprite->getEntity()->getComponent<PositionComponent>()) {
+                bounds.x = positionComponent->x;
+                bounds.y = positionComponent->y;
+            }
+            return bounds;
+        }
+
+        static Rect<float> getRelativeBounds(CollideBoxComponent *collideBox)
+        {
+            Rect<float> bounds(0, 0, collideBox->box.w, collideBox->box.h);
+
+            if (PositionComponent *positionComponent = collideBox->getEntity()->getComponent<PositionComponent>()) {
                 bounds.x = positionComponent->x;
                 bounds.y = positionComponent->y;
             }

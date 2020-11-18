@@ -7,9 +7,9 @@
 
 #include "BackgroundSystem.hpp"
 
-#include "core/components/BackgroundComponent.hpp"
-#include "core/components/PositionComponent.hpp"
-#include "core/systems/ARenderSystem.hpp"
+#include "engine/core/components/BackgroundComponent.hpp"
+#include "engine/core/components/PositionComponent.hpp"
+#include "engine/core/systems/ARenderSystem.hpp"
 #include "game/Game.hpp"
 
 namespace rtype::client {

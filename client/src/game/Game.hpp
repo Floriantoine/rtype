@@ -8,7 +8,7 @@
 #pragma once
 
 #include "SFML/Graphics/RenderWindow.hpp"
-#include "core/AGame.hpp"
+#include "engine/core/AGame.hpp"
 #include "utils/Singleton.hpp"
 
 namespace rtype::client {

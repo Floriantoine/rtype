@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "core/systems/AAnimationSystem.hpp"
+#include "engine/core/systems/AAnimationSystem.hpp"
 
 namespace rtype::client {
     class AnimationSystem : public AAnimationSystem {

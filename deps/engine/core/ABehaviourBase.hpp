@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** Behaviour abstract class
+** Behaviour abstract base class
 */
 
 #pragma once
@@ -18,20 +18,16 @@
 #include <iostream>
 #include <memory>
 
-namespace sf {
-    class Event;
-}
-
 namespace rtype {
 
     /**
-     * Behaviour abstract class
+     * Behaviour abstract base class
      *
      * Behaviours are entity-specific behaviours
      * Behaviours must inherit from this class to be triggered by the default 
      * systems
      */
-    class ABehaviour : public IBehaviour {
+    class ABehaviourBase : public IBehaviour {
       public:
         /**
          * Method called when behaviour component is initialized
@@ -52,26 +48,6 @@ namespace rtype {
          * Method called when the associated entity collides with another entity
          */
         virtual void onCollide(const CollisionData &collision) {};
-
-        /**
-         * Method called when a keyboard key is pressed
-         */
-        virtual void onKeyPressed(const sf::Event &) {};
-
-        /**
-         * Method called when a keyboard key is released
-         */
-        virtual void onKeyReleased(const sf::Event &) {};
-
-        /**
-         * Method called when a mouse button is pressed
-         */
-        virtual void onMouseButtonPressed(const sf::Event &) {};
-
-        /**
-         * Method called when a mouse button is released
-         */
-        virtual void onMouseButtonReleased(const sf::Event &) {};
 
         /**
          * Method called when the entity enters camera view
@@ -145,20 +121,20 @@ namespace rtype {
         }
 
         /**
-         * Creates a factory for a ABehaviour derived class
+         * Creates a factory for a ABehaviourBase derived class
          *
-         * @tparam T a ABehaviour derived class
+         * @tparam T a ABehaviourBase derived class
          *
-         * @returns a factory for the T class, derived from ABehaviour
+         * @returns a factory for the T class, derived from ABehaviourBase
          */
         template <class T>
         static auto getFactory()
         {
-            STATIC_ASSERT_IS_BASE_OF(ABehaviour, T);
+            STATIC_ASSERT_IS_BASE_OF(ABehaviourBase, T);
             return [](const std::shared_ptr<Entity> &entity, nlohmann::json body) {
                 entity->addComponent<BehaviourComponent>(std::make_shared<T>());
                 BehaviourComponent *holder = entity->getComponent<BehaviourComponent>();
-                std::shared_ptr<ABehaviour> script = holder->getBehaviour<ABehaviour>();
+                std::shared_ptr<ABehaviourBase> script = holder->getBehaviour<ABehaviourBase>();
                 script->onInit();
             };
         }

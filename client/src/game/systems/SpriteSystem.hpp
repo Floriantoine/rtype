@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include "engine/core/components/AnimationComponent.hpp"
+#include "../components/AnimationComponent.hpp"
+#include "../components/ScaleComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/components/RotationComponent.hpp"
 #include "engine/core/components/SpriteComponent.hpp"

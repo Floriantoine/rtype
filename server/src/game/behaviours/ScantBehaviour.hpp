@@ -7,8 +7,7 @@
 
 #pragma once
 
-#include "engine/core/ABehaviour.hpp"
-#include "engine/core/components/AnimationComponent.hpp"
+#include "game/ABehaviour.hpp"
 #include "engine/core/components/MissileComponent.hpp"
 #include "engine/core/components/PositionComponent.hpp"
 
@@ -33,7 +32,6 @@ namespace rtype::server {
         int shootRate_ = 1500;
 
         PositionComponent *position_ = nullptr;
-        AnimationComponent *animation_ = nullptr;
         MissileComponent *missile_ = nullptr;
         std::size_t initInY_ = 0;
 

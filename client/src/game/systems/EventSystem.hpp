@@ -15,6 +15,7 @@ namespace rtype::client {
       public:
         void update(long elapsedTime);
         void handleCloseEvent(const sf::Event &evt);
+        void handleMouseMove(const sf::Event &evt);
         void handleMouseButtonPressedEvents(const sf::Event &evt);
         void handleMouseButtonReleasedEvents(const sf::Event &evt);
         void handleKeyPressedEvents(const sf::Event &evt);
