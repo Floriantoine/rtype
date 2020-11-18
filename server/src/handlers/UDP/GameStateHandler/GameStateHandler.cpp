@@ -20,7 +20,7 @@ namespace rtype::server {
     {
         auto *body = package.getBodyTo<GameStateHandler::ClientRequestBody>();
 
-        if (*this->owner_.state_ == GameState::RUN || body->state != GameState::RUN)
+        if (*this->owner_.state == GameState::RUN || body->state != GameState::RUN)
             return;
 
         this->owner_.scene->getComponentManager().apply<BehaviourComponent>([&](BehaviourComponent *holder) {
@@ -30,7 +30,7 @@ namespace rtype::server {
             }
         });
 
-        this->owner_.state_ = GameState::RUN;
+        this->owner_.state = GameState::RUN;
         this->sendResponse(package);
 
         ServerRequestBody req;

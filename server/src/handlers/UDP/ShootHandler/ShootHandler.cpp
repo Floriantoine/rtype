@@ -23,7 +23,7 @@ namespace rtype::server {
     void ShootHandler::receiveRequest(const Network::UdpPackage &package)
     {
         auto *body = package.getBodyTo<ClientRequestBody>();
-        auto behaviour = this->owner_.getEntityComponent_<BehaviourComponent>(body->playerID);
+        auto behaviour = this->owner_.getEntityComponent<BehaviourComponent>(body->playerID);
         auto playerBehaviour = behaviour->getBehaviour<PlayerBehaviour>();
         std::shared_ptr<Entity> missile = nullptr;
 

@@ -112,7 +112,7 @@ namespace rtype::server {
             if (needResponse)
                 this->awaitingResponse_.push_back(pkg);
         } else {
-            this->owner_.removePlayer_(endpoint);
+            this->owner_.removePlayer(endpoint);
         }
     }
 }
