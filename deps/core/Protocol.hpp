@@ -10,13 +10,13 @@
 #include "boost/algorithm/string/classification.hpp"
 #include "boost/algorithm/string/join.hpp"
 #include "boost/algorithm/string/split.hpp"
-#include "utils/Clock.hpp"
 
 #include <cassert>
 #include <cstddef>
 #include <functional>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #define DEFINITON_BYTE 0
 #define BODY_SIZE (DEFINITON_BYTE + 1)
@@ -121,27 +121,27 @@ namespace rtype::BinaryProtocolCommunication {
         int count = PEER_INFO;
 
         for (const auto &str : str_vec_ip) {
-            buffer[count] = static_cast<unsigned char>(std::atoi(str.c_str()));
+            buffer[count] = static_cast<std::uint8_t>(std::atoi(str.c_str()));
             count += 1;
         }
-        buffer[count] = (endpoint.port & 0xFF00) >> 8;
-        buffer[count + 1] = (endpoint.port & 0xFF);
+        buffer[count++] = (endpoint.port & 0xFF);
+        buffer[count] = (endpoint.port >> 8);
     };
 
-    static Endpoint DecodePeerInfos(const Buffer &buffer)
+    static Endpoint DecodePeerInfos(Buffer &buffer)
     {
         Endpoint endpoint;
         std::vector<std::string> tmp;
-        std::uint8_t index = PEER_INFO;
-        std::uint8_t i = 0;
+        int index = PEER_INFO;
+        int i = 0;
 
         while (i < 4) {
-            tmp.emplace_back(std::string((char *)&buffer[index++]));
+            tmp.emplace_back(std::to_string(buffer[index++]));
             ++i;
         }
         endpoint.ip = boost::algorithm::join(tmp, ".");
-        endpoint.port = (buffer[index++] | 0xFF00) << 8;
-        endpoint.port = buffer[index] | 0xFF;
+        endpoint.port = buffer[index++];
+        endpoint.port += buffer[index] << 8;
         return endpoint;
     };
 
