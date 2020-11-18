@@ -13,6 +13,7 @@
 #include "../../core/components/PositionComponent.hpp"
 #include "../../core/components/SpriteComponent.hpp"
 #include "../../core/ecs/entity/Entity.hpp"
+#include "../../core/components/MissileComponent.hpp"
 #include "SFML/Window/Event.hpp"
 
 namespace rtype {
