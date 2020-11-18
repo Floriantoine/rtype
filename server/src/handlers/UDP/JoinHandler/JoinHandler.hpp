@@ -8,24 +8,31 @@
 #pragma once
 
 #include "Player.hpp"
+#include "engine/core/ecs/entity/Entity.hpp"
 #include "handlers/AHandlerUDP.hpp"
 #include "types.hpp"
 
+#include <memory>
 #include <vector>
 
 namespace rtype::server {
     class JoinHandler : public AHandlerUDP {
       public:
-        struct ServerRequestBody {
+        struct ServerResponseBody {
             entity_id_t playerID;
+            coordinate_t x;
+            coordinate_t y;
             std::vector<unsigned char> mapName;
         };
 
-        JoinHandler(std::vector<Player> &players);
+        JoinHandler(Lobby &owner);
         ~JoinHandler() override = default;
 
       protected:
-        void response(const Network::UdpPackage &package) override;
-        void request(const Network::UdpPackage &package) override;
+        void receiveResponse(const Network::UdpPackage &package) override;
+        void receiveRequest(const Network::UdpPackage &package) override;
+        BPC::Method getMethod() const override;
+        void refusePlayer(const Network::UdpPackage &package) const;
+        void newPlayer(const Network::UdpPackage &package, const std::shared_ptr<Entity> &player) const;
     };
 }

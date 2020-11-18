@@ -46,6 +46,12 @@ set(SRCS
         handlers/UDP/PositionHandler/PositionHandler.cpp
         handlers/UDP/ShootHandler/ShootHandler.cpp
         handlers/UDP/SpawnHandler/SpawnHandler.cpp
+        game/behaviours/BugBehaviour.cpp
+        game/behaviours/CameraBehaviour.cpp
+        game/behaviours/MissilePlayerBehaviour.cpp
+        game/behaviours/PataBehaviour.cpp
+        game/behaviours/PlayerBehaviour.cpp
+        game/behaviours/ScantBehaviour.cpp
 )
 
 list(TRANSFORM SRCS PREPEND ${SRC_DIR})

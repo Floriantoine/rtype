@@ -20,11 +20,12 @@ namespace rtype::server {
             entity_id_t playerID;
         };
 
-        LeaveHandler(std::vector<Player> &players);
+        LeaveHandler(Lobby &owner);
         ~LeaveHandler() override = default;
 
       protected:
-        void response(const Network::UdpPackage &package) override;
-        void request(const Network::UdpPackage &package) override;
+        void receiveResponse(const Network::UdpPackage &package) override;
+        void receiveRequest(const Network::UdpPackage &package) override;
+        BPC::Method getMethod() const override;
     };
 }

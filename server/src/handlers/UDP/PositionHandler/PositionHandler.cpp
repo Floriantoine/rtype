@@ -7,17 +7,23 @@
 
 #include "PositionHandler.hpp"
 
+#include "Protocol.hpp"
+#include "handlers/AHandlerUDP.hpp"
+
 namespace rtype::server {
-    PositionHandler::PositionHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
+    PositionHandler::PositionHandler(Lobby &owner)
+        : AHandlerUDP(owner)
     {
     }
 
-    void PositionHandler::response(const Network::UdpPackage &package)
-    {
-    }
+    void PositionHandler::receiveRequest(const Network::UdpPackage &package)
+    { }
 
-    void PositionHandler::request(const Network::UdpPackage &package)
+    void PositionHandler::receiveResponse(const Network::UdpPackage &package)
+    { }
+
+    BPC::Method PositionHandler::getMethod() const
     {
+        return BPC::POSITION;
     }
 }

@@ -7,32 +7,35 @@
 
 #include "AskJoinHandler.hpp"
 
+#include "GameServer.hpp"
 #include "Protocol.hpp"
 #include "Server.hpp"
 #include "handlers/AHandlerTCP.hpp"
+#include "types.hpp"
 
 #include <functional>
 #include <memory>
+#include <string.h>
 
 namespace rtype::server {
-    AskJoinHandler::AskJoinHandler(LobbyDispatcher &dispatcher)
-        : AHandlerTCP(dispatcher)
+    AskJoinHandler::AskJoinHandler(GameServer &owner)
+        : AHandlerTCP(owner)
     { }
 
-    void AskJoinHandler::response(const BPC::Package &package, Network::TcpSession &client)
+    void AskJoinHandler::receiveResponse(const BPC::Package &package, Network::TcpSession &client)
     {
     }
 
-    void AskJoinHandler::request(const BPC::Package &requestPackage, Network::TcpSession &client)
+    void AskJoinHandler::receiveRequest(const BPC::Package &requestPackage, Network::TcpSession &client)
     {
         const ClientRequestBody *request = requestPackage.getBodyTo<ClientRequestBody>();
-        LobbyDispatcher::Range range = this->dispatcher_.dispatch();
+        LobbyDispatcher::Range range = this->owner_.dispatcher_->dispatch();
         ServerResponseBody response = { .port = 0 };
         std::shared_ptr<std::function<void()>> onSent = nullptr;
         bool good = false;
 
         for (; range.start != range.end; ++range.start) {
-            if (range.start->get()->id == request->lobbyID) {
+            if (strncasecmp(range.start->get()->id.data(), request->lobbyID, sizeof(lobby_id_t)) == 0) {
                 good = !range.start->get()->isFull();
                 break;
             }

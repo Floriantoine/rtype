@@ -23,11 +23,12 @@ namespace rtype::server {
             coordinate_t y;
         };
 
-        PositionHandler(std::vector<Player> &players);
+        PositionHandler(Lobby &owner);
         ~PositionHandler() override = default;
 
       protected:
-        void response(const Network::UdpPackage &package) override;
-        void request(const Network::UdpPackage &package) override;
+        void receiveResponse(const Network::UdpPackage &package) override;
+        void receiveRequest(const Network::UdpPackage &package) override;
+        BPC::Method getMethod() const override;
     };
 }

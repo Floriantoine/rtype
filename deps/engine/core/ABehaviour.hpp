@@ -17,7 +17,6 @@
 
 #include <iostream>
 #include <memory>
-#include <iostream>
 
 namespace sf {
     class Event;
