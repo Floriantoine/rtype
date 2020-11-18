@@ -31,24 +31,23 @@ namespace rtype {
             { }
             ~Game() = default;
 
+            void resetClock() override
+            {
+                this->lastUpdate_ = std::chrono::steady_clock::now();
+            }
+
             long getElapsedMillisecond() const override
             {
-                auto elapsed = std::chrono::steady_clock::now() - this->lastUpdate_;
+                const auto &elapsed = std::chrono::steady_clock::now() - this->lastUpdate_;
                 return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
             }
 
-            void tick() override
+            void wait() override
             {
-                auto expectedInterval = std::chrono::milliseconds((long)(1000 / this->getFramerateLimit()));
-                auto elapsedTime = std::chrono::milliseconds(this->getElapsedMillisecond());
-                auto maxInterval = expectedInterval > elapsedTime
-                    ? expectedInterval
-                    : elapsedTime;
-                auto now = std::chrono::steady_clock::now();
-                auto nextTickTime = now - elapsedTime + maxInterval * 2;
-
-                this->lastUpdate_ = nextTickTime - expectedInterval;
-                std::this_thread::sleep_until(nextTickTime);
+                auto interval = std::chrono::milliseconds((long)(1000 / this->getFramerateLimit()));
+                const auto &now = std::chrono::steady_clock::now();
+                auto elapsed = std::chrono::milliseconds(this->getElapsedMillisecond());
+                std::this_thread::sleep_until(now - elapsed + interval);
             }
 
             void setWindowTitle(const std::string &title)

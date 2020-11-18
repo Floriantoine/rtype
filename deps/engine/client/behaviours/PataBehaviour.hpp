@@ -22,7 +22,7 @@ namespace rtype {
         std::size_t amplitude_ = 15;
         int accuracy_ = 100;
 
-        std::size_t stepInX_ = 1;
+        std::size_t stepInX_ = 5;
 
         long totalElapsedTime_ = 0;
         long rate_ = 16;
@@ -33,10 +33,6 @@ namespace rtype {
         std::size_t initInY_ = 0;
 
       public:
-        void onInit() override
-        {
-        }
-
         void onUpdate(long elapsedTime) override
         {
             if (this->position_ == nullptr) {
@@ -50,7 +46,7 @@ namespace rtype {
             double sinValue = sin(this->position_->x / this->amplitude_);
             this->position_->y = this->initInY_ + (this->amplitude_ * sinValue);
 
-            if (step)
+            if (step > 0)
                 this->totalElapsedTime_ %= this->rate_;
             if (this->position_->x < this->limiteMinInX_)
                 this->destroyEntity();

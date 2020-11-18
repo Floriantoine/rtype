@@ -8,6 +8,7 @@
 #pragma once
 
 #include "./scene/SceneManager.hpp"
+#include <chrono>
 
 namespace rtype {
 
@@ -33,9 +34,14 @@ namespace rtype {
         /**
          * Paces the game loop to match [getFrequency] updates per second
          *
-         * This method is called in the main loop, and must
+         * This method is called in the main loop, and must wait until the next tick
          */
-        virtual void tick() = 0;
+        virtual void wait() = 0;
+
+        /**
+         * Resets the clock used to calculate of elapsed time
+         */
+        virtual void resetClock() = 0;
 
         /**
          * @returns the number of milliseconds elapsed since last game update
@@ -59,7 +65,11 @@ namespace rtype {
          */
         double getFramerate() const
         {
-            return 1000.0 / this->getElapsedMillisecond();
+            long elapsedTime = this->getElapsedMillisecond();
+
+            if (elapsedTime == 0)
+                elapsedTime = 1;
+            return 1000.0 / elapsedTime;
         }
 
         /**
@@ -70,11 +80,16 @@ namespace rtype {
             this->onInit();
             this->isRunning = true;
             this->onStart();
+            long elapsed = 0;
+
+            this->resetClock();
             while (this->isRunning) {
+                elapsed = this->getElapsedMillisecond();
+                this->resetClock();
                 this->onBeforeUpdate();
-                this->update();
+                this->update(elapsed);
                 this->onAfterUpdate();
-                this->tick();
+                this->wait();
             }
         }
 
@@ -138,9 +153,9 @@ namespace rtype {
         /**
          * Updates the game
          */
-        void update()
+        void update(long elapsed)
         {
-            this->sceneManager_.update(this->getElapsedMillisecond());
+            this->sceneManager_.update(elapsed);
         }
 
         /**
