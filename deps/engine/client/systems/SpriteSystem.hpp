@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include "../../core/components/SpriteComponent.hpp"
-#include "../../core/components/PositionComponent.hpp"
 #include "../../core/components/AnimationComponent.hpp"
+#include "../../core/components/PositionComponent.hpp"
 #include "../../core/components/RotationComponent.hpp"
+#include "../../core/components/SpriteComponent.hpp"
 #include "../../core/systems/ARenderSystem.hpp"
 
 namespace rtype::client {
@@ -22,6 +22,12 @@ namespace rtype::client {
 
         void update(long elapsedTime) override
         {
+            Entity *cameraEntity = this->getCamera();
+            PositionComponent *cameraPosition = nullptr;
+
+            if (!!cameraEntity && !(cameraPosition = cameraEntity->getComponent<PositionComponent>()) )
+                return;
+
             this->componentManager_->apply<SpriteComponent>([&](SpriteComponent *sprite) {
                 if (!sprite->getEntity()->getVisibility())
                     return;
@@ -30,7 +36,7 @@ namespace rtype::client {
                 RotationComponent *rotation = sprite->getEntity()->getComponent<RotationComponent>();
 
                 if (position != nullptr) {
-                    sprite->sprite.setPosition(position->x, position->y);
+                    sprite->sprite.setPosition(position->x - cameraPosition->x, position->y - cameraPosition->y);
                 }
                 if (animation != nullptr) {
                     sprite->rect.left = sprite->rect.width * animation->currentFrame;

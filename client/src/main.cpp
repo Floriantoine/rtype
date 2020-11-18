@@ -8,6 +8,7 @@
 #include "GameClient.hpp"
 #include "engine/client/Game.hpp"
 #include "engine/client/behaviours/BugBehaviour.hpp"
+#include "engine/client/behaviours/CameraBehaviour.hpp"
 #include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
 #include "engine/client/behaviours/PataBehaviour.hpp"
 #include "engine/client/behaviours/PlayerBehaviour.hpp"
@@ -56,10 +57,11 @@ int init()
     JsonLoader::registerComponentFactory("health", HealthComponent::factory);
     JsonLoader::registerComponentFactory("animation", AnimationComponent::factory);
     JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
-    JsonLoader::registerComponentFactory("player_script", PlayerBehaviour::getFactory<PlayerBehaviour>());
-    JsonLoader::registerComponentFactory("missile_player_script", MissilePlayerBehaviour::getFactory<MissilePlayerBehaviour>());
-    JsonLoader::registerComponentFactory("pata_script", PataBehaviour::getFactory<PataBehaviour>());
-    JsonLoader::registerComponentFactory("bug_script", BugBehaviour::getFactory<BugBehaviour>());
+    JsonLoader::registerComponentFactory("player_behaviour", PlayerBehaviour::getFactory<PlayerBehaviour>());
+    JsonLoader::registerComponentFactory("missile_player_behaviour", MissilePlayerBehaviour::getFactory<MissilePlayerBehaviour>());
+    JsonLoader::registerComponentFactory("pata_behaviour", PataBehaviour::getFactory<PataBehaviour>());
+    JsonLoader::registerComponentFactory("bug_behaviour", BugBehaviour::getFactory<BugBehaviour>());
+    JsonLoader::registerComponentFactory("camera_behaviour", CameraBehaviour::getFactory<CameraBehaviour>());
 
     try {
         auto scene = JsonLoader::createScene(client::Game::getInstance(), "./config_file/scene/stage1.json");

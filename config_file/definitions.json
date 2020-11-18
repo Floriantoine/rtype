@@ -14,6 +14,9 @@
                     "top": 0,
                     "width": 800,
                     "height": 600
+                },
+                {
+                    "type": "camera_behaviour"
                 }
             ]
         },
@@ -39,8 +42,7 @@
                     "height": 480
                 },
                 {
-                    "type": "position",
-                    "x": 200
+                    "type": "position"
                 }
             ]
         },
@@ -193,7 +195,7 @@
                     "health": 1
                 },
                 {
-                    "type": "missile_player_script"
+                    "type": "missile_player_behaviour"
                 }
             ]
         },
@@ -237,7 +239,7 @@
                     "rate": 50
                 },
                 {
-                    "type": "player_script"
+                    "type": "player_behaviour"
                 },
                 {
                     "type": "health",
@@ -281,7 +283,7 @@
                     "health": 1
                 },
                 {
-                    "type": "pata_script"
+                    "type": "pata_behaviour"
                 }
             ]
         },
@@ -318,7 +320,7 @@
                     "health": 1
                 },
                 {
-                    "type": "bug_script"
+                    "type": "bug_behaviour"
                 }
             ]
         },
