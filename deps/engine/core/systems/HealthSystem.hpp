@@ -9,7 +9,7 @@
 
 #include "../components/HealthComponent.hpp"
 #include "../components/BehaviourComponent.hpp"
-#include "../ABehaviour.hpp"
+#include "../ABehaviourBase.hpp"
 #include "../ecs/system/ASystem.hpp"
 
 namespace rtype {
@@ -26,7 +26,7 @@ namespace rtype {
                 if (component->health <= 0) {
                     BehaviourComponent *behaviour = component->getEntity()->getComponent<BehaviourComponent>();
                     if (behaviour != nullptr) {
-                        behaviour->getBehaviour<ABehaviour>()->onDestroy();
+                        behaviour->getBehaviour<ABehaviourBase>()->onDestroy();
                     }
                     this->destroyEntity(component->getEntity());
                 }

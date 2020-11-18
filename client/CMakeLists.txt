@@ -21,6 +21,26 @@ set(WARNING_FLAG
 set(SRCS
         main.cpp
         Network/Client.cpp
+        Exception.cpp
+        GameClient.cpp
+        game/Game.cpp
+        game/behaviours/BugBehaviour.cpp
+        game/behaviours/CameraBehaviour.cpp
+        game/behaviours/MissilePlayerBehaviour.cpp
+        game/behaviours/PataBehaviour.cpp
+        game/behaviours/PlayerBehaviour.cpp
+        game/behaviours/ScantBehaviour.cpp
+        game/components/AnimationComponent.cpp
+        game/components/ColorComponent.cpp
+        game/components/InputComponent.cpp
+        game/components/ScaleComponent.cpp
+        game/components/TextComponent.cpp
+        game/systems/TextSystem.cpp
+        game/systems/InputSystem.cpp
+        game/systems/EventSystem.cpp
+        game/systems/AnimationSystem.cpp
+        game/systems/BackgroundSystem.cpp
+        game/systems/SpriteSystem.cpp
 )
 
 list(TRANSFORM SRCS PREPEND ${SRC_DIR})

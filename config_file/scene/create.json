@@ -1,0 +1,80 @@
+{
+    "layer": 0,
+    "state": "RUNNING",
+    "entities": [
+        {
+            "base": "Logo"
+        },
+        {
+            "base": "Text",
+            "components": [
+                {
+                    "type": "text",
+                    "string": "Back"
+                },
+                {
+                    "type": "position",
+                    "x": 20,
+                    "y": 40
+                }
+            ]
+        },
+        {
+            "base": "Text",
+            "components": [
+                {
+                    "type": "text",
+                    "string": "/infinte"
+                },
+                {
+                    "type": "position",
+                    "x": 580,
+                    "y": 40
+                }
+            ]
+        },
+        {
+            "base": "Text",
+            "components": [
+                {
+                    "type": "text",
+                    "string": "1 / 4 players"
+                },
+                {
+                    "type": "position",
+                    "x": 490,
+                    "y": 180
+                }
+            ]
+        },
+        {
+            "base": "Button",
+            "components": [
+                {
+                    "type": "text",
+                    "string": "start"
+                },
+                {
+                    "type": "position",
+                    "x": 600,
+                    "y": 260
+                }
+            ]
+        },
+        {
+            "base": "Text",
+            "components": [
+                {
+                    "type": "text",
+                    "string": "c 2020  BY  Fahad, Albert, Adrien, Alexis.",
+                    "size": 12
+                },
+                {
+                    "type": "position",
+                    "x": 260,
+                    "y": 560
+                }
+            ]
+        }
+    ]
+}

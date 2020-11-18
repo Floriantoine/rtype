@@ -7,31 +7,17 @@
 
 #include "AHandlerTCP.hpp"
 
+#include "GameServer.hpp"
+
 #include <iostream>
 #include <string>
 
 namespace rtype::server {
-    AHandlerTCP::HandlerPtrWrapper::HandlerPtrWrapper(AHandlerTCP &handler, AHandlerTCP::HandlerPtrWrapper::method_ptr_t pointer)
-        : pointer_ { pointer }
-        , handler_ { handler }
-    {
-    }
-
-    void AHandlerTCP::HandlerPtrWrapper::operator()(const BPC::Package &package, Network::TcpSession &client)
-    {
-        (this->handler_.*this->pointer_)(package, client);
-    }
-
-    AHandlerTCP::AHandlerTCP(LobbyDispatcher &dispatcher)
-        : dispatcher_ { dispatcher }
+    AHandlerTCP::AHandlerTCP(GameServer &owner)
+        : owner_(owner)
     { }
 
-    void AHandlerTCP::other(const BPC::Package &package, Network::TcpSession &client)
-    {
-        AHandlerTCP::unknowPacket(package, client);
-    }
-
-    void AHandlerTCP::unknowPacket(const BPC::Package &package, Network::TcpSession &client) 
+    void AHandlerTCP::unknowPacket(const BPC::Package &package, Network::TcpSession &client)
     {
         std::string ip = client.getSocket().local_endpoint().address().to_string();
         auto port = client.getSocket().local_endpoint().port();
@@ -39,13 +25,14 @@ namespace rtype::server {
         std::cerr << "Received a malformed packed from: " << ip << ":" << port << std::endl;
     }
 
-    AHandlerTCP::HandlerPtrWrapper AHandlerTCP::operator[](BPC::BaseType type)
+    void AHandlerTCP::receive(const BPC::Package &package, Network::TcpSession &client)
     {
-        if (type == BPC::BaseType::REQUEST) {
-            return AHandlerTCP::HandlerPtrWrapper(*this, &AHandlerTCP::request);
-        } else if (type == BPC::BaseType::RESPONSE) {
-            return AHandlerTCP::HandlerPtrWrapper(*this, &AHandlerTCP::response);
+        if (package.type == BPC::BaseType::REQUEST) {
+            this->receiveRequest(package, client);
+        } else if (package.type == BPC::BaseType::RESPONSE) {
+            this->receiveRequest(package, client);
+        } else {
+            AHandlerTCP::unknowPacket(package, client);
         }
-        return AHandlerTCP::HandlerPtrWrapper(*this, &AHandlerTCP::other);
     }
 }

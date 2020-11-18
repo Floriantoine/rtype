@@ -16,5 +16,7 @@ enable_testing()
 add_subdirectory(server)
 add_subdirectory(client)
 add_subdirectory(client/tests)
+add_subdirectory(tests)
 
 add_test(r-type_client ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/r-type_client_tests)
+add_test(r-type_core_tests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/r-type_core_tests)

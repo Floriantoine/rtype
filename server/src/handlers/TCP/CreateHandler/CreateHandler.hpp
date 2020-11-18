@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "engine/core/scene/Scene.hpp"
 #include "handlers/AHandlerTCP.hpp"
 #include "lobby/LobbyDispatcher.hpp"
 #include "types.hpp"
@@ -18,7 +19,8 @@ namespace rtype::server {
     class CreateHandler : public AHandlerTCP {
       public:
         struct ServerResponseBody {
-            port_t port;
+            port_t port { 0 };
+            lobby_id_t lobbyID = { 0 };
         };
 
         struct ClientRequestBody {
@@ -27,11 +29,13 @@ namespace rtype::server {
             ClientRequestBody(const std::vector<unsigned char> &buffer);
         };
 
-        CreateHandler(LobbyDispatcher &dispatcher);
+        CreateHandler(GameServer &owner);
         ~CreateHandler() override = default;
 
       protected:
-        void response(const BPC::Package &package, Network::TcpSession &session) override;
-        void request(const BPC::Package &package, Network::TcpSession &session) override;
+        static void initScene(Scene &scene);
+
+        void receiveResponse(const BPC::Package &package, Network::TcpSession &session) override;
+        void receiveRequest(const BPC::Package &package, Network::TcpSession &session) override;
     };
 }

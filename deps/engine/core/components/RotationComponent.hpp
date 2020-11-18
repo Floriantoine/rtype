@@ -17,16 +17,16 @@ namespace rtype {
 
     class RotationComponent : public Component<RotationComponent> {
       public:
-        int degree { 0 };
+        float degree { 0 };
 
       public:
         RotationComponent() = default;
-        RotationComponent(int degree)
+        RotationComponent(float degree)
             : degree { degree } {};
 
         static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
-            std::size_t degree { 0 };
+            float degree { 0 };
 
             auto degreeJson = body.find("degree");
             if (degreeJson != body.end()) {

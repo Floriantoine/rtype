@@ -9,6 +9,8 @@
 
 #include "Lobby.hpp"
 #include "boost/thread/pthread/condition_variable.hpp"
+#include "engine/core/scene/Scene.hpp"
+#include "engine/core/scene/SceneManager.hpp"
 #include "lobby/LobbyIDGenerator.hpp"
 #include "utils/lock/SharedLock.hpp"
 
@@ -16,6 +18,7 @@
 #include <memory>
 #include <queue>
 #include <shared_mutex>
+#include <string>
 #include <vector>
 
 namespace rtype::server {
@@ -25,8 +28,8 @@ namespace rtype::server {
     */
     class LobbyDispatcher {
       public:
-        typedef std::unique_ptr<Lobby> lobbyUniquePtr_t;
-        typedef std::list<lobbyUniquePtr_t>::iterator lobbyIterator_t;
+        typedef std::shared_ptr<Lobby> lobbySharedPtr_t;
+        typedef std::list<lobbySharedPtr_t>::iterator lobbyIterator_t;
 
         /**
         * @brief data structure telling what lobbies a LobbyManagerThread should process
@@ -61,10 +64,11 @@ namespace rtype::server {
       private:
         const unsigned managerCount_;
         std::shared_ptr<SharedLock> rwLock_;
-        std::list<lobbyUniquePtr_t> lobbies_;
+        std::list<lobbySharedPtr_t> lobbies_;
         std::vector<Range> ranges_;
         LobbyIDGenerator idGenerator_;
         boost::condition_variable_any condVar_;
+        bool running_ { true };
 
         /**
         * @brief dispatches lobbies into this->ranges_
@@ -83,7 +87,7 @@ namespace rtype::server {
         /**
         * @brief adds a new lobby to dispatch
         */
-        const Lobby &createLobby(/*const std::unique_ptr<Scene> &scene*/);
+        const Lobby &createLobby(std::shared_ptr<Scene> &&scene, const std::string &mapName);
 
         /**
         * @brief get the range of lobbies to process depending on a LobbyManagerThread's index
@@ -99,5 +103,9 @@ namespace rtype::server {
         * @brief blocks the calling thread until a lobby is created
         */
         void waitForNewLobby();
+
+        void notifyAll();
+
+        void stop();
     };
 }

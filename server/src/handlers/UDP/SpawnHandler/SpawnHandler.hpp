@@ -22,11 +22,12 @@ namespace rtype::server {
             std::string jsonBody;
         };
 
-        SpawnHandler(std::vector<Player> &players);
+        SpawnHandler(Lobby &owner);
         ~SpawnHandler() override = default;
 
       protected:
-        void response(const Network::UdpPackage &package) override;
-        void request(const Network::UdpPackage &package) override;
+        void receiveResponse(const Network::UdpPackage &package) override;
+        void receiveRequest(const Network::UdpPackage &package) override;
+        BPC::Method getMethod() const override;
     };
 }

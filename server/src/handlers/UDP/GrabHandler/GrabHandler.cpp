@@ -7,17 +7,21 @@
 
 #include "GrabHandler.hpp"
 
+#include "Protocol.hpp"
+
 namespace rtype::server {
-    GrabHandler::GrabHandler(std::vector<Player> &players)
-        : AHandlerUDP(players)
-    {
-    }
+    GrabHandler::GrabHandler(Lobby &owner)
+        : AHandlerUDP(owner)
+    { }
 
-    void GrabHandler::response(const Network::UdpPackage &package)
-    {
-    }
+    void GrabHandler::receiveRequest(const Network::UdpPackage &package)
+    { }
 
-    void GrabHandler::request(const Network::UdpPackage &package)
+    void GrabHandler::receiveResponse(const Network::UdpPackage &package)
+    { }
+    
+    BPC::Method GrabHandler::getMethod() const
     {
+        return BPC::GRAB;
     }
 }

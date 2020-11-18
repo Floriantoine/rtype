@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../ecs/component/Component.hpp"
+#include "../ecs/entity/Entity.hpp"
 #include "nlohmann/json.hpp"
 
 namespace rtype {

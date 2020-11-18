@@ -7,4 +7,4 @@
 
 #pragma once
 
-#define ID_TYPE std::uint32_t
+#define ID_TYPE std::uint64_t
