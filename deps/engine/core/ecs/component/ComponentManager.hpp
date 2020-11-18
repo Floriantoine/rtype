@@ -78,7 +78,7 @@ namespace rtype {
         {
             if (this->isComponentTypeRegistered(typeId) == false)
                 return false;
-            auto list = this->getComponentList(typeId);
+            const auto &list = this->getComponentList(typeId);
             return (list.find(entityId) != list.end());
         }
 
@@ -86,8 +86,8 @@ namespace rtype {
         {
             if (this->isComponentTypeRegistered(typeId) == false)
                 return nullptr;
-            auto list = this->getComponentList(typeId);
-            auto it = list.find(entityId);
+            const auto &list = this->getComponentList(typeId);
+            const auto &it = list.find(entityId);
             if (it == list.end())
                 return nullptr;
             return it->second;
@@ -111,7 +111,7 @@ namespace rtype {
         void addComponent(Entity *entity, id_t entityId, Args &&... args)
         {
             assert(this->hasComponent<T>(entityId) == false && "Entity already has component");
-            auto pool = this->getComponentPool<T>();
+            const auto &pool = this->getComponentPool<T>();
             T *component = static_cast<T *>(pool->get(std::forward<Args>(args)...));
             component->entity_ = entity;
             this->getComponentList<T>()[entityId] = static_cast<ComponentBase *>(component);
@@ -139,7 +139,7 @@ namespace rtype {
 
         void removeAllComponents(id_t entityId)
         {
-            for (auto &list : this->componentLists_) {
+            for (const auto &list : this->componentLists_) {
                 if (list.second.find(entityId) != list.second.end()) {
                     this->removeComponent(list.first, entityId);
                 }
@@ -150,7 +150,7 @@ namespace rtype {
         void apply(std::function<void(T *)> function)
         {
             if (this->isComponentTypeRegistered<T>()) {
-                auto list = this->getComponentList<T>();
+                const auto &list = this->getComponentList<T>();
                 for (auto it = list.begin(), next = it; it != list.end(); it = next) {
                     next++;
                     function(static_cast<T *>(it->second));

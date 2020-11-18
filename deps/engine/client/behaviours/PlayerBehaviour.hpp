@@ -14,6 +14,7 @@
 #include "../../core/components/SpriteComponent.hpp"
 #include "../../core/ecs/entity/Entity.hpp"
 #include "../../core/components/MissileComponent.hpp"
+#include "../CollideGroups.hpp"
 #include "SFML/Window/Event.hpp"
 
 namespace rtype {
@@ -36,7 +37,7 @@ namespace rtype {
         long comeBackElapsedTime_ = 0;
         long shootElapsedTime_ = 0;
 
-        int missileSpawnRate_ = 160;
+        int missileSpawnRate_ = 190;
         int animRate_ = 130;
 
         void init_()
@@ -174,12 +175,11 @@ namespace rtype {
             }
         }
 
-        void onMouseButtonPressed(const sf::Event &event) override
-        {
-        }
-
         void onCollide(const CollisionData &collision) override
         {
+            if (collision.other.collideGroup != COLLIDE_GROUP_PLAYERS) {
+                this->takeDamage(this->getHealth());
+            }
         }
     };
 

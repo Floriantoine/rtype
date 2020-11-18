@@ -10,13 +10,14 @@
 #include "./components/BehaviourComponent.hpp"
 #include "./components/HealthComponent.hpp"
 #include "./ecs/assert.hpp"
-#include "./ecs/entity/Entity.hpp"
 #include "./ecs/entity/EntityManager.hpp"
+#include "./ecs/entity/Entity.hpp"
 #include "./physics/CollisionData.hpp"
 #include "nlohmann/json.hpp"
 
 #include <iostream>
 #include <memory>
+#include <iostream>
 
 namespace sf {
     class Event;
@@ -74,6 +75,16 @@ namespace rtype {
         virtual void onMouseButtonReleased(const sf::Event &) {};
 
         /**
+         * Method called when the entity enters camera view
+         */
+        virtual void onViewEnter() {};
+
+        /**
+         * Method called when the entity leaves camera view
+         */
+        virtual void onViewLeave() {};
+
+        /**
          * Get the behaviour's entity
          * 
          * @returns associated entity
@@ -103,6 +114,20 @@ namespace rtype {
         {
             this->onDestroy();
             this->getEntity()->getEntityManager()->destroyEntity(this->getEntity()->getId());
+        }
+
+        /**
+         * Get the entity's health points
+         * 
+         * @returns the entity's health points
+         */
+        int getHealth()
+        {
+            HealthComponent *health = this->getComponent<HealthComponent>();
+            if (health == nullptr) {
+                return 0;
+            }
+            return health->health;
         }
 
         /**

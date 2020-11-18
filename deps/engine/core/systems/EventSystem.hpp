@@ -8,8 +8,8 @@
 #pragma once
 
 #include "../../client/Game.hpp"
-#include "../components/BehaviourComponent.hpp"
 #include "../ABehaviour.hpp"
+#include "../components/BehaviourComponent.hpp"
 #include "../ecs/system/ASystem.hpp"
 #include "SFML/Window/Event.hpp"
 
@@ -43,6 +43,8 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::MouseButtonPressed) {
                 this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
+                    if (!holder->getEntity()->getVisibility())
+                        return;
                     holder->getBehaviour<ABehaviour>()->onMouseButtonPressed(evt);
                 });
             }
@@ -52,6 +54,8 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::MouseButtonReleased) {
                 this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
+                    if (!holder->getEntity()->getVisibility())
+                        return;
                     holder->getBehaviour<ABehaviour>()->onMouseButtonReleased(evt);
                 });
             }
@@ -61,6 +65,8 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::KeyPressed) {
                 this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
+                    if (!holder->getEntity()->getVisibility())
+                        return;
                     holder->getBehaviour<ABehaviour>()->onKeyPressed(evt);
                 });
             }
@@ -70,6 +76,8 @@ namespace rtype {
         {
             if (evt.type == sf::Event::EventType::KeyReleased) {
                 this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
+                    if (!holder->getEntity()->getVisibility())
+                        return;
                     holder->getBehaviour<ABehaviour>()->onKeyReleased(evt);
                 });
             }

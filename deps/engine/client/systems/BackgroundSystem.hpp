@@ -21,7 +21,17 @@ namespace rtype::client {
 
         void update(long elapsedTime) override
         {
+            Entity *cameraEntity = this->getCamera();
+            PositionComponent *cameraPosition = nullptr;
+
+            if (!!cameraEntity && !(cameraPosition = cameraEntity->getComponent<PositionComponent>()) )
+                return;
             this->componentManager_->apply<BackgroundComponent>([&](BackgroundComponent *back) {
+                PositionComponent *position = back->getEntity()->getComponent<PositionComponent>();
+
+                if (position != nullptr) {
+                    back->sprite.setPosition(position->x - cameraPosition->x, position->y - cameraPosition->y);
+                }
                 client::Game::getInstance().getWindow()->draw(back->sprite);
             });
         }

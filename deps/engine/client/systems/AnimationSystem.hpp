@@ -19,6 +19,8 @@ namespace rtype::client {
         void update(long elapsedTime) override
         {
             this->componentManager_->apply<AnimationComponent>([&](AnimationComponent *anim) {
+                if (!anim->getEntity()->getVisibility())
+                    return;
                 if (anim->rate == 0)
                     return;
                 anim->totalElapsedTime += elapsedTime;

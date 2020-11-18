@@ -3,11 +3,27 @@
     "state": "RUNNING",
     "entities": [
         {
+            "base": "Camera"
+        },
+        {
             "base": "SkyBackground",
             "components": [
                 {
                     "type": "background",
-                    "width": 2000
+                    "width": 2200
+                }
+            ]
+        },
+        {
+            "base": "InternBackground",
+            "components": [
+                {
+                    "type": "background",
+                    "width": 2200
+                },
+                {
+                    "type": "position",
+                    "x": 2200
                 }
             ]
         },

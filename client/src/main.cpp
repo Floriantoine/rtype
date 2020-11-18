@@ -8,6 +8,7 @@
 #include "GameClient.hpp"
 #include "engine/client/Game.hpp"
 #include "engine/client/behaviours/BugBehaviour.hpp"
+#include "engine/client/behaviours/CameraBehaviour.hpp"
 #include "engine/client/behaviours/MissilePlayerBehaviour.hpp"
 #include "engine/client/behaviours/PataBehaviour.hpp"
 #include "engine/client/behaviours/PlayerBehaviour.hpp"
@@ -16,6 +17,7 @@
 #include "engine/client/systems/SpriteSystem.hpp"
 #include "engine/core/components/AnimationComponent.hpp"
 #include "engine/core/components/BackgroundComponent.hpp"
+#include "engine/core/components/CameraComponent.hpp"
 #include "engine/core/components/CollideBoxComponent.hpp"
 #include "engine/core/components/CollideGroupComponent.hpp"
 #include "engine/core/components/HealthComponent.hpp"
@@ -23,8 +25,8 @@
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/components/RotationComponent.hpp"
 #include "engine/core/components/SpriteComponent.hpp"
-#include "engine/core/ecs/component/Component.hpp"
 #include "engine/core/systems/BehaviourSystem.hpp"
+#include "engine/core/systems/CameraSystem.hpp"
 #include "engine/core/systems/CollisionSystem.hpp"
 #include "engine/core/systems/EventSystem.hpp"
 #include "engine/core/systems/HealthSystem.hpp"
@@ -38,13 +40,14 @@
 
 using namespace rtype;
 
-void fun()
+int init()
 {
-    // Game::getInstance().setWindowTitle("R-Type");
-    // Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
+    client::Game::getInstance().setWindowTitle("R-Type");
+    client::Game::getInstance().setVideoMode(sf::VideoMode(800, 600));
 
-    // JsonLoader::loadDefinitions("./config_file/definitions.json");
+    JsonLoader::loadDefinitions("./config_file/definitions.json");
 
+    JsonLoader::registerComponentFactory("camera", CameraComponent::factory);
     JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
     JsonLoader::registerComponentFactory("background", BackgroundComponent::factory);
     JsonLoader::registerComponentFactory("rotation", RotationComponent::factory);
@@ -54,14 +57,16 @@ void fun()
     JsonLoader::registerComponentFactory("health", HealthComponent::factory);
     JsonLoader::registerComponentFactory("animation", AnimationComponent::factory);
     JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
-    JsonLoader::registerComponentFactory("player_script", PlayerBehaviour::getFactory<PlayerBehaviour>());
-    JsonLoader::registerComponentFactory("missile_player_script", MissilePlayerBehaviour::getFactory<MissilePlayerBehaviour>());
-    JsonLoader::registerComponentFactory("pata_script", PataBehaviour::getFactory<PataBehaviour>());
-    JsonLoader::registerComponentFactory("bug_script", BugBehaviour::getFactory<BugBehaviour>());
+    JsonLoader::registerComponentFactory("player_behaviour", PlayerBehaviour::getFactory<PlayerBehaviour>());
+    JsonLoader::registerComponentFactory("missile_player_behaviour", MissilePlayerBehaviour::getFactory<MissilePlayerBehaviour>());
+    JsonLoader::registerComponentFactory("pata_behaviour", PataBehaviour::getFactory<PataBehaviour>());
+    JsonLoader::registerComponentFactory("bug_behaviour", BugBehaviour::getFactory<BugBehaviour>());
+    JsonLoader::registerComponentFactory("camera_behaviour", CameraBehaviour::getFactory<CameraBehaviour>());
 
     try {
         auto scene = JsonLoader::createScene(client::Game::getInstance(), "./config_file/scene/stage1.json");
 
+        scene->createSystem<CameraSystem>();
         scene->createSystem<EventSystem>();
         scene->createSystem<BehaviourSystem>();
         scene->createSystem<client::AnimationSystem>();
@@ -71,8 +76,10 @@ void fun()
         scene->createSystem<HealthSystem>();
 
         client::Game::getInstance().start();
+        return 0;
     } catch (const Exception &e) {
         std::cerr << e.what() << std::endl;
+        return 1;
     }
 }
 
@@ -80,7 +87,9 @@ int main(const int argc, const char **argv)
 {
     try {
         client::GameClient::Start(argc, argv);
+        return 0;
     } catch (const std::exception &err) {
         std::cerr << err.what() << std::endl;
+        return 1;
     }
 }
