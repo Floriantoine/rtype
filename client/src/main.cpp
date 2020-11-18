@@ -16,6 +16,7 @@
 #include "engine/client/systems/SpriteSystem.hpp"
 #include "engine/core/components/AnimationComponent.hpp"
 #include "engine/core/components/BackgroundComponent.hpp"
+#include "engine/core/components/CameraComponent.hpp"
 #include "engine/core/components/CollideBoxComponent.hpp"
 #include "engine/core/components/CollideGroupComponent.hpp"
 #include "engine/core/components/HealthComponent.hpp"
@@ -24,6 +25,7 @@
 #include "engine/core/components/RotationComponent.hpp"
 #include "engine/core/components/SpriteComponent.hpp"
 #include "engine/core/systems/BehaviourSystem.hpp"
+#include "engine/core/systems/CameraSystem.hpp"
 #include "engine/core/systems/CollisionSystem.hpp"
 #include "engine/core/systems/EventSystem.hpp"
 #include "engine/core/systems/HealthSystem.hpp"
@@ -44,6 +46,7 @@ int init()
 
     JsonLoader::loadDefinitions("./config_file/definitions.json");
 
+    JsonLoader::registerComponentFactory("camera", CameraComponent::factory);
     JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);
     JsonLoader::registerComponentFactory("background", BackgroundComponent::factory);
     JsonLoader::registerComponentFactory("rotation", RotationComponent::factory);
@@ -61,6 +64,7 @@ int init()
     try {
         auto scene = JsonLoader::createScene(client::Game::getInstance(), "./config_file/scene/stage1.json");
 
+        scene->createSystem<CameraSystem>();
         scene->createSystem<EventSystem>();
         scene->createSystem<BehaviourSystem>();
         scene->createSystem<client::AnimationSystem>();

@@ -1,6 +1,23 @@
 {
     "definitions": [
         {
+            "id": "Camera",
+            "components": [
+                {
+                    "type": "position",
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "type": "camera",
+                    "left": 0,
+                    "top": 0,
+                    "width": 800,
+                    "height": 600
+                }
+            ]
+        },
+        {
             "id": "SkyBackground",
             "components": [
                 {
@@ -203,7 +220,9 @@
                     "group": 0
                 },
                 {
-                    "type": "position"
+                    "type": "position",
+                    "x": 400,
+                    "y": 300
                 },
                 {
                     "type": "animation",
@@ -219,6 +238,10 @@
                 },
                 {
                     "type": "player_script"
+                },
+                {
+                    "type": "health",
+                    "health": 1
                 }
             ]
         },

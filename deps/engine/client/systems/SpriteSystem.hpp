@@ -23,6 +23,8 @@ namespace rtype::client {
         void update(long elapsedTime) override
         {
             this->componentManager_->apply<SpriteComponent>([&](SpriteComponent *sprite) {
+                if (!sprite->getEntity()->getVisibility())
+                    return;
                 PositionComponent *position = sprite->getEntity()->getComponent<PositionComponent>();
                 AnimationComponent *animation = sprite->getEntity()->getComponent<AnimationComponent>();
                 RotationComponent *rotation = sprite->getEntity()->getComponent<RotationComponent>();

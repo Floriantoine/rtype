@@ -21,6 +21,8 @@ namespace rtype {
         void update(long elapsedTime)
         {
             this->componentManager_->apply<BehaviourComponent>([&](BehaviourComponent *holder) {
+                if (!holder->getEntity()->getVisibility())
+                    return;
                 std::shared_ptr<ABehaviour> script = holder->getBehaviour<ABehaviour>();
                 script->onUpdate(elapsedTime);
             });

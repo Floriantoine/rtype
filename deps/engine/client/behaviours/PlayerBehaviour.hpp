@@ -14,6 +14,7 @@
 #include "../../core/components/SpriteComponent.hpp"
 #include "../../core/ecs/entity/Entity.hpp"
 #include "../../core/components/MissileComponent.hpp"
+#include "../CollideGroups.hpp"
 #include "SFML/Window/Event.hpp"
 
 namespace rtype {
@@ -180,7 +181,9 @@ namespace rtype {
 
         void onCollide(const CollisionData &collision) override
         {
-            std::cout << collision.other.collideGroup << std::endl;
+            if (collision.other.collideGroup != COLLIDE_GROUP_PLAYERS) {
+                this->takeDamage(this->getHealth());
+            }
         }
     };
 

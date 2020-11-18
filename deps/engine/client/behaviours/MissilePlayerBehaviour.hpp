@@ -33,13 +33,7 @@ namespace rtype {
         long stepInX_ = 10;
         long rate_ = 20;
 
-        long maxWindow_ = 600;
-
       public:
-        void onInit() override
-        {
-        }
-
         void onUpdate(long elapsedTime) override
         {
             if (this->position_ == nullptr) {
@@ -51,8 +45,6 @@ namespace rtype {
             this->position_->x += step * this->stepInX_;
             if (step)
                 this->totalElapsedTime_ %= this->rate_;
-            if (this->position_->x > this->maxWindow_)
-                this->destroyEntity();
         }
 
         void onCollide(const CollisionData &collision) override
@@ -60,6 +52,11 @@ namespace rtype {
             if (collision.other.collideGroup != COLLIDE_GROUP_PLAYERS) {
                 this->takeDamage(1);
             }
+        }
+
+        void onViewLeave() override
+        {
+            this->takeDamage(this->getHealth());
         }
     };
 }
