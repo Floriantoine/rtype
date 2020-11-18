@@ -31,11 +31,10 @@ namespace rtype::client::Network {
             this->on_error_();
     }
 
-    void TcpClient::send(const BPC::Package &package)
+    err_code TcpClient::send(const BPC::Package &package)
     {
         this->serv_socket_.write_some(asio::buffer(BPC::Serialize(package)), this->error_code_);
-        if (this->error_code_)
-            this->on_error_();
+        return this->error_code_;
     }
 
     rtype::BPC::Package TcpClient::recv()
@@ -83,7 +82,7 @@ namespace rtype::client::Network {
                     pkg.body.reserve(pkg.bodySize);
                     nbytes = self->socket_->receive_from(boost::asio::buffer(pkg.body), self->serv_endpoints_, asio::socket_base::message_flags(), err);
                     if (nbytes == pkg.bodySize && !err) {
-                        self->on_message_(pkg, *self);
+                        self->on_message_(pkg);
                         self->streambuf_.resize(HEADER_SIZE, 0);
                         self->start();
                     }
@@ -91,8 +90,10 @@ namespace rtype::client::Network {
             });
     }
 
-    void UdpClient::send(const BPC::Package &package)
+    err_code UdpClient::send(const BPC::Package &package)
     {
-        socket_->send_to(asio::buffer(BPC::Serialize(package)), this->serv_endpoints_);
+        err_code err;
+        socket_->send_to(asio::buffer(BPC::Serialize(package)), this->serv_endpoints_, asio::socket_base::message_flags(), err);
+        return err;
     }
 }
