@@ -17,14 +17,6 @@
 namespace rtype::client {
 
     class Game : public AGame, public Singleton<Game> {
-      public:
-        enum SceneFile {
-            SCENE_MAIN_MENU,
-            SCENE_LOBBY_MENU,
-            SCENE_JOIN_MENU,
-            SCENE_STAGE_1
-        };
-
       private:
         std::chrono::steady_clock::time_point lastUpdate_;
         std::unique_ptr<sf::RenderWindow> window_;
@@ -32,10 +24,9 @@ namespace rtype::client {
         sf::Uint32 windowStyle_ { sf::Style::Default };
         std::string windowTitle_ { "Game" };
         const char *scenesDir_ { "./config_file/scene/" };
-        static const std::unordered_map<SceneFile, const std::string> scenesNames_;
-        std::unordered_map<SceneFile, std::shared_ptr<Scene>> scenesList_;
+        std::unordered_map<std::string, std::shared_ptr<Scene>> scenesList_;
 
-        void loadScene_(SceneFile, const std::string &);
+        bool loadScene_(const std::string &);
 
       public:
         Game();
@@ -52,5 +43,6 @@ namespace rtype::client {
         void onInit() override;
         void onBeforeUpdate() override;
         void onAfterUpdate() override;
+        void goToScene(const std::string &sceneName);
     };
 }

@@ -144,7 +144,7 @@ namespace rtype {
             nlohmann::json json = JsonUtil::loadFile(file);
 
             if (json.is_discarded()) {
-                throw Exception("parsing error");
+                throw Exception("parsing error: definitions file '" + file + "' doesn't exist or is invalid");
             }
 
             auto defs = json.find("definitions");
@@ -216,8 +216,8 @@ namespace rtype {
         {
             nlohmann::json json = JsonUtil::loadFile(file);
 
-            if (json == nlohmann::json::value_t::discarded) {
-                throw Exception("parsing error");
+            if (json.is_discarded()) {
+                throw Exception("parsing error: scene file '" + file  + "' doesn't exist or is invalid");
             }
 
             std::size_t layer = JsonUtil::JsonAt(json, "layer")->get<std::size_t>();
@@ -246,8 +246,8 @@ namespace rtype {
         {
             nlohmann::json json = JsonUtil::loadFile(file);
 
-            if (json == nlohmann::json::value_t::discarded) {
-                throw Exception("parsing error");
+            if (json.is_discarded()) {
+                throw Exception("parsing error: scene file '" + file  + "' doesn't exist");
             }
 
             std::size_t layer = JsonUtil::JsonAt(json, "layer")->get<std::size_t>();

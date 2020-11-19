@@ -45,12 +45,14 @@ set(SRCS
         game/behaviours/PlayerBehaviour.cpp
         game/behaviours/ScantBehaviour.cpp
         game/behaviours/ButtonBehaviour.cpp
+        game/behaviours/NavButtonBehaviour.cpp
         game/behaviours/TextInputBehaviour.cpp
         game/components/AnimationComponent.cpp
         game/components/ColorComponent.cpp
         game/components/InputComponent.cpp
         game/components/ScaleComponent.cpp
         game/components/TextComponent.cpp
+        game/components/NavDirectionComponent.cpp
         game/systems/TextSystem.cpp
         game/systems/InputSystem.cpp
         game/systems/EventSystem.cpp

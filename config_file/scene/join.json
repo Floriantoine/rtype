@@ -9,7 +9,7 @@
             "base": "Logo"
         },
         {
-            "base": "Text",
+            "base": "NavButton",
             "components": [
                 {
                     "type": "text",
@@ -19,6 +19,17 @@
                     "type": "position",
                     "x": 20,
                     "y": 40
+                },
+                {
+                    "type": "collide_box",
+                    "left": 20,
+                    "top": 40,
+                    "width": 100,
+                    "height": 50
+                },
+                {
+                    "type": "nav_direction",
+                    "direction": "menu.json"
                 }
             ]
         },
@@ -32,6 +43,7 @@
                 },
                 {
                     "type": "input",
+                    "string": "",
                     "max": 6
                 },
                 {
@@ -40,7 +52,7 @@
             ]
         },
         {
-            "base": "Button",
+            "base": "NavButton",
             "components": [
                 {
                     "type": "text",
@@ -50,6 +62,17 @@
                     "type": "position",
                     "x": 600,
                     "y": 260
+                },
+                {
+                    "type": "collide_box",
+                    "left": 600,
+                    "top": 260,
+                    "width": 100,
+                    "height": 50
+                },
+                {
+                    "type": "nav_direction",
+                    "direction": "stage1.json"
                 }
             ]
         },

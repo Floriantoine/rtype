@@ -25,6 +25,7 @@ namespace rtype {
         };
 
       private:
+        Entity *camera_ { nullptr };
         system_group_e group_;
 
       protected:
@@ -35,17 +36,15 @@ namespace rtype {
         { }
         ~ASystem() = default;
 
-        Entity *getCamera() const
+        Entity *getCamera()
         {
-            static Entity *camera = nullptr;
-
-            if (camera == nullptr) {
+            if (this->camera_ == nullptr) {
                 int cameraCount = 0;
                 this->componentManager_->apply<CameraComponent>([&](CameraComponent *cameraComponent) {
                     ++cameraCount;
                     if (cameraCount > 1)
                         return;
-                    camera = cameraComponent->getEntity();
+                    this->camera_ = cameraComponent->getEntity();
                 });
                 if (cameraCount == 0) {
                     std::cerr << "warn: no scene camera defined" << std::endl;
@@ -53,7 +52,7 @@ namespace rtype {
                     std::cerr << "warn: more than 1 scene camera defined. Only 1 will be used" << std::endl;
                 }
             }
-            return camera;
+            return this->camera_;
         }
 
       public:

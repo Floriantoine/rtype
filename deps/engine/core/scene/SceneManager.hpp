@@ -106,7 +106,7 @@ namespace rtype {
                     it.second->setState(Scene::State::STATE_INACTIVE);
                 }
             }
-            if (found == false) {
+            if (!found) {
                 throw std::runtime_error("Specified scene id doesn't exist");
             }
         }

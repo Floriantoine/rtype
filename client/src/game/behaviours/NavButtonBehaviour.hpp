@@ -2,22 +2,21 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-BDX-5-1-rtype-albert.corson
 ** File description:
-** ButtonBehaviour
+** NavButtonBehaviour
 */
 
 #pragma once
 
-#include "game/ABehaviour.hpp"
+#include "./ButtonBehaviour.hpp"
+#include "game/components/NavDirectionComponent.hpp"
 
 namespace rtype::client {
-    class ButtonBehaviour : public ABehaviour {
-      private:
-        bool isHovered_ { false };
-        bool isClicked_ { false };
 
-      protected:
-        bool isHovered() { return this->isHovered_; }
-        bool isClicked() { return this->isClicked_; }
+    class NavButtonBehaviour : public ButtonBehaviour {
+      private:
+        NavDirectionComponent *direction_;
+
+        void init_();
 
       public:
         void onUpdate(long elapsedTime) override;

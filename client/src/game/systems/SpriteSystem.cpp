@@ -12,14 +12,18 @@
 namespace rtype::client {
 
     SpriteSystem::SpriteSystem()
-        : ARenderSystem() {};
+        : ARenderSystem()
+    { }
 
     void SpriteSystem::update(long elapsedTime)
     {
         Entity *cameraEntity = this->getCamera();
         PositionComponent *cameraPosition = nullptr;
 
-        if (!!cameraEntity && !(cameraPosition = cameraEntity->getComponent<PositionComponent>()))
+        if (cameraEntity == nullptr)
+            return;
+        cameraPosition = cameraEntity->getComponent<PositionComponent>();
+        if (cameraPosition == nullptr)
             return;
 
         this->componentManager_->apply<SpriteComponent>([&](SpriteComponent *sprite) {

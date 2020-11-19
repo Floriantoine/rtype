@@ -64,7 +64,6 @@ namespace rtype::client {
             if (this->value->string.size() > 0) {
                 this->value->string.pop_back();
             }
-            std::cout << this->value->string << std::endl;
             return;
         }
         if (this->value->max != 0 && this->value->string.size() >= this->value->max)

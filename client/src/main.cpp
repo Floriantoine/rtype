@@ -25,6 +25,7 @@
 #include "game/behaviours/PataBehaviour.hpp"
 #include "game/behaviours/PlayerBehaviour.hpp"
 #include "game/behaviours/ButtonBehaviour.hpp"
+#include "game/behaviours/NavButtonBehaviour.hpp"
 #include "game/behaviours/TextInputBehaviour.hpp"
 
 #include "game/components/AnimationComponent.hpp"
@@ -32,6 +33,7 @@
 #include "game/components/ColorComponent.hpp"
 #include "game/components/TextComponent.hpp"
 #include "game/components/InputComponent.hpp"
+#include "game/components/NavDirectionComponent.hpp"
 
 #include "scene_loader/SceneLoader.hpp"
 
@@ -51,6 +53,7 @@ int init(int argc, const char **argv)
     JsonLoader::loadDefinitions("./config_file/definitions.json");
 
     JsonLoader::registerComponentFactory("text", client::TextComponent::factory);
+    JsonLoader::registerComponentFactory("nav_direction", client::NavDirectionComponent::factory);
     JsonLoader::registerComponentFactory("input", client::InputComponent::factory);
     JsonLoader::registerComponentFactory("color", client::ColorComponent::factory);
     JsonLoader::registerComponentFactory("animation", client::AnimationComponent::factory);
@@ -62,6 +65,7 @@ int init(int argc, const char **argv)
     JsonLoader::registerComponentFactory("bug_behaviour", ABehaviourBase::getFactory<client::BugBehaviour>());
     JsonLoader::registerComponentFactory("camera_behaviour", ABehaviourBase::getFactory<client::CameraBehaviour>());
     JsonLoader::registerComponentFactory("button_behaviour", ABehaviourBase::getFactory<client::ButtonBehaviour>());
+    JsonLoader::registerComponentFactory("nav_button_behaviour", ABehaviourBase::getFactory<client::NavButtonBehaviour>());
     JsonLoader::registerComponentFactory("text_input_behaviour", ABehaviourBase::getFactory<client::TextInputBehaviour>());
 
     JsonLoader::registerComponentFactory("camera", CameraComponent::factory);

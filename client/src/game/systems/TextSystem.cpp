@@ -8,6 +8,7 @@
 #include "TextSystem.hpp"
 
 namespace rtype::client {
+
     TextSystem::TextSystem()
         : ARenderSystem() {};
 
@@ -17,6 +18,7 @@ namespace rtype::client {
             PositionComponent *position = text->getEntity()->getComponent<PositionComponent>();
             ColorComponent *color = text->getEntity()->getComponent<ColorComponent>();
 
+            text->text.setString(text->string);
             if (position != nullptr) {
                 text->text.setPosition(position->x, position->y);
             }
@@ -32,4 +34,5 @@ namespace rtype::client {
             client::Game::getInstance().getWindow()->draw(text->text);
         });
     }
+
 };
