@@ -115,7 +115,7 @@ namespace rtype::server {
         return this->udpServer_.getPort();
     }
 
-    void Lobby::onPacketReceived_(const Network::UdpPackage &package)
+    void Lobby::onPacketReceived_(const Network::UdpPackage &package) const
     {
         auto it = std::find_if(
             this->handlers.cbegin(),

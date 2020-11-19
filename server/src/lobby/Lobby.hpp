@@ -51,7 +51,7 @@ namespace rtype::server {
         bool awaitingResponse_ { false };
         Network::UdpServer udpServer_;
 
-        void onPacketReceived_(const Network::UdpPackage &package);
+        void onPacketReceived_(const Network::UdpPackage &package) const;
         void updateState_();
         void updatePlayersState_();
         void updateGameState_();
