@@ -13,7 +13,6 @@
 
 #include <memory>
 #include <string>
-#include <utility>
 
 namespace rtype {
 
@@ -29,13 +28,13 @@ namespace rtype {
         TextureComponent() = default;
         TextureComponent(std::string path, std::size_t x, std::size_t y,
             std::size_t width, std::size_t height)
-            : path { std::move(path) }
+            : path { path }
             , x { x }
             , y { y }
             , width { width }
             , height { height } {};
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
             std::string path { "" };
             std::size_t x { 0 };

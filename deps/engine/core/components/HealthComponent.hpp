@@ -23,7 +23,7 @@ namespace rtype {
             : health { health }
         { }
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
             std::size_t health { 0 };
 

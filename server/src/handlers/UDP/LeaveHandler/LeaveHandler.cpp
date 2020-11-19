@@ -16,6 +16,7 @@ namespace rtype::server {
 
     void LeaveHandler::receiveRequest(const Network::UdpPackage &package)
     {
+        auto *body = package.getBodyTo<ClientRequestBody>();
         this->sendResponse(package);
         this->owner_.removePlayer(package.endpoint);
     }

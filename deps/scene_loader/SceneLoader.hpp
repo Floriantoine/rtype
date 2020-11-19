@@ -23,7 +23,6 @@
 #include <functional>
 #include <memory>
 #include <unordered_map>
-#include <utility>
 #include <vector>
 
 namespace rtype {
@@ -130,7 +129,7 @@ namespace rtype {
          */
         static void registerComponentFactory(const std::string &type, component_factory_t factory)
         {
-            JsonLoader::getInstance().factories_[type] = std::move(factory);
+            JsonLoader::getInstance().factories_[type] = factory;
         }
 
         /**

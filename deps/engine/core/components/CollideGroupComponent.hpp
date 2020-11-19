@@ -25,7 +25,7 @@ namespace rtype {
             : group { group }
         {}
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
             int group { -1 };
 

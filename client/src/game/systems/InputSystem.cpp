@@ -9,6 +9,9 @@
 
 namespace rtype::client {
 
+    InputSystem::InputSystem()
+        : ARenderSystem() {};
+
     void InputSystem::update(long elapsedTime)
     {
         this->componentManager_->apply<InputComponent>([&](InputComponent *text) {

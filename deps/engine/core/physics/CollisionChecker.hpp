@@ -7,17 +7,18 @@
 
 #pragma once
 
-#include "../Rect.hpp"
-#include "../Vector2.hpp"
 #include "../components/CollideBoxComponent.hpp"
 #include "./CollisionData.hpp"
+#include "../Vector2.hpp"
+#include "../Rect.hpp"
 
 namespace rtype {
 
     /**
      * Abstraction class providing methods for checking collisions between different types
      */
-    class CollisionChecker {
+    class CollisionChecker
+    {
       public:
         /**
          * Check collision between two rectangles
@@ -29,7 +30,7 @@ namespace rtype {
          * 
          * @returns true if the two rectangles intersect, false otherwise
          */
-        template <typename T = int>
+        template<typename T = int>
         static bool collides(const Rect<T> &rect, const Rect<T> &other)
         {
             return rect.intersects(other);
@@ -45,7 +46,7 @@ namespace rtype {
          * 
          * @returns true if the rectangle collides with the point, false otherwise
          */
-        template <typename T = int>
+        template<typename T = int>
         static bool collides(const Rect<T> &rect, const Vector2<T> &point)
         {
             return rect.contains(point);
@@ -62,7 +63,7 @@ namespace rtype {
          * 
          * @returns true if the rectangle collides with the point, false otherwise
          */
-        template <typename T = int>
+        template<typename T = int>
         static bool collides(const Rect<T> &rect, T x, T y)
         {
             return rect.contains(x, y);

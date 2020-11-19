@@ -26,7 +26,7 @@ namespace rtype {
             : viewport(left, top, width, height)
         { }
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
             float left { 0 };
             float top { 0 };

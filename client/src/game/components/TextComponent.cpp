@@ -11,14 +11,14 @@
 
 namespace rtype::client {
 
-    TextComponent::TextComponent(const std::string &string, const std::shared_ptr<sf::Font> &font, int size)
+    TextComponent::TextComponent(std::string string, std::shared_ptr<sf::Font> font, int size)
         : string { string }
         , font { font }
         , size { size }
         , text(string, *font.get(), size)
     { }
 
-    void TextComponent::factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
+    void TextComponent::factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
     {
         std::string fontPath { "" };
         int size { 30 };

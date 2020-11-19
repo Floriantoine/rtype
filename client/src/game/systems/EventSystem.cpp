@@ -8,10 +8,10 @@
 #include "EventSystem.hpp"
 
 #include "SFML/Window/Event.hpp"
+#include "game/ABehaviour.hpp"
 #include "engine/core/components/BehaviourComponent.hpp"
 #include "engine/core/components/CollideBoxComponent.hpp"
 #include "engine/core/physics/CollisionChecker.hpp"
-#include "game/ABehaviour.hpp"
 #include "game/Game.hpp"
 
 namespace rtype::client {

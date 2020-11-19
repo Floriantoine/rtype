@@ -18,7 +18,7 @@ namespace rtype::server {
 
     void MoveHandler::receiveRequest(const Network::UdpPackage &package)
     {
-        const auto *requestBody = package.getBodyTo<ClientRequestBody>();
+        auto *requestBody = package.getBodyTo<ClientRequestBody>();
         auto *behaviourComponent = this->owner_.getEntityComponent<BehaviourComponent>(requestBody->playerID);
 
         if (behaviourComponent == nullptr)

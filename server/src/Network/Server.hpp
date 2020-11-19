@@ -38,7 +38,7 @@ namespace rtype::server::Network {
 
         void start();
         void async_read();
-        void async_write(const BPC::Package &package, const std::shared_ptr<std::function<void()>> &onSent = nullptr);
+        void async_write(const BPC::Package &package, std::shared_ptr<std::function<void()>> onSent = nullptr);
 
       private:
         tcp::socket socket_;

@@ -74,7 +74,7 @@ namespace rtype {
             return this->entityManager_.createEntity();
         }
 
-        void removeEntity(const std::shared_ptr<Entity> &entity)
+        void removeEntity(std::shared_ptr<Entity> entity)
         {
             this->entityManager_.destroyEntity(entity->getId());
         }

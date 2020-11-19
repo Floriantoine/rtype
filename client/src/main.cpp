@@ -6,6 +6,8 @@
 */
 
 #include "GameClient.hpp"
+#include "engine/core/components/SpriteComponent.hpp"
+#include "engine/core/components/MissileComponent.hpp"
 #include "engine/core/components/BackgroundComponent.hpp"
 #include "engine/core/components/CameraComponent.hpp"
 #include "engine/core/components/CollideBoxComponent.hpp"
@@ -15,21 +17,24 @@
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/components/RotationComponent.hpp"
 #include "engine/core/components/SpriteComponent.hpp"
+
 #include "game/Game.hpp"
 #include "game/behaviours/BugBehaviour.hpp"
-#include "game/behaviours/ButtonBehaviour.hpp"
 #include "game/behaviours/CameraBehaviour.hpp"
 #include "game/behaviours/MissilePlayerBehaviour.hpp"
-#include "game/behaviours/NavButtonBehaviour.hpp"
 #include "game/behaviours/PataBehaviour.hpp"
 #include "game/behaviours/PlayerBehaviour.hpp"
+#include "game/behaviours/ButtonBehaviour.hpp"
+#include "game/behaviours/NavButtonBehaviour.hpp"
 #include "game/behaviours/TextInputBehaviour.hpp"
+
 #include "game/components/AnimationComponent.hpp"
+#include "game/components/ScaleComponent.hpp"
 #include "game/components/ColorComponent.hpp"
+#include "game/components/TextComponent.hpp"
 #include "game/components/InputComponent.hpp"
 #include "game/components/NavDirectionComponent.hpp"
-#include "game/components/ScaleComponent.hpp"
-#include "game/components/TextComponent.hpp"
+
 #include "scene_loader/SceneLoader.hpp"
 
 #include <cstdlib>

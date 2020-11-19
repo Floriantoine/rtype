@@ -11,8 +11,8 @@
 #include "./IObjectPool.hpp"
 
 #include <cstddef>
-#include <list>
 #include <stdexcept>
+#include <list>
 #include <vector>
 
 namespace rtype {

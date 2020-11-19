@@ -18,7 +18,6 @@
 
 #include <memory>
 #include <string>
-#include <utility>
 
 namespace rtype {
 
@@ -31,15 +30,15 @@ namespace rtype {
       public:
         BackgroundComponent() = default;
         BackgroundComponent(std::shared_ptr<sf::Texture> texture, sf::IntRect rect)
-            : texture { std::move(texture) }
+            : texture { texture }
             , rect { rect }
         {
             this->texture->setRepeated(true);
-            this->sprite.setTexture(*this->texture);
+            this->sprite.setTexture(*this->texture.get());
             this->sprite.setTextureRect(this->rect);
         }
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
             std::string texturePath { "" };
             int left { 0 };

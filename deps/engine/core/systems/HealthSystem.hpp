@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "../ABehaviourBase.hpp"
-#include "../components/BehaviourComponent.hpp"
 #include "../components/HealthComponent.hpp"
+#include "../components/BehaviourComponent.hpp"
+#include "../ABehaviourBase.hpp"
 #include "../ecs/system/ASystem.hpp"
 
 namespace rtype {

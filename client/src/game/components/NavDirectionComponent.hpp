@@ -21,7 +21,7 @@ namespace rtype::client {
         NavDirectionComponent() = default;
         NavDirectionComponent(const std::string &direction);
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body);
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body);
     };
 
 }

@@ -22,6 +22,6 @@ namespace rtype::client {
         ScaleComponent() = default;
         ScaleComponent(float x, float y);
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body);
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body);
     };
 }

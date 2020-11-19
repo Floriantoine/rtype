@@ -9,12 +9,12 @@
 
 #include "Config.hpp"
 #include "Server.hpp"
-#include "handlers/AHandlerTCP.hpp"
 #include "handlers/TCP/AskJoinHandler/AskJoinHandler.hpp"
 #include "handlers/TCP/CreateHandler/CreateHandler.hpp"
 #include "lobby/Lobby.hpp"
 #include "lobby/LobbyDispatcher.hpp"
 #include "lobby/LobbyManagerThread.hpp"
+#include "handlers/AHandlerTCP.hpp"
 
 #include <memory>
 #include <unordered_map>

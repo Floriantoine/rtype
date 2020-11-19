@@ -16,7 +16,7 @@
 namespace rtype::client {
     class TextSystem : public ARenderSystem {
       public:
-        TextSystem() = default;
+        TextSystem();
         ~TextSystem() = default;
 
         void update(long elapsedTime) override;

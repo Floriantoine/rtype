@@ -29,13 +29,13 @@ namespace rtype {
 
       public:
         SpriteComponent() = default;
-        SpriteComponent(const std::shared_ptr<sf::Texture> &texture, sf::IntRect rect)
+        SpriteComponent(std::shared_ptr<sf::Texture> texture, sf::IntRect rect)
             : texture { texture }
             , rect { rect }
             , sprite(*texture.get(), rect)
         {}
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
             std::string texturePath { "" };
             int left { 0 };

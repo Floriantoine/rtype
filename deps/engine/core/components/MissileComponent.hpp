@@ -11,7 +11,6 @@
 #include "../ecs/entity/Entity.hpp"
 #include "nlohmann/json.hpp"
 
-#include <iostream>
 #include <memory>
 #include <string>
 
@@ -22,13 +21,14 @@ namespace rtype {
         nlohmann::json missileBody;
         std::size_t rate { 0 };
 
+      public:
         MissileComponent() = default;
-        MissileComponent(nlohmann::json missileBody, std::size_t rate)
-            : missileBody { std::move(missileBody) }
+        MissileComponent(const nlohmann::json &missileBody, std::size_t rate)
+            : missileBody ( std::move(missileBody) )
             , rate { rate }
         { }
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
         {
             nlohmann::json missileBody;
             std::size_t rate { 0 };
@@ -41,6 +41,7 @@ namespace rtype {
             if (rateJson != body.end()) {
                 rateJson->get_to(rate);
             }
+
             entity->addComponent<MissileComponent>(missileBody, rate);
         }
     };

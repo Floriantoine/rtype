@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "../../components/CameraComponent.hpp"
 #include "../component/ComponentManager.hpp"
 #include "../types.hpp"
+#include "../../components/CameraComponent.hpp"
 
 #include <iostream>
 

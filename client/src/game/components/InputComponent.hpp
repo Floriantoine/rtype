@@ -27,8 +27,8 @@ namespace rtype::client {
 
       public:
         InputComponent() = default;
-        InputComponent(const std::string &string, const std::shared_ptr<sf::Font> &font, int size, const Vector2<float> &offset, int max);
+        InputComponent(std::string string, std::shared_ptr<sf::Font> font, int size, Vector2<float> offset, int max);
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body);
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body);
     };
 }

@@ -24,6 +24,6 @@ namespace rtype::client {
         AnimationComponent() = default;
         AnimationComponent(int currentFrame, int totalFrame, long rate);
 
-        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body);
+        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body);
     };
 }
