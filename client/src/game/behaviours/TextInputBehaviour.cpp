@@ -13,7 +13,7 @@
 
 namespace rtype::client {
 
-    std::unordered_map<sf::Keyboard::Key, char> TextInputBehaviour::keys_ = {
+    const std::unordered_map<sf::Keyboard::Key, char> TextInputBehaviour::keys_ = {
         { sf::Keyboard::A, 'A' },
         { sf::Keyboard::B, 'B' },
         { sf::Keyboard::C, 'C' },
@@ -64,7 +64,6 @@ namespace rtype::client {
             if (this->value->string.size() > 0) {
                 this->value->string.pop_back();
             }
-            std::cout << this->value->string << std::endl;
             return;
         }
         if (this->value->max != 0 && this->value->string.size() >= this->value->max)

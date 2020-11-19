@@ -6,6 +6,19 @@
 */
 
 #include "Game.hpp"
+#include "scene_loader/SceneLoader.hpp"
+
+#include "engine/core/systems/BehaviourSystem.hpp"
+#include "engine/core/systems/CameraSystem.hpp"
+#include "engine/core/systems/CollisionSystem.hpp"
+#include "engine/core/systems/HealthSystem.hpp"
+
+#include "game/systems/AnimationSystem.hpp"
+#include "game/systems/EventSystem.hpp"
+#include "game/systems/SpriteSystem.hpp"
+#include "game/systems/TextSystem.hpp"
+#include "game/systems/InputSystem.hpp"
+#include "game/systems/BackgroundSystem.hpp"
 
 #include "SFML/Config.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
@@ -15,6 +28,35 @@
 #include <thread>
 
 namespace rtype::client {
+
+    void Game::setScenesDir(const char *scenesDir)
+    {
+        this->scenesDir_ = scenesDir;
+    }
+
+    bool Game::loadScene_(const std::string &filename)
+    {
+        try {
+            auto scene = JsonLoader::createScene(*this, this->scenesDir_ + filename);
+
+            scene->createSystem<BehaviourSystem>();
+            scene->createSystem<CameraSystem>();
+            scene->createSystem<CollisionSystem>();
+            scene->createSystem<HealthSystem>();
+            scene->createSystem<AnimationSystem>();
+            scene->createSystem<EventSystem>();
+            scene->createSystem<TextSystem>();
+            scene->createSystem<InputSystem>();
+            scene->createSystem<BackgroundSystem>();
+            scene->createSystem<SpriteSystem>();
+            this->scenesList_[filename] = scene;
+            return true;
+        } catch (const Exception &e) {
+            std::cerr << "error: " << e.what() << std::endl;
+            return false;
+        }
+    }
+
     Game::Game()
         : lastUpdate_ { std::chrono::steady_clock::now() }
     { }
@@ -60,6 +102,7 @@ namespace rtype::client {
 
     void Game::onInit()
     {
+        this->goToScene("menu.json");
         this->window_ = std::make_unique<sf::RenderWindow>(
             this->videoMode_,
             this->windowTitle_,
@@ -75,4 +118,20 @@ namespace rtype::client {
     {
         this->window_->display();
     }
+
+    void Game::goToScene(const std::string &sceneName)
+    {
+        for (const auto &it: this->scenesList_) {
+            if (it.first == sceneName) {
+                AGame::goToScene(it.second->getId());
+                return;
+            }
+        }
+        if (this->loadScene_(sceneName) == true) {
+            this->goToScene(sceneName);
+        } else {
+            std::cerr << "warn: scene name '" + sceneName + "' is not registered. Ignoring." << std::endl;
+        }
+    }
+
 }

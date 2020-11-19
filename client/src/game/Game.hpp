@@ -11,6 +11,9 @@
 #include "engine/core/AGame.hpp"
 #include "utils/Singleton.hpp"
 
+#include <string>
+#include <unordered_map>
+
 namespace rtype::client {
 
     class Game : public AGame, public Singleton<Game> {
@@ -20,11 +23,16 @@ namespace rtype::client {
         sf::VideoMode videoMode_ { 1920, 1080 };
         sf::Uint32 windowStyle_ { sf::Style::Default };
         std::string windowTitle_ { "Game" };
+        const char *scenesDir_ { "./config_file/scene/" };
+        std::unordered_map<std::string, std::shared_ptr<Scene>> scenesList_;
+
+        bool loadScene_(const std::string &);
 
       public:
         Game();
         ~Game() = default;
 
+        void setScenesDir(const char *scenesDir);
         void resetClock() override;
         long getElapsedMillisecond() const override;
         void wait() override;
@@ -35,5 +43,6 @@ namespace rtype::client {
         void onInit() override;
         void onBeforeUpdate() override;
         void onAfterUpdate() override;
+        void goToScene(const std::string &sceneName);
     };
 }

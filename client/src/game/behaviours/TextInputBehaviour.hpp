@@ -16,7 +16,7 @@ namespace rtype::client {
     class TextInputBehaviour : public ABehaviour {
       private:
         InputComponent *value { nullptr };
-        static std::unordered_map<sf::Keyboard::Key, char> keys_;
+        static const std::unordered_map<sf::Keyboard::Key, char> keys_;
 
         void init_();
 

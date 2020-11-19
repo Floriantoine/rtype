@@ -21,6 +21,8 @@ namespace rtype::client {
 
         if (this->position_ != nullptr) {
             this->position_->x += (this->speed_ * elapsedTime) / 1000.0;
+        } else {
+            std::cerr << "warn: no position associated to the camera component" << std::endl;
         }
     }
 }

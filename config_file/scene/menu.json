@@ -23,7 +23,7 @@
             ]
         },
         {
-            "base": "Button",
+            "base": "NavButton",
             "components": [
                 {
                     "type": "text",
@@ -35,19 +35,20 @@
                     "y": 200
                 },
                 {
-                    "type": "button_behaviour"
-                },
-                {
                     "type": "collide_box",
                     "left": 400,
                     "top": 200,
                     "width": 350,
                     "height": 50
+                },
+                {
+                    "type": "nav_direction",
+                    "direction": "lobby.json"
                 }
             ]
         },
         {
-            "base": "Button",
+            "base": "NavButton",
             "components": [
                 {
                     "type": "text",
@@ -64,6 +65,10 @@
                     "top": 260,
                     "width": 300,
                     "height": 50
+                },
+                {
+                    "type": "nav_direction",
+                    "direction": "join.json"
                 }
             ]
         },

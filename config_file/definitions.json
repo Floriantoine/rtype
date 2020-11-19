@@ -79,6 +79,36 @@
                 },
                 {
                     "type": "position"
+                },
+                {
+                    "type": "button_behaviour"
+                }
+            ]
+        },
+        {
+            "id": "NavButton",
+            "components": [
+                {
+                    "type": "text",
+                    "font": "r_type.ttf",
+                    "size": 25,
+                    "string": ""
+                },
+                {
+                    "type": "color",
+                    "red": 17,
+                    "green": 153,
+                    "blue": 165,
+                    "outline": true
+                },
+                {
+                    "type": "position"
+                },
+                {
+                    "type": "nav_direction"
+                },
+                {
+                    "type": "nav_button_behaviour"
                 }
             ]
         },
