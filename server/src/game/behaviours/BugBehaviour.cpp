@@ -5,8 +5,10 @@
 ** Pata behaviour
 */
 
-#include "game/CollideGroups.hpp"
 #include "./BugBehaviour.hpp"
+
+#include "game/CollideGroups.hpp"
+#include "handlers/UDP/PositionHandler/PositionHandler.hpp"
 
 namespace rtype::server {
 
@@ -20,7 +22,7 @@ namespace rtype::server {
             this->rotation_ = this->getComponent<RotationComponent>();
         }
         this->totalElapsedTime_ += elapsedTime;
-        int step = this->totalElapsedTime_ / this->rate_;
+        long step = this->totalElapsedTime_ / this->rate_;
 
         this->position_->x -= step * this->stepInX_;
         this->position_->y = this->initInY_ + (this->amplitude_ * sin(this->position_->x / this->longitude_));
@@ -29,6 +31,7 @@ namespace rtype::server {
 
         if (step)
             this->totalElapsedTime_ %= this->rate_;
+        this->sendPosition(this->position_);
         if (this->position_->x < this->limiteMinInX_)
             this->destroyEntity();
     }
@@ -39,5 +42,4 @@ namespace rtype::server {
             this->takeDamage(1);
         }
     }
-
 }

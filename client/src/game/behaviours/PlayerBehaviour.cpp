@@ -51,7 +51,7 @@ namespace rtype::client {
         if (this->keyElapsedTime_ && !this->isDownKeyPressed_ && !this->isUpKeyPressed_) {
             this->comeBackElapsedTime_ += elapsedTime;
 
-            int step = this->comeBackElapsedTime_ / this->animRate_;
+            long step = this->comeBackElapsedTime_ / this->animRate_;
 
             if (step) {
                 this->comeBackElapsedTime_ %= this->animRate_;
@@ -78,7 +78,7 @@ namespace rtype::client {
             auto missilePosition = missile->getComponent<PositionComponent>();
 
             missilePosition->x = this->position_->x + this->sprite_->rect.width;
-            missilePosition->y = this->position_->y + this->sprite_->rect.height / 2;
+            missilePosition->y = this->position_->y + this->sprite_->rect.height / 2.0;
         }
     }
 

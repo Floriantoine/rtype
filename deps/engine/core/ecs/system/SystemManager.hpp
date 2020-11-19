@@ -70,5 +70,4 @@ namespace rtype {
             assert("System is not registered in this SystemManager instance");
         }
     };
-
 }

@@ -10,3 +10,6 @@ server/serv
 client/cli
 client/compile_flags.txt
 server/compile_flags.txt
+GPATH
+GRTAGS
+GTAGS

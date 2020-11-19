@@ -19,18 +19,17 @@ namespace rtype::server {
         Exception(std::string &&msg);
         virtual ~Exception() override = default;
     };
-    namespace Network {
 
+    namespace Network {
         class IOException : virtual rtype::Exception {
           public:
             IOException(const std::string &msg);
             IOException(std::string &&msg);
             IOException(const std::string &msg, const std::string &part);
             IOException(std::string &&msg, std::string &&part);
-            ~IOException() noexcept = default;
+            ~IOException() noexcept override = default;
             IOException &operator=(const IOException &) = delete;
             IOException &operator=(IOException &&) = delete;
         };
     };
 }
-

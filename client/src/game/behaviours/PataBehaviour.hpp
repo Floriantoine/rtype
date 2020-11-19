@@ -18,7 +18,7 @@ namespace rtype::client {
         std::size_t amplitude_ = 15;
         int accuracy_ = 100;
 
-        std::size_t stepInX_ = 5;
+        long stepInX_ = 5;
 
         long totalElapsedTime_ = 0;
         long rate_ = 16;

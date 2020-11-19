@@ -42,6 +42,7 @@ namespace rtype::server {
             this->position_->x += this->move_ * elapsedTime;
         }
         this->shootElapsedTime_ += elapsedTime;
+        this->sendPosition(this->position_);
     }
 
     std::shared_ptr<Entity> PlayerBehaviour::shoot()
@@ -52,7 +53,7 @@ namespace rtype::server {
             auto missilePosition = missile->getComponent<PositionComponent>();
 
             missilePosition->x = this->position_->x + this->sprite_->rect.width;
-            missilePosition->y = this->position_->y + this->sprite_->rect.height / 2;
+            missilePosition->y = this->position_->y + this->sprite_->rect.height / 2.0;
             return missile;
         }
         return nullptr;

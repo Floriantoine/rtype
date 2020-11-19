@@ -28,15 +28,17 @@ static server::Config ParseConfig(const std::string &filePath)
     std::ifstream configFile(filePath.data());
     server::Config conf;
 
-    if (!configFile.good())
+    if (!configFile.good()) {
         throw server::Exception("can't open config file: " + filePath);
+    }
     nlohmann::json::parse(configFile).get_to(conf);
     if (conf.maxGameThreads <= 0) {
         conf.maxGameThreads = std::thread::hardware_concurrency();
-        conf.maxGameThreads -= conf.maxGameThreads != 0;
+        conf.maxGameThreads -= static_cast<unsigned int>(conf.maxGameThreads != 0);
     }
-    if (conf.maxGameThreads == 0)
+    if (conf.maxGameThreads == 0) {
         throw server::Exception("can't auto determine how many threads to use");
+    }
     return conf;
 }
 

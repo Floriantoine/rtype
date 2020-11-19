@@ -25,4 +25,6 @@ namespace rtype::server {
         }
     }
 
+    void CameraBehaviour::onDestroy()
+    { }
 }

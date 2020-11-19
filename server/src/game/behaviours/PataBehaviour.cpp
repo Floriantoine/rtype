@@ -16,7 +16,7 @@ namespace rtype::server {
             this->initInY_ = this->position_->y;
         }
         this->totalElapsedTime_ += elapsedTime;
-        int step = this->totalElapsedTime_ / this->rate_;
+        long step = this->totalElapsedTime_ / this->rate_;
 
         this->position_->x -= step * this->stepInX_;
         double sinValue = sin(this->position_->x / this->amplitude_);
@@ -24,6 +24,7 @@ namespace rtype::server {
 
         if (step > 0)
             this->totalElapsedTime_ %= this->rate_;
+        this->sendPosition(this->position_);
         if (this->position_->x < this->limiteMinInX_)
             this->destroyEntity();
     }
