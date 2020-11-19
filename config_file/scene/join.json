@@ -30,6 +30,9 @@
                 {
                     "type": "nav_direction",
                     "direction": "menu.json"
+                },
+                {
+                    "type": "nav_button_behaviour"
                 }
             ]
         },
@@ -47,7 +50,7 @@
                     "max": 6
                 },
                 {
-                    "type": "text_input_behaviour"
+                    "type": "lobby_id_input_behaviour"
                 }
             ]
         },
@@ -72,7 +75,10 @@
                 },
                 {
                     "type": "nav_direction",
-                    "direction": "stage1.json"
+                    "direction": "lobby.json"
+                },
+                {
+                    "type": "join_button_behaviour"
                 }
             ]
         },

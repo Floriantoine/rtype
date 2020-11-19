@@ -25,6 +25,7 @@ namespace rtype::client {
         std::string windowTitle_ { "Game" };
         const char *scenesDir_ { "./config_file/scene/" };
         std::unordered_map<std::string, std::shared_ptr<Scene>> scenesList_;
+        std::string lobbyId_;
 
         bool loadScene_(const std::string &);
 
@@ -33,6 +34,8 @@ namespace rtype::client {
         ~Game() = default;
 
         void setScenesDir(const char *scenesDir);
+        void setLobbyId(const std::string &lobbyId);
+        const std::string &getLobbyId() const;
         void resetClock() override;
         long getElapsedMillisecond() const override;
         void wait() override;

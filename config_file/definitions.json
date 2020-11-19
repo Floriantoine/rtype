@@ -106,9 +106,6 @@
                 },
                 {
                     "type": "nav_direction"
-                },
-                {
-                    "type": "nav_button_behaviour"
                 }
             ]
         },

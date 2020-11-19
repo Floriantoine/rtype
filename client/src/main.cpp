@@ -28,6 +28,11 @@
 #include "game/behaviours/NavButtonBehaviour.hpp"
 #include "game/behaviours/TextInputBehaviour.hpp"
 
+#include "game/behaviours/buttons/CreateButtonBehaviour.hpp"
+#include "game/behaviours/buttons/JoinButtonBehaviour.hpp"
+#include "game/behaviours/buttons/StartButtonBehaviour.hpp"
+#include "game/behaviours/buttons/LobbyIdInputBehaviour.hpp"
+
 #include "game/components/AnimationComponent.hpp"
 #include "game/components/ScaleComponent.hpp"
 #include "game/components/ColorComponent.hpp"
@@ -67,6 +72,10 @@ int init(int argc, const char **argv)
     JsonLoader::registerComponentFactory("button_behaviour", ABehaviourBase::getFactory<client::ButtonBehaviour>());
     JsonLoader::registerComponentFactory("nav_button_behaviour", ABehaviourBase::getFactory<client::NavButtonBehaviour>());
     JsonLoader::registerComponentFactory("text_input_behaviour", ABehaviourBase::getFactory<client::TextInputBehaviour>());
+    JsonLoader::registerComponentFactory("create_button_behaviour", ABehaviourBase::getFactory<client::CreateButtonBehaviour>());
+    JsonLoader::registerComponentFactory("start_button_behaviour", ABehaviourBase::getFactory<client::StartButtonBehaviour>());
+    JsonLoader::registerComponentFactory("join_button_behaviour", ABehaviourBase::getFactory<client::JoinButtonBehaviour>());
+    JsonLoader::registerComponentFactory("lobby_id_input_behaviour", ABehaviourBase::getFactory<client::LobbyIdInputBehaviour>());
 
     JsonLoader::registerComponentFactory("camera", CameraComponent::factory);
     JsonLoader::registerComponentFactory("sprite", SpriteComponent::factory);

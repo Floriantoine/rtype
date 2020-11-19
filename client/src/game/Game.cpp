@@ -34,6 +34,16 @@ namespace rtype::client {
         this->scenesDir_ = scenesDir;
     }
 
+    void Game::setLobbyId(const std::string &lobbyId)
+    {
+        this->lobbyId_ = lobbyId;
+    }
+
+    const std::string &Game::getLobbyId() const
+    {
+        return (this->lobbyId_);
+    }
+
     bool Game::loadScene_(const std::string &filename)
     {
         try {

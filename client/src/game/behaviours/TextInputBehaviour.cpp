@@ -63,6 +63,7 @@ namespace rtype::client {
         if (evt.key.code == sf::Keyboard::BackSpace) {
             if (this->value->string.size() > 0) {
                 this->value->string.pop_back();
+                this->onChange(this->value->string);
             }
             return;
         }
@@ -72,6 +73,11 @@ namespace rtype::client {
         if (it == this->keys_.end())
             return;
         this->value->string.push_back(it->second);
+        this->onChange(this->value->string);
+    }
+
+    void TextInputBehaviour::onChange(const std::string &value)
+    {
     }
 
 }

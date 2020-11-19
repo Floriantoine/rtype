@@ -24,6 +24,8 @@ namespace rtype::client {
         void onUpdate(long elapsedTime) override;
 
         void onKeyPressed(const sf::Event &evt) override;
+
+        virtual void onChange(const std::string &value);
     };
 
 }

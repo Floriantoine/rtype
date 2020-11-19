@@ -30,6 +30,9 @@
                 {
                     "type": "nav_direction",
                     "direction": "menu.json"
+                },
+                {
+                    "type": "nav_button_behaviour"
                 }
             ]
         },
@@ -83,6 +86,9 @@
                 {
                     "type": "nav_direction",
                     "direction": "stage1.json"
+                },
+                {
+                    "type": "start_button_behaviour"
                 }
             ]
         },
