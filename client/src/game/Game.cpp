@@ -47,8 +47,8 @@ namespace rtype::client {
             scene->createSystem<EventSystem>();
             scene->createSystem<TextSystem>();
             scene->createSystem<InputSystem>();
-            scene->createSystem<BackgroundSystem>();
             scene->createSystem<SpriteSystem>();
+            scene->createSystem<BackgroundSystem>();
             this->scenesList_[filename] = scene;
             return true;
         } catch (const Exception &e) {

@@ -91,10 +91,8 @@ int init(int argc, const char **argv)
 
 int main(const int argc, const char **argv)
 {
+    return init(argc, argv);
     try {
-        if (argc < 2)
-            return 1;
-        return init(argc, argv);
         client::GameClient::Start(argc, argv);
         return 0;
     } catch (const std::exception &err) {
