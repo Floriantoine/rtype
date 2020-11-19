@@ -18,7 +18,7 @@ namespace rtype::client {
         Entity *cameraEntity = this->getCamera();
         PositionComponent *cameraPosition = nullptr;
 
-        if (!!cameraEntity && !(cameraPosition = cameraEntity->getComponent<PositionComponent>()))
+        if (!cameraEntity || !(cameraPosition = cameraEntity->getComponent<PositionComponent>()))
             return;
         this->componentManager_->apply<BackgroundComponent>([&](BackgroundComponent *back) {
             PositionComponent *position = back->getEntity()->getComponent<PositionComponent>();

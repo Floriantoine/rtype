@@ -36,7 +36,7 @@ namespace rtype::server {
         void run_();
 
       public:
-        LobbyManagerThread(std::shared_ptr<LobbyDispatcher> dispatcher);
+        LobbyManagerThread(const std::shared_ptr<LobbyDispatcher> &dispatcher);
         ~LobbyManagerThread();
     };
 }

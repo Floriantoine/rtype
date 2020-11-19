@@ -24,7 +24,7 @@ namespace rtype {
         RotationComponent(float degree)
             : degree { degree } {};
 
-        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
         {
             float degree { 0 };
 

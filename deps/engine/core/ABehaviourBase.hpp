@@ -10,8 +10,8 @@
 #include "./components/BehaviourComponent.hpp"
 #include "./components/HealthComponent.hpp"
 #include "./ecs/assert.hpp"
-#include "./ecs/entity/EntityManager.hpp"
 #include "./ecs/entity/Entity.hpp"
+#include "./ecs/entity/EntityManager.hpp"
 #include "./physics/CollisionData.hpp"
 #include "nlohmann/json.hpp"
 
@@ -131,9 +131,9 @@ namespace rtype {
         static auto getFactory()
         {
             STATIC_ASSERT_IS_BASE_OF(ABehaviourBase, T);
-            return [](const std::shared_ptr<Entity> &entity, nlohmann::json body) {
+            return [](const std::shared_ptr<Entity> &entity, const nlohmann::json &body) {
                 entity->addComponent<BehaviourComponent>(std::make_shared<T>());
-                BehaviourComponent *holder = entity->getComponent<BehaviourComponent>();
+                auto *holder = entity->getComponent<BehaviourComponent>();
                 std::shared_ptr<ABehaviourBase> script = holder->getBehaviour<ABehaviourBase>();
                 script->onInit();
             };

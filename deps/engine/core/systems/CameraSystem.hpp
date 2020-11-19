@@ -7,15 +7,15 @@
 
 #pragma once
 
+#include "../ABehaviourBase.hpp"
 #include "../Rect.hpp"
+#include "../components/BehaviourComponent.hpp"
 #include "../components/CameraComponent.hpp"
-#include "../components/SpriteComponent.hpp"
-#include "../components/PositionComponent.hpp"
 #include "../components/CollideBoxComponent.hpp"
+#include "../components/PositionComponent.hpp"
+#include "../components/SpriteComponent.hpp"
 #include "../ecs/system/ASystem.hpp"
 #include "../physics/CollisionChecker.hpp"
-#include "../ABehaviourBase.hpp"
-#include "../components/BehaviourComponent.hpp"
 
 namespace rtype {
 

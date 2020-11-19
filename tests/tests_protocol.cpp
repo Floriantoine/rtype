@@ -5,9 +5,9 @@
 ** tests_protocol
 */
 
-#include <catch2/catch.hpp>
 #include "Protocol.hpp"
 
+#include <catch2/catch.hpp>
 
 TEST_CASE("SerDe success", "[SeDerialization]")
 {

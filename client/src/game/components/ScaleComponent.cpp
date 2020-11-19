@@ -13,7 +13,7 @@ namespace rtype::client {
         : x { x }
         , y { y } {};
 
-    void ScaleComponent::factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+    void ScaleComponent::factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
     {
         float x { 0 };
         float y { 0 };

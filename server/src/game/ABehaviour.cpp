@@ -20,7 +20,7 @@ namespace rtype::server {
     void ABehaviour::sendPosition(const PositionComponent *position)
     {
         auto &handler = this->lobby_->handlers[BPC::POSITION];
-        PositionHandler::ServerRequestBody body;
+        PositionHandler::ServerRequestBody body{};
         body.entityID = this->getEntity()->getId();
         body.x = position->x;
         body.y = position->y;
@@ -30,7 +30,7 @@ namespace rtype::server {
 
     void ABehaviour::onDestroy()
     {
-        DestroyHandler::ServerRequestBody body;
+        DestroyHandler::ServerRequestBody body{};
         body.entityID = this->getEntity()->getId();
 
         this->sendRequestToPlayers(BPC::DESTROY, &body);

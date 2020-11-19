@@ -50,7 +50,7 @@ namespace rtype::server::Network {
             });
     }
 
-    void TcpSession::async_write(const BPC::Package &package, std::shared_ptr<std::function<void()>> onSent)
+    void TcpSession::async_write(const BPC::Package &package, const std::shared_ptr<std::function<void()>> &onSent)
     {
         auto self = shared_from_this();
 

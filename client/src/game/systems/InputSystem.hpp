@@ -16,7 +16,7 @@
 namespace rtype::client {
     class InputSystem : public ARenderSystem {
       public:
-        InputSystem();
+        InputSystem() = default;
         ~InputSystem() = default;
 
         void update(long elapsedTime) override;

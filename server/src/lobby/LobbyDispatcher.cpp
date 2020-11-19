@@ -29,7 +29,7 @@ namespace rtype::server {
         this->unlock();
     }
 
-    void LobbyDispatcher::Range::lock(std::shared_ptr<SharedLock> rwLock)
+    void LobbyDispatcher::Range::lock(const std::shared_ptr<SharedLock> &rwLock)
     {
         this->rwLock_ = rwLock;
 

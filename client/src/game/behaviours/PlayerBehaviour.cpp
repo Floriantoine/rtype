@@ -5,11 +5,12 @@
 ** Player behaviour
 */
 
+#include "./PlayerBehaviour.hpp"
+
 #include "SFML/Window/Event.hpp"
 #include "engine/core/ecs/entity/Entity.hpp"
-#include "scene_loader/SceneLoader.hpp"
 #include "game/CollideGroups.hpp"
-#include "./PlayerBehaviour.hpp"
+#include "scene_loader/SceneLoader.hpp"
 
 namespace rtype::client {
 
@@ -75,7 +76,7 @@ namespace rtype::client {
         if (this->shootElapsedTime_ / this->missileSpawnRate_ > 0) {
             this->shootElapsedTime_ %= this->missileSpawnRate_;
             auto missile = JsonLoader::createEntity(*this->getEntity()->getEntityManager(), this->missile_->missileBody);
-            auto missilePosition = missile->getComponent<PositionComponent>();
+            auto *missilePosition = missile->getComponent<PositionComponent>();
 
             missilePosition->x = this->position_->x + this->sprite_->rect.width;
             missilePosition->y = this->position_->y + this->sprite_->rect.height / 2.0;
@@ -106,16 +107,16 @@ namespace rtype::client {
     void PlayerBehaviour::onKeyPressed(const sf::Event &event)
     {
         switch (event.key.code) {
-            case sf::Keyboard::Key::Z:
+            case sf::Keyboard::Key::Up:
                 this->isUpKeyPressed_ = true;
                 break;
-            case sf::Keyboard::Key::Q:
+            case sf::Keyboard::Key::Left:
                 this->isLeftKeyPressed_ = true;
                 break;
-            case sf::Keyboard::Key::S:
+            case sf::Keyboard::Key::Down:
                 this->isDownKeyPressed_ = true;
                 break;
-            case sf::Keyboard::Key::D:
+            case sf::Keyboard::Key::Right:
                 this->isRightKeyPressed_ = true;
                 break;
             default:
@@ -126,16 +127,16 @@ namespace rtype::client {
     void PlayerBehaviour::onKeyReleased(const sf::Event &event)
     {
         switch (event.key.code) {
-            case sf::Keyboard::Key::Z:
+            case sf::Keyboard::Key::Up:
                 this->isUpKeyPressed_ = false;
                 break;
-            case sf::Keyboard::Key::Q:
+            case sf::Keyboard::Key::Left:
                 this->isLeftKeyPressed_ = false;
                 break;
-            case sf::Keyboard::Key::S:
+            case sf::Keyboard::Key::Down:
                 this->isDownKeyPressed_ = false;
                 break;
-            case sf::Keyboard::Key::D:
+            case sf::Keyboard::Key::Right:
                 this->isRightKeyPressed_ = false;
                 break;
             default:

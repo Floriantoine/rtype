@@ -14,6 +14,7 @@
 #include <map>
 #include <mutex>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace rtype {
@@ -45,7 +46,7 @@ namespace rtype {
          */
         static iterator_t on(const std::string &eventName, listener_t listener)
         {
-            return EventManager::getInstance()._on(eventName, listener);
+            return EventManager::getInstance()._on(eventName, std::move(listener));
         }
 
         /**
@@ -70,7 +71,7 @@ namespace rtype {
         }
 
       private:
-        iterator_t _on(const std::string &eventName, listener_t listener)
+        iterator_t _on(const std::string &eventName, const listener_t &listener)
         {
             std::lock_guard<std::mutex> lock(mutex);
             return _listeners.insert({ eventName, listener });

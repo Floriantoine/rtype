@@ -13,7 +13,7 @@ namespace rtype::client {
         : direction { direction }
     { }
 
-    void NavDirectionComponent::factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+    void NavDirectionComponent::factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
     {
         std::string direction;
 

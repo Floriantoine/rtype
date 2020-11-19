@@ -25,12 +25,12 @@ namespace rtype {
             : resource_ { std::move(data) }
         { } 
 
-        ADataLock(ADataLock<T> &&other)
+        ADataLock(ADataLock<T> &&other) noexcept
         {
             ADataLock::operator=(std::move(other));
         }
 
-        ADataLock<T> &operator=(ADataLock<T> &&other)
+        ADataLock<T> &operator=(ADataLock<T> &&other) noexcept
         {
             this->resource_ = std::move(other.resource_);
             return (*this);

@@ -53,7 +53,7 @@ namespace rtype::server {
             /**
             * @brief calls lock_shared() on the rwMutex_, allowing reading and processing of the lobbies
             */
-            void lock(std::shared_ptr<SharedLock> rwLock);
+            void lock(const std::shared_ptr<SharedLock> &rwLock);
 
             /**
             * @brief releases ownership of the lobbies

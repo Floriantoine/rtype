@@ -32,7 +32,7 @@ namespace rtype {
             return new_scene;
         }
 
-        void destroyScene(std::shared_ptr<Scene> scene)
+        void destroyScene(const std::shared_ptr<Scene> &scene)
         {
             id_t sceneId = scene->getId();
             auto it = this->orderedScenes_.cbegin();

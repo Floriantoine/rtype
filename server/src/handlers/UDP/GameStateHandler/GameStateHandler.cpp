@@ -6,9 +6,10 @@
 */
 
 #include "GameStateHandler.hpp"
+
 #include "Protocol.hpp"
-#include "game/ABehaviour.hpp"
 #include "engine/core/components/BehaviourComponent.hpp"
+#include "game/ABehaviour.hpp"
 #include "types.hpp"
 
 namespace rtype::server {
@@ -44,7 +45,7 @@ namespace rtype::server {
 
     void GameStateHandler::receiveResponse(const Network::UdpPackage &package)
     { }
-    
+
     BPC::Method GameStateHandler::getMethod() const
     {
         return BPC::GAME_STATE;

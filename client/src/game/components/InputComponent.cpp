@@ -11,7 +11,7 @@
 
 namespace rtype::client {
 
-    InputComponent::InputComponent(std::string string, std::shared_ptr<sf::Font> font, int size, Vector2<float> offset, int max)
+    InputComponent::InputComponent(const std::string &string, const std::shared_ptr<sf::Font> &font, int size, const Vector2<float> &offset, int max)
         : string { string }
         , font { font }
         , size { size }
@@ -20,7 +20,7 @@ namespace rtype::client {
         , max { max }
     { }
 
-    void InputComponent::factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+    void InputComponent::factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
     {
         std::string fontPath { "" };
         int size { 30 };

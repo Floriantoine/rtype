@@ -19,7 +19,7 @@ namespace rtype {
       public:
         Entity *entity;
         int collideGroup;
-        Rect<float> relativeCollideBox;
+        const Rect<float> relativeCollideBox;
 
         ColliderData(Entity *entity, int collideGroup, const Rect<float> &&relativeCollideBox)
             : entity ( entity )

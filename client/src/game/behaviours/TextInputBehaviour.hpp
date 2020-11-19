@@ -8,8 +8,8 @@
 #pragma once
 
 #include "SFML/Window/Event.hpp"
-#include "game/components/InputComponent.hpp"
 #include "game/ABehaviour.hpp"
+#include "game/components/InputComponent.hpp"
 
 namespace rtype::client {
 

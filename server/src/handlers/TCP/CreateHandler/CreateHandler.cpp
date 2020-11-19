@@ -24,7 +24,7 @@ namespace rtype::server {
     {
         const auto len = buffer.size();
 
-        for (auto i = 0ul; i < len; ++i) {
+        for (auto i = 0UL; i < len; ++i) {
             this->mapName[i] = buffer[i];
         }
     }

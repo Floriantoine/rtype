@@ -30,7 +30,7 @@ namespace rtype::server {
         if (playerBehaviour) {
             missile = playerBehaviour->shoot();
         }
-        ServerResponseBody response;
+        ServerResponseBody response{};
         response.missileID = 0;
         response.confirmation = false;
 
@@ -42,7 +42,7 @@ namespace rtype::server {
         response.confirmation = true;
         this->sendResponse(package, &response);
 
-        auto pos = missile->getComponent<PositionComponent>();
+        auto *pos = missile->getComponent<PositionComponent>();
         std::string json = R"({"base":"PlayerMissile","components":[{"type":"position","x":)";
         json += pos->x;
         json += ",\"y\":";
@@ -50,7 +50,7 @@ namespace rtype::server {
         json += "}]}";
 
         BPC::Buffer responseBody(json.size() + 8);
-        char *idPtr = (char *)response.missileID;
+        char *idPtr = reinterpret_cast<char *>(&response.missileID);
         unsigned idx = 0;
         for (; idx < sizeof(response.missileID); ++idx) {
             responseBody[idx] = idPtr[idx];

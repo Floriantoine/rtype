@@ -131,7 +131,7 @@ namespace rtype {
          *
          * @param scene scene to destroy
          */
-        void destroyScene(std::shared_ptr<Scene> scene)
+        void destroyScene(const std::shared_ptr<Scene>& scene)
         {
             this->sceneManager_.destroyScene(scene);
         }
