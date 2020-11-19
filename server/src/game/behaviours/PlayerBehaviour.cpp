@@ -42,6 +42,7 @@ namespace rtype::server {
             this->position_->x += this->move_ * elapsedTime;
         }
         this->shootElapsedTime_ += elapsedTime;
+        this->sendPosition(this->position_);
     }
 
     std::shared_ptr<Entity> PlayerBehaviour::shoot()

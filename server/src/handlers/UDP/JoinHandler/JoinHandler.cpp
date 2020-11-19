@@ -29,7 +29,7 @@ namespace rtype::server {
             this->refusePlayer(package);
             return;
         }
-        auto player = JsonLoader::createEntity(this->owner_.scene_->getEntityManager(), json);
+        auto player = JsonLoader::createEntity(this->owner_.scene->getEntityManager(), json);
         if (!player) {
             this->refusePlayer(package);
             return;
@@ -46,8 +46,8 @@ namespace rtype::server {
             body[idx] = playerTemplate[idx];
             ++idx;
         }
-        auto &handler = this->owner_.handlers_[BPC::SPAWN];
-        for (const auto &it : this->owner_.players_) {
+        auto &handler = this->owner_.handlers[BPC::SPAWN];
+        for (const auto &it : this->owner_.players) {
             handler->sendRequest(it.endpoint, &body);
         }
         this->newPlayer(package, player);
@@ -79,7 +79,7 @@ namespace rtype::server {
         Network::UdpPackage response(package, BPC::RESPONSE);
         JoinHandler::ServerResponseBody body;
         auto pos = player->getComponent<PositionComponent>();
-        auto ref = this->owner_.players_.emplace_back();
+        auto ref = this->owner_.players.emplace_back();
 
         ref.id = player->getId();
         ref.endpoint = package.endpoint;

@@ -22,6 +22,7 @@ namespace rtype::server {
 
       public:
         void onUpdate(long elapsedTime) override;
+        void onDestroy() override;
     };
 
 }

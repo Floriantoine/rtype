@@ -24,6 +24,7 @@ namespace rtype::server {
 
         if (step > 0)
             this->totalElapsedTime_ %= this->rate_;
+        this->sendPosition(this->position_);
         if (this->position_->x < this->limiteMinInX_)
             this->destroyEntity();
     }

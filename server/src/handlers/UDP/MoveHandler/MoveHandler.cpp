@@ -19,11 +19,13 @@ namespace rtype::server {
     void MoveHandler::receiveRequest(const Network::UdpPackage &package)
     {
         auto *requestBody = package.getBodyTo<ClientRequestBody>();
-        auto *behaviourComponent = this->owner_.getEntityComponent_<BehaviourComponent>(requestBody->playerID);
+        auto *behaviourComponent = this->owner_.getEntityComponent<BehaviourComponent>(requestBody->playerID);
 
         if (behaviourComponent == nullptr)
             return;
         auto behaviour = behaviourComponent->getBehaviour<PlayerBehaviour>();
+        if (!behaviour)
+            return;
         switch (requestBody->direction) {
             case Direction::UP:
                 behaviour->isUpKeyPressed_ = requestBody->state;
@@ -39,7 +41,7 @@ namespace rtype::server {
                 break;
         }
         this->sendResponse(package);
-        for (const auto &it : this->owner_.players_) {
+        for (const auto &it : this->owner_.players) {
             if (it.endpoint == package.endpoint)
                 continue;
             this->sendRequest(it.endpoint, &requestBody);

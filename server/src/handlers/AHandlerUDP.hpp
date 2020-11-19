@@ -48,7 +48,7 @@ namespace rtype::server {
                 pkg.body.resize(0);
             }
             if (this->owner_.udpServer_.write(package)) {
-                this->owner_.removePlayer_(pkg.endpoint);
+                this->owner_.removePlayer(pkg.endpoint);
             }
         }
 
@@ -73,7 +73,7 @@ namespace rtype::server {
                 if (needResponse)
                     this->awaitingResponse_.push_back(pkg);
             } else {
-                this->owner_.removePlayer_(endpoint);
+                this->owner_.removePlayer(endpoint);
             }
         }
 

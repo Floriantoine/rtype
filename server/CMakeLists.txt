@@ -46,6 +46,7 @@ set(SRCS
         handlers/UDP/PositionHandler/PositionHandler.cpp
         handlers/UDP/ShootHandler/ShootHandler.cpp
         handlers/UDP/SpawnHandler/SpawnHandler.cpp
+        game/ABehaviour.cpp
         game/behaviours/BugBehaviour.cpp
         game/behaviours/CameraBehaviour.cpp
         game/behaviours/MissilePlayerBehaviour.cpp
