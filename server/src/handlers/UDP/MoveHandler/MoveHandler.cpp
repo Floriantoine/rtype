@@ -29,13 +29,13 @@ namespace rtype::server {
                 behaviour->isUpKeyPressed_ = requestBody->state;
                 break;
             case Direction::DOWN:
-                behaviour->isUpKeyPressed_ = requestBody->state;
+                behaviour->isDownKeyPressed_ = requestBody->state;
                 break;
             case Direction::LEFT:
-                behaviour->isUpKeyPressed_ = requestBody->state;
+                behaviour->isLeftKeyPressed_ = requestBody->state;
                 break;
             default:
-                behaviour->isUpKeyPressed_ = requestBody->state;
+                behaviour->isRightKeyPressed_ = requestBody->state;
                 break;
         }
         this->sendResponse(package);

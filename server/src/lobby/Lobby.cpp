@@ -102,8 +102,7 @@ namespace rtype::server {
     {
         return (*this->state_ != GameState::AWT_START
             && *this->state_ != GameState::RUN
-            && !this->awaitingResponse_
-        );
+            && !this->awaitingResponse_);
     }
 
     bool Lobby::isFull() const noexcept
@@ -141,12 +140,13 @@ namespace rtype::server {
     void Lobby::updatePlayersState_()
     {
         auto player = this->players_.begin();
-        DestroyHandler::ServerRequestBody body;
+        DestroyHandler::ServerRequestBody body {};
         auto &handler = this->handlers_[BPC::LEAVE];
 
         for (; player != this->players_.end(); ++player) {
-            if (player->activeness.getElapsedMillisecond() < PLAYER_TIMEOUT_MS)
+            if (player->activeness.getElapsedMillisecond() < PLAYER_TIMEOUT_MS) {
                 continue;
+            }
             body.entityID = player->id;
             player = this->players_.erase(player);
             for (const auto &it : this->players_) {
@@ -157,7 +157,7 @@ namespace rtype::server {
 
     void Lobby::updateGameState_()
     {
-        GameStateHandler::ServerRequestBody body;
+        GameStateHandler::ServerRequestBody body {};
 
         if (*this->state_ != GameState::RUN) {
             if (this->state_.elapsed() >= LOBBY_TIMEOUT_MS) {
@@ -168,7 +168,7 @@ namespace rtype::server {
                     handler->sendRequest(it.endpoint, &body);
                 }
             }
-        } else if (*this->state_ != GameState::AWT_START && this->players_.size() == 0) {
+        } else if (*this->state_ != GameState::AWT_START && this->players_.empty()) {
             this->state_ = GameState::TIMEOUT;
         }
     }
@@ -179,14 +179,14 @@ namespace rtype::server {
             [&endpoint](const auto &it) {
                 return it.endpoint == endpoint;
             });
-        auto health = this->getEntityComponent_<HealthComponent>(it->id);
+        auto *health = this->getEntityComponent_<HealthComponent>(it->id);
         health->health = 0;
         if (it != this->players_.end()) {
             this->players_.erase(it);
         }
     }
 
-    std::shared_ptr<Entity> Lobby::getEntity_(id_t id) 
+    std::shared_ptr<Entity> Lobby::getEntity_(id_t id)
     {
         return this->scene_->getEntityManager().getEntity(id);
     }

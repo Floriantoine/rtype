@@ -18,7 +18,7 @@ namespace rtype::client {
             if (anim->rate == 0)
                 return;
             anim->totalElapsedTime += elapsedTime;
-            int step = anim->totalElapsedTime / anim->rate;
+            long step = anim->totalElapsedTime / anim->rate;
 
             if (step == 0)
                 return;

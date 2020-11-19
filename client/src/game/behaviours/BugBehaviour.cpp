@@ -19,7 +19,7 @@ namespace rtype::client {
             this->rotation_ = this->getComponent<RotationComponent>();
         }
         this->totalElapsedTime_ += elapsedTime;
-        int step = this->totalElapsedTime_ / this->rate_;
+        long step = this->totalElapsedTime_ / this->rate_;
 
         this->position_->x -= step * this->stepInX_;
         this->position_->y = this->initInY_ + (this->amplitude_ * sin(this->position_->x / this->longitude_));

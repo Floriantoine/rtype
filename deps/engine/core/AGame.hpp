@@ -69,7 +69,7 @@ namespace rtype {
 
             if (elapsedTime == 0)
                 elapsedTime = 1;
-            return 1000.0 / elapsedTime;
+            return 1000.0 / static_cast<double>(elapsedTime);
         }
 
         /**

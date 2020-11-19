@@ -23,7 +23,7 @@
 #define TIMESTAMP (BODY_SIZE + sizeof(unsigned long))
 #define BODY (TIMESTAMP + sizeof(long))
 #define HEADER_SIZE BODY
-#define PEER_INFO DEFINITON_BYTE + 17
+#define PEER_INFO (DEFINITON_BYTE + 17)
 
 namespace rtype::BinaryProtocolCommunication {
     typedef std::vector<unsigned char> Buffer; // binary to send

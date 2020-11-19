@@ -17,7 +17,7 @@ namespace rtype::client {
             this->position_ = this->getComponent<PositionComponent>();
         }
         this->totalElapsedTime_ += elapsedTime;
-        int step = this->totalElapsedTime_ / this->rate_;
+        long step = this->totalElapsedTime_ / this->rate_;
 
         this->position_->x += step * this->stepInX_;
         if (step)

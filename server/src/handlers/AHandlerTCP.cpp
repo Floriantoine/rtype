@@ -30,7 +30,7 @@ namespace rtype::server {
         if (package.type == BPC::BaseType::REQUEST) {
             this->receiveRequest(package, client);
         } else if (package.type == BPC::BaseType::RESPONSE) {
-            this->receiveRequest(package, client);
+            this->receiveResponse(package, client);
         } else {
             AHandlerTCP::unknowPacket(package, client);
         }

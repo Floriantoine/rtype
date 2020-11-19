@@ -38,7 +38,7 @@ namespace rtype::client {
                 sprite->sprite.setTextureRect(sprite->rect);
             }
             if (rotation != nullptr) {
-                sprite->sprite.setOrigin(sprite->rect.width / 2, sprite->rect.height / 2);
+                sprite->sprite.setOrigin(static_cast<float>(sprite->rect.width) / 2.0, static_cast<float>(sprite->rect.height) / 2.0);
                 sprite->sprite.setRotation(rotation->degree);
             }
             if (scale != nullptr) {

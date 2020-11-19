@@ -1,0 +1,15 @@
+Checks:     '-*,
+            cppcoreguidelines-*,
+            performance-*,
+            readability-*,
+            portability-*,
+            misc-*,
+            modernize-*,
+            bugprone-*,
+            cert-*,
+            clang-analyzer-*,
+            llvm-*,
+            -modernize-use-trailing-return-type,
+            -llvm-namespace-comment'
+AnalyzeTemporaryDtors: true
+FormatStyle:     file
