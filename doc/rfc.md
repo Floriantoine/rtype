@@ -324,22 +324,13 @@ ___
 ### **LEAVE**
 * <ins>ENTITY_ID</ins>: the entity id of the players
 #### REQUEST:
-#### *From server:*
-> Must notify the clients that the a player has left the lobby
-```
-+-----------+
-| ENTITY_ID |
-| unsigned  |
-|  1 byte   |
-+-----------+
-```
 #### *From client:*
 > Must notify the server that the client is leaving the game
 ```
 +-----------+
 | ENTITY_ID |
 | unsigned  |
-|  1 byte   |
+|  8 bytes  |
 +-----------+
 ```
 

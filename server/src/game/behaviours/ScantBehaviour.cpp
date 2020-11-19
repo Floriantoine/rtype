@@ -49,6 +49,7 @@ namespace rtype::server {
         //     //stop the shoot things
         //     this->animation_->currentFrame = 1;
         // }
+        // this->sendPosition(this->position_);
     }
 
     void ScantBehaviour::onCollide(const CollisionData &collision)

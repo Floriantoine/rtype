@@ -28,7 +28,7 @@ namespace rtype::server {
         std::shared_ptr<Entity> missile = nullptr;
 
         if (playerBehaviour) {
-            // missile = PlayerBehaviour->shoot();
+            missile = playerBehaviour->shoot();
         }
         ServerResponseBody response;
         response.missileID = 0;

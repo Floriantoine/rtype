@@ -24,6 +24,8 @@ namespace rtype::server {
         if (behaviourComponent == nullptr)
             return;
         auto behaviour = behaviourComponent->getBehaviour<PlayerBehaviour>();
+        if (!behaviour)
+            return;
         switch (requestBody->direction) {
             case Direction::UP:
                 behaviour->isUpKeyPressed_ = requestBody->state;
