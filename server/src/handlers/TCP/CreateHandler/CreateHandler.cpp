@@ -57,7 +57,7 @@ namespace rtype::server {
             const Lobby &lobby = this->owner_.dispatcher_->createLobby(std::move(scenePtr), requestBody.mapName);
 
             responseBody.port = lobby.getPort();
-            memcpy(responseBody.lobbyID, lobby.id.data(), sizeof(lobby_id_t));
+            memcpy(&responseBody.lobbyID, lobby.id.data(), sizeof(lobby_id_t));
             responsePackage.setBodyFrom(&responseBody);
             onSent = std::make_shared<std::function<void()>>([&client] {
                 client.getSocket().close();

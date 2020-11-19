@@ -6,21 +6,22 @@
 */
 
 #include "GameClient.hpp"
+
 #include "Exception.hpp"
 #include "Protocol.hpp"
-#include "types.hpp"
-#include "utils/Clock.hpp"
-#include "handlers/GameStateHandler/GameStateHandler.hpp"
-#include "handlers/MoveHandler/MoveHandler.hpp"
-#include "handlers/SpawnHandler/SpawnHandler.hpp"
-#include "handlers/GrabHandler/GrabHandler.hpp"
-#include "handlers/DropHandler/DropHandler.hpp"
 #include "handlers/ChargeHandler/ChargeHandler.hpp"
-#include "handlers/PositionHandler/PositionHandler.hpp"
-#include "handlers/ShootHandler/ShootHandler.hpp"
+#include "handlers/DropHandler/DropHandler.hpp"
+#include "handlers/GameStateHandler/GameStateHandler.hpp"
+#include "handlers/GrabHandler/GrabHandler.hpp"
 #include "handlers/HitHandler/HitHandler.hpp"
 #include "handlers/JoinHandler/JoinHandler.hpp"
 #include "handlers/LeaveHandler/LeaveHandler.hpp"
+#include "handlers/MoveHandler/MoveHandler.hpp"
+#include "handlers/PositionHandler/PositionHandler.hpp"
+#include "handlers/ShootHandler/ShootHandler.hpp"
+#include "handlers/SpawnHandler/SpawnHandler.hpp"
+#include "types.hpp"
+#include "utils/Clock.hpp"
 
 #include <cstring>
 #include <memory>
@@ -82,20 +83,21 @@ namespace rtype::client {
         if (argc == 4) {
             if (std::strlen(argv[3]) != LOBBY_ID_SIZE) {
                 std::string err = "Malformed LOBBY_ID: ";
-                err += (int)LOBBY_ID_SIZE;
+                err += std::to_string(LOBBY_ID_SIZE);
                 err += " characters expected";
                 throw Exception(err);
             }
             package.body.reserve(LOBBY_ID_SIZE);
-            for (int i = 0; i < LOBBY_ID_SIZE; ++i)
+            for (int i = 0; i < LOBBY_ID_SIZE; ++i) {
                 package.body[i] = argv[3][i];
+            }
             package.bodySize = LOBBY_ID_SIZE;
             package.method = BPC::ASK_JOIN;
         }
         return package;
     }
 
-    void GameClient::onPacketReceived_(const BPC::Package &pkg) 
+    void GameClient::onPacketReceived_(const BPC::Package &pkg)
     {
         auto it = std::find_if(
             this->handlers_.cbegin(),

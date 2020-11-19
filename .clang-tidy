@@ -10,6 +10,7 @@ Checks:     '-*,
             clang-analyzer-*,
             llvm-*,
             -modernize-use-trailing-return-type,
-            -llvm-namespace-comment'
+            -llvm-namespace-comment,
+            -misc-non-private-member-variables-in-classes'
 AnalyzeTemporaryDtors: true
 FormatStyle:     file
