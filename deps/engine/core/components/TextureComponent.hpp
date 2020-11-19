@@ -34,7 +34,7 @@ namespace rtype {
             , width { width }
             , height { height } {};
 
-        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
         {
             std::string path { "" };
             std::size_t x { 0 };

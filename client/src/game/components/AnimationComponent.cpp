@@ -14,7 +14,7 @@ namespace rtype::client {
         , totalFrame { totalFrame }
         , rate { rate } {};
 
-    void AnimationComponent::factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+    void AnimationComponent::factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
     {
         int currentFrame { 0 };
         int totalFrame { 0 };

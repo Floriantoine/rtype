@@ -131,7 +131,7 @@ namespace rtype {
         static auto getFactory()
         {
             STATIC_ASSERT_IS_BASE_OF(ABehaviourBase, T);
-            return [](const std::shared_ptr<Entity> &entity, nlohmann::json body) {
+            return [](const std::shared_ptr<Entity> &entity, const nlohmann::json &body) {
                 entity->addComponent<BehaviourComponent>(std::make_shared<T>());
                 BehaviourComponent *holder = entity->getComponent<BehaviourComponent>();
                 std::shared_ptr<ABehaviourBase> script = holder->getBehaviour<ABehaviourBase>();

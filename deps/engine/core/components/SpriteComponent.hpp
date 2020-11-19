@@ -35,7 +35,7 @@ namespace rtype {
             , sprite(*texture.get(), rect)
         {}
 
-        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
         {
             std::string texturePath { "" };
             int left { 0 };

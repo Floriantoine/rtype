@@ -17,7 +17,7 @@ namespace rtype::client {
         , outline { outline }
         , color(red, green, blue, alpha) {};
 
-    void ColorComponent::factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+    void ColorComponent::factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
     {
         int red { 0 };
         int green { 0 };

@@ -18,7 +18,7 @@ namespace rtype::client {
         , text(string, *font.get(), size)
     { }
 
-    void TextComponent::factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+    void TextComponent::factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
     {
         std::string fontPath { "" };
         int size { 30 };

@@ -26,7 +26,7 @@ namespace rtype {
             : x { x }
             , y { y } {};
 
-        static void factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+        static void factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
         {
             float x { 0 };
             float y { 0 };

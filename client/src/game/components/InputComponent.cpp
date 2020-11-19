@@ -20,7 +20,7 @@ namespace rtype::client {
         , max { max }
     { }
 
-    void InputComponent::factory(const std::shared_ptr<Entity> &entity, nlohmann::json body)
+    void InputComponent::factory(const std::shared_ptr<Entity> &entity, const nlohmann::json &body)
     {
         std::string fontPath { "" };
         int size { 30 };
