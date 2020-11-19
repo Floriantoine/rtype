@@ -17,10 +17,6 @@
 #include "engine/core/components/PositionComponent.hpp"
 #include "engine/core/components/RotationComponent.hpp"
 #include "engine/core/components/SpriteComponent.hpp"
-#include "engine/core/systems/BehaviourSystem.hpp"
-#include "engine/core/systems/CameraSystem.hpp"
-#include "engine/core/systems/CollisionSystem.hpp"
-#include "engine/core/systems/HealthSystem.hpp"
 
 #include "game/Game.hpp"
 #include "game/behaviours/BugBehaviour.hpp"
@@ -36,13 +32,6 @@
 #include "game/components/ColorComponent.hpp"
 #include "game/components/TextComponent.hpp"
 #include "game/components/InputComponent.hpp"
-
-#include "game/systems/AnimationSystem.hpp"
-#include "game/systems/EventSystem.hpp"
-#include "game/systems/SpriteSystem.hpp"
-#include "game/systems/TextSystem.hpp"
-#include "game/systems/InputSystem.hpp"
-#include "game/systems/BackgroundSystem.hpp"
 
 #include "scene_loader/SceneLoader.hpp"
 
@@ -86,19 +75,8 @@ int init(int argc, const char **argv)
     JsonLoader::registerComponentFactory("missile", MissileComponent::factory);
 
     try {
-        auto scene = JsonLoader::createScene(client::Game::getInstance(), argv[1]);
-
-        scene->createSystem<rtype::CameraSystem>();
-        // scene->createSystem<CollisionSystem>();
-        // scene->createSystem<HealthSystem>();
-        scene->createSystem<rtype::BehaviourSystem>();
-        scene->createSystem<client::EventSystem>();
-        scene->createSystem<client::TextSystem>();
-        scene->createSystem<client::InputSystem>();
-        scene->createSystem<client::AnimationSystem>();
-        scene->createSystem<client::SpriteSystem>();
-        // scene->createSystem<client::BackgroundSystem>();
-
+        if (argc == 2)
+            client::Game::getInstance().setScenesDir(argv[1]);
         client::Game::getInstance().start();
         return 0;
     } catch (const Exception &e) {

@@ -149,6 +149,16 @@ namespace rtype {
             return this->sceneManager_.getScene(sceneId);
         }
 
+        /**
+         * Switch to a given scene, disabling others
+         * 
+         * @param sceneId scene id
+         */
+        void goToScene(id_t sceneId)
+        {
+            this->sceneManager_.goToScene(sceneId);
+        }
+
       private:
         /**
          * Updates the game

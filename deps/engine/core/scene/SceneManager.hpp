@@ -69,5 +69,46 @@ namespace rtype {
                 scene.second->update(group, elapsedTime);
             }
         }
+
+        /**
+         * Set a scene state to paused
+         * 
+         * @param sceneId scene id
+         */
+        void pauseScene(id_t sceneId)
+        {
+            this->getScene(sceneId)->setState(Scene::State::STATE_PAUSED);
+        }
+
+        /**
+         * Set a scene state to inactive
+         * 
+         * @param sceneId scene id
+         */
+        void disableScene(id_t sceneId)
+        {
+            this->getScene(sceneId)->setState(Scene::State::STATE_INACTIVE);
+        }
+
+        /**
+         * Switch to a given scene, disabling others
+         * 
+         * @param sceneId scene id
+         */
+        void goToScene(id_t sceneId)
+        {
+            bool found = false;
+            for (const auto &it: this->orderedScenes_) {
+                if (it.second->getId() == sceneId) {
+                    found = true;
+                    it.second->setState(Scene::State::STATE_RUNNING);
+                } else {
+                    it.second->setState(Scene::State::STATE_INACTIVE);
+                }
+            }
+            if (found == false) {
+                throw std::runtime_error("Specified scene id doesn't exist");
+            }
+        }
     };
 }

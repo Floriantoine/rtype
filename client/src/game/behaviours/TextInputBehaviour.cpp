@@ -13,7 +13,7 @@
 
 namespace rtype::client {
 
-    std::unordered_map<sf::Keyboard::Key, char> TextInputBehaviour::keys_ = {
+    const std::unordered_map<sf::Keyboard::Key, char> TextInputBehaviour::keys_ = {
         { sf::Keyboard::A, 'A' },
         { sf::Keyboard::B, 'B' },
         { sf::Keyboard::C, 'C' },
