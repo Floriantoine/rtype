@@ -14,8 +14,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - name: "Add conan remote (bincrafters)"
         run: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
@@ -23,7 +21,6 @@ jobs:
       - name: "Prepare conan install"
         run: |
           dnf install -y libfontenc-devel libXaw-devel libXcomposite-devel libXcursor-devel libXdmcp-devel libXtst-devel libXinerama-devel xorg-x11-xkb-utils-devel libXrandr-devel libXres-devel libXScrnSaver-devel libXvMC-devel xorg-x11-xtrans-devel xcb-util-wm-devel xcb-util-keysyms-devel xcb-util-renderutil-devel libXdamage-devel libXv-devel xkeyboard-config-devel
-
       - name: Build
         run: ./build.sh
 
