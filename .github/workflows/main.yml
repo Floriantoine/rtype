@@ -16,10 +16,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: "Add conan remote (bincrafters)"
         run: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
